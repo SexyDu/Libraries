@@ -7,3 +7,7 @@
 .vsconfig
 /Temp
 /UserSettings
+/obj
+/ProjectManaging
+/.vs
+*.csproj
