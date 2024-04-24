@@ -1,23 +1,23 @@
 using UnityEngine;
 
-namespace SexyDu.Pattern.Strategy.UseInterface
+namespace SexyDu.Pattern.Behavioral.Strategy.UseParentClass
 {
-    public interface IBasedType
+    public abstract class BasedClass
     {
-        public void SomeAction();
+        public abstract void SomeAction();
     }
 
-    public class TypeAClass : IBasedType
+    public class TypeAClass : BasedClass
     {
-        public void SomeAction()
+        public override void SomeAction()
         {
             Debug.LogFormat("Act Type A");
         }
     }
 
-    public class TypeBClass : IBasedType
+    public class TypeBClass : BasedClass
     {
-        public void SomeAction()
+        public override void SomeAction()
         {
             Debug.LogFormat("Act Type B");
         }
@@ -25,7 +25,7 @@ namespace SexyDu.Pattern.Strategy.UseInterface
 
     public class ExecutionClass
     {
-        public void ActionSome(IBasedType target)
+        public void ActionSome(BasedClass target)
         {
             target.SomeAction();
         }

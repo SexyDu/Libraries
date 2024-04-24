@@ -4,7 +4,7 @@
 
 using UnityEngine;
 
-namespace SexyDu.Pattern.FactoryMethod
+namespace SexyDu.Pattern.Creational.FactoryMethod
 {
     #region Object
     public abstract class Based

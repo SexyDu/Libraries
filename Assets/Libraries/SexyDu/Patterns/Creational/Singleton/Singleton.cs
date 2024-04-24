@@ -1,6 +1,6 @@
 using System;
 
-namespace SexyDu.Pattern.Singleton
+namespace SexyDu.Pattern.Creational.Singleton
 {
     public class Singleton
     {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SexyDu.Pattern.Command
+namespace SexyDu.Pattern.Behavioral.Command
 {
     /// <summary>
     /// 커맨드 베이스 클래스
