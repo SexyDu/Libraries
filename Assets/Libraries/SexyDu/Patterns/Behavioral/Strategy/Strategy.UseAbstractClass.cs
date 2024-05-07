@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SexyDu.Pattern.Behavioral.Strategy.UseParentClass
+namespace SexyDu.Pattern.Behavioral.Strategy.UseAbstractClass
 {
     public abstract class BasedClass
     {
