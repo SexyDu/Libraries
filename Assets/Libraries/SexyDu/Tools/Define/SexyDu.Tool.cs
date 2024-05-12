@@ -1,0 +1,7 @@
+namespace SexyDu
+{
+    namespace Tool
+    {
+
+    }
+}
