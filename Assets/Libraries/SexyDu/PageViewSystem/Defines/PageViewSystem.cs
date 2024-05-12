@@ -1,7 +1,0 @@
-namespace SexyDu
-{
-    namespace PageViewSystem
-    {
-        
-    }
-}
