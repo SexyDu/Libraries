@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using SexyDu.Touch;
 
-namespace SexyDu.UI.Unity
+namespace SexyDu.UI.UGUI
 {
     public class TouchTargetSender : MonoBehaviour, IPointerDownHandler
     {
-        [SerializeField] private TouchTargetBasic target;
+        [SerializeField] private TouchTarget target;
 
         public void OnPointerDown(PointerEventData eventData)
         {

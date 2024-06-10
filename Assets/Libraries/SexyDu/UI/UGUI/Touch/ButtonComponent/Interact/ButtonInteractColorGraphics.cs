@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace SexyDu.UI.Unity
+namespace SexyDu.UI.UGUI
 {
     public class ButtonInteractColorGraphics : ButtonInteractColor
     {

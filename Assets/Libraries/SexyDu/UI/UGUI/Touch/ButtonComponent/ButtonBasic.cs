@@ -2,10 +2,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
+using SexyDu.Touch;
 
-namespace SexyDu.UI.Unity
+namespace SexyDu.UI.UGUI
 {
-    public class ButtonBasic : TouchTargetBasic, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
+    public class ButtonBasic : TouchTarget, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
     {
         public virtual void OnPointerDown(PointerEventData eventData)
         {
@@ -47,6 +48,13 @@ namespace SexyDu.UI.Unity
         public override void AddTouch(int fingerId)
         {
             this.fingerId = fingerId;
+        }
+
+        public override void ClearTouch()
+        {
+            ClearFingerID();
+
+            InteractUp();
         }
 
         protected virtual void ClearFingerID()

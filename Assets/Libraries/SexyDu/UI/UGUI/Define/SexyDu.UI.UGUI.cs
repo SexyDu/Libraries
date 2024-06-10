@@ -2,7 +2,7 @@ namespace SexyDu
 {
     namespace UI
     {
-        namespace Unity
+        namespace UGUI
         {
 
         }

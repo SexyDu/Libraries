@@ -1,10 +1,12 @@
 using UnityEngine;
 
-namespace SexyDu.UI.Unity
+namespace SexyDu.Touch
 {
-    public abstract class TouchTargetBasic : MonoBehaviour, ITouchTarget
+    public abstract class TouchTarget : MonoBehaviour, ITouchTarget
     {
         public abstract void AddTouch(int fingerId);
+
+        public abstract void ClearTouch();
 
         protected Vector2 GetTouchPosition(int fingerId)
         {

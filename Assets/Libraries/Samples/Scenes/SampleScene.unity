@@ -332,7 +332,6 @@ GameObject:
   - component: {fileID: 927729498}
   - component: {fileID: 927729502}
   - component: {fileID: 927729501}
-  - component: {fileID: 927729500}
   - component: {fileID: 927729503}
   - component: {fileID: 927729499}
   m_Layer: 5
@@ -380,24 +379,6 @@ MonoBehaviour:
   - {r: 0, g: 0, b: 0, a: 0.5372549}
   graphics:
   - {fileID: 927729501}
---- !u!114 &927729500
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 927729497}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ccdc1a27551bc4f16b621083e8f5b2aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactable: 1
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls: []
-  interacts:
-  - {fileID: 927729499}
 --- !u!114 &927729501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -609,9 +590,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a475c375a72c14eecad7d346ccac47b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onAwakeInit: 1
   target: {fileID: 1701112480}
   min: -10000
   max: 10000
+  inertiaFrameCount: 10
+  decelerationRate: 0.135
+  limitInertia: 1000
+  inertiaBreak: 1
 --- !u!114 &1701112482
 MonoBehaviour:
   m_ObjectHideFlags: 0

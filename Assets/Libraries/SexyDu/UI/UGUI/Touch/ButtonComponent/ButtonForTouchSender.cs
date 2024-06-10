@@ -1,10 +1,15 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using SexyDu.Touch;
 
-namespace SexyDu.UI.Unity
+namespace SexyDu.UI.UGUI
 {
-    public class ButtonTouchTargetSender : ButtonBasic
+    /// <summary>
+    /// 버튼
+    /// * 버튼 터치에 이동 감지 시 지정된 sender로 이관
+    /// </summary>
+    public class ButtonForTouchSender : ButtonBasic
     {
         public override void OnPointerDown(PointerEventData eventData)
         {
@@ -29,7 +34,7 @@ namespace SexyDu.UI.Unity
                 if (FingerId.Equals(eventData.pointerId))
                 {
                     onClick.Invoke();
-                    ReleaseTouch();
+                    ClearTouch();
                 }
             }
         }
@@ -40,23 +45,23 @@ namespace SexyDu.UI.Unity
             StopTouch();
         }
 
+        public override void ClearTouch()
+        {
+            base.ClearTouch();
+
+            StopTouch();
+        }
+
         [Header("Sender")]
-        [SerializeField] private TouchTargetBasic transferTarget;
+        [SerializeField] private TouchTarget transferTarget;
 
         private void SendTouch()
         {
             if (transferTarget != null)
             {
                 transferTarget.AddTouch(FingerId);
-                ReleaseTouch();
+                ClearTouch();
             }
-        }
-
-        private void ReleaseTouch()
-        {
-            InteractUp();
-            ClearFingerID();
-            StopTouch();
         }
 
         private void StartTouch()
@@ -81,10 +86,11 @@ namespace SexyDu.UI.Unity
         private IEnumerator CoTouch()
         {
             Vector2 initial = GetTouchPosition(FingerId);
-            float compareDistance = Screen.height * 0.01f;
-
+            
             if (initial.Equals(Vector2.zero))
-                ReleaseTouch();
+                ClearTouch();
+
+            float compareDistance = Screen.height * 0.01f;
 
             do
             {
@@ -94,7 +100,7 @@ namespace SexyDu.UI.Unity
 
                 if (current.Equals(Vector2.zero))
                 {
-                    ReleaseTouch();
+                    ClearTouch();
                 }
                 else
                 {

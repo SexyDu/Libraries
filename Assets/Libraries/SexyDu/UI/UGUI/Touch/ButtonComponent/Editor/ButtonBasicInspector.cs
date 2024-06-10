@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 
-namespace SexyDu.UI.Unity
+namespace SexyDu.UI.UGUI
 {
     [CustomEditor(typeof(ButtonBasic), true)]
     [CanEditMultipleObjects]
