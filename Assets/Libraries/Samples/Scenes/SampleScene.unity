@@ -592,8 +592,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onAwakeInit: 1
   target: {fileID: 1701112480}
-  min: -10000
-  max: 10000
+  min: -500
+  max: 500
   inertiaFrameCount: 10
   decelerationRate: 0.135
   limitInertia: 1000

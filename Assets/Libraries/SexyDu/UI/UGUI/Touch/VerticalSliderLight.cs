@@ -115,6 +115,26 @@ namespace SexyDu.UI.UGUI
         }
 
         /// <summary>
+        /// 제한범위 값 보정
+        /// </summary>
+        /// <returns>제한범위를 벗어났는지 여부(보정 여부)</returns>
+        private bool AmendLimit(ref float val)
+        {
+            if (val < min)
+            {
+                val = min;
+                return true;
+            }
+            else if (val > max)
+            {
+                val = max;
+                return true;
+            }
+            else
+                return false;
+        }
+
+        /// <summary>
         /// 슬라이더 실행
         /// </summary>
         private void StartSlide(int fingerId)
@@ -180,6 +200,7 @@ namespace SexyDu.UI.UGUI
                     // deltaPosition 계산 및 적용
                     float deltaPosition = (current.y - prev.y) * scaleFactorForMult;
                     anchoredPosition.y += deltaPosition;
+                    AmendLimit(ref anchoredPosition.y);
 
                     target.anchoredPosition = anchoredPosition;
 
@@ -250,7 +271,11 @@ namespace SexyDu.UI.UGUI
                 // 관성 수치 적용
                 float deltaTime = Time.deltaTime;
                 anchoredPosition.y += inertiaPerOneSec * deltaTime;
+                bool isOver = AmendLimit(ref anchoredPosition.y);
                 target.anchoredPosition = anchoredPosition;
+
+                if (isOver)
+                    break;
 
                 // 감속처리
                 inertiaPerOneSec += decelerationRate / deltaTime;
@@ -271,7 +296,11 @@ namespace SexyDu.UI.UGUI
                 // 관성 수치 적용
                 float deltaTime = Time.deltaTime;
                 anchoredPosition.y += inertiaPerOneSec * deltaTime;
+                bool isOver = AmendLimit(ref anchoredPosition.y);
                 target.anchoredPosition = anchoredPosition;
+
+                if (isOver)
+                    break;
 
                 // 감속처리
                 inertiaPerOneSec -= decelerationRate / deltaTime;
