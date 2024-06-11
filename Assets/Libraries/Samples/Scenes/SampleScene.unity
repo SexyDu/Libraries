@@ -435,7 +435,7 @@ MonoBehaviour:
       m_Calls: []
   interacts:
   - {fileID: 927729499}
-  transferTarget: {fileID: 1701112481}
+  touchReceiver: {fileID: 1701112481}
 --- !u!1 &995234188
 GameObject:
   m_ObjectHideFlags: 0

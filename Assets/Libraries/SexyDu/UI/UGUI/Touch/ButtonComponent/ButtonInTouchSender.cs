@@ -9,7 +9,7 @@ namespace SexyDu.UI.UGUI
     /// 버튼
     /// * 버튼 터치에 이동 감지 시 지정된 sender로 이관
     /// </summary>
-    public class ButtonForTouchSender : ButtonBasic
+    public class ButtonInTouchSender : ButtonBasic, ITouchTargetSender
     {
         public override void OnPointerDown(PointerEventData eventData)
         {
@@ -24,7 +24,7 @@ namespace SexyDu.UI.UGUI
 
         public override void OnPointerUp(PointerEventData eventData)
         {
-            //InteractUp();
+            // NotUsed
         }
 
         public override void OnPointerClick(PointerEventData eventData)
@@ -53,13 +53,21 @@ namespace SexyDu.UI.UGUI
         }
 
         [Header("Sender")]
-        [SerializeField] private TouchTarget transferTarget;
+        [SerializeField] private TouchTarget touchReceiver;
+
+        public void SetTouchReceiver(ITouchTarget receiver)
+        {
+            if (receiver is TouchTarget)
+                touchReceiver = receiver as TouchTarget;
+            else
+                Debug.LogError("TouchTargetSender에서는 TouchTarget만을 Receiver로 받을 수 있습니다.");
+        }
 
         private void SendTouch()
         {
-            if (transferTarget != null)
+            if (touchReceiver != null)
             {
-                transferTarget.AddTouch(FingerId);
+                touchReceiver.AddTouch(FingerId);
                 ClearTouch();
             }
         }
