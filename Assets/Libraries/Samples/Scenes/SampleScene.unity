@@ -436,6 +436,7 @@ MonoBehaviour:
   interacts:
   - {fileID: 927729499}
   touchReceiver: {fileID: 1701112481}
+  onDownClearReceiver: 0
 --- !u!1 &995234188
 GameObject:
   m_ObjectHideFlags: 0
@@ -598,6 +599,7 @@ MonoBehaviour:
   decelerationRate: 0.135
   limitInertia: 1000
   inertiaBreak: 1
+  rectTransformCache: {fileID: 1701112480}
 --- !u!114 &1701112482
 MonoBehaviour:
   m_ObjectHideFlags: 0

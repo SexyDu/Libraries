@@ -95,6 +95,26 @@ namespace SexyDu.UI.UGUI
         // 터치 보정용 Canvas scale factor
         private float scaleFactorForMult = 1f;
 
+        private Vector2 TargetPosition
+        {
+            get => target.anchoredPosition;
+            set => target.anchoredPosition = value;
+        }
+
+        /// <summary>
+        /// 제한수치에 따른 위치 조정
+        /// </summary>
+        public void AmendTargetPosition()
+        {
+            // 일단 슬라이드 종료
+            EndSlide();
+
+            Vector2 anchoredPosition = TargetPosition;
+            // 위치값이 보정된 경우 설정
+            if (AmendLimitPosition(ref anchoredPosition.y))
+                TargetPosition = anchoredPosition;
+        }
+
         #region Slide
         [SerializeField] private float min; // slide 최솟값
         [SerializeField] private float max; // slide 최댓값
@@ -118,7 +138,7 @@ namespace SexyDu.UI.UGUI
         /// 제한범위 값 보정
         /// </summary>
         /// <returns>제한범위를 벗어났는지 여부(보정 여부)</returns>
-        private bool AmendLimit(ref float val)
+        private bool AmendLimitPosition(ref float val)
         {
             if (val < min)
             {
@@ -179,7 +199,7 @@ namespace SexyDu.UI.UGUI
             }
 
             // 초기 타겟 위치
-            Vector2 anchoredPosition = target.anchoredPosition;
+            Vector2 anchoredPosition = TargetPosition;
 
             do
             {
@@ -200,9 +220,9 @@ namespace SexyDu.UI.UGUI
                     // deltaPosition 계산 및 적용
                     float deltaPosition = (current.y - prev.y) * scaleFactorForMult;
                     anchoredPosition.y += deltaPosition;
-                    AmendLimit(ref anchoredPosition.y);
+                    AmendLimitPosition(ref anchoredPosition.y);
 
-                    target.anchoredPosition = anchoredPosition;
+                    TargetPosition = anchoredPosition;
 
                     // 관성 queue에 현재 delta 데이터 입력
                     inertiaQueue?.Enqueue(deltaPosition, Time.deltaTime);
@@ -262,7 +282,7 @@ namespace SexyDu.UI.UGUI
         /// </summary>
         private IEnumerator CoInertiaDecrease(float inertiaPerOneSec)
         {
-            Vector2 anchoredPosition = target.anchoredPosition;
+            Vector2 anchoredPosition = TargetPosition;
 
             do
             {
@@ -271,8 +291,8 @@ namespace SexyDu.UI.UGUI
                 // 관성 수치 적용
                 float deltaTime = Time.deltaTime;
                 anchoredPosition.y += inertiaPerOneSec * deltaTime;
-                bool isOver = AmendLimit(ref anchoredPosition.y);
-                target.anchoredPosition = anchoredPosition;
+                bool isOver = AmendLimitPosition(ref anchoredPosition.y);
+                TargetPosition = anchoredPosition;
 
                 if (isOver)
                     break;
@@ -287,7 +307,7 @@ namespace SexyDu.UI.UGUI
         /// </summary>
         private IEnumerator CoInertiaIncrease(float inertiaPerOneSec)
         {
-            Vector2 anchoredPosition = target.anchoredPosition;
+            Vector2 anchoredPosition = TargetPosition;
 
             do
             {
@@ -296,8 +316,8 @@ namespace SexyDu.UI.UGUI
                 // 관성 수치 적용
                 float deltaTime = Time.deltaTime;
                 anchoredPosition.y += inertiaPerOneSec * deltaTime;
-                bool isOver = AmendLimit(ref anchoredPosition.y);
-                target.anchoredPosition = anchoredPosition;
+                bool isOver = AmendLimitPosition(ref anchoredPosition.y);
+                TargetPosition = anchoredPosition;
 
                 if (isOver)
                     break;
@@ -307,6 +327,19 @@ namespace SexyDu.UI.UGUI
 
             } while (inertiaPerOneSec > inertiaBreak);
         }
+        #endregion
+
+        #region ObjectCache
+        [Header("ObjectCache")]
+        [SerializeField] private RectTransform rectTransformCache;
+        private RectTransform RectTransformCache => rectTransformCache;
+
+        /// <summary>
+        /// 슬라이더의 영역
+        /// RectTransform.rect.size.x == RectTransform.rect.width
+        /// RectTransform.rect.size.y == RectTransform.rect.height
+        /// </summary>
+        public Vector2 Area => rectTransformCache.rect.size;
         #endregion
     }
 }

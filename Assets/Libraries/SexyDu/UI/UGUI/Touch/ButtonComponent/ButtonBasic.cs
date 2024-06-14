@@ -6,6 +6,9 @@ using SexyDu.Touch;
 
 namespace SexyDu.UI.UGUI
 {
+    /// <summary>
+    /// 기본 버튼
+    /// </summary>
     public class ButtonBasic : TouchTarget, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
     {
         public virtual void OnPointerDown(PointerEventData eventData)
