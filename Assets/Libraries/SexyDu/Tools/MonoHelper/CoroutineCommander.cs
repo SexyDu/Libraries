@@ -21,12 +21,15 @@ namespace SexyDu.Tool
             yield return enumerator;
 
             onCompleted?.Invoke();
+            Clear();
         }
 
         // 코루틴 수행 워커
         private MonoBehaviour worker = null;
         // 현재 수행중인 코루틴
         private Coroutine coroutine = null;
+        // 동작 중 여부
+        public bool IsRunning => coroutine != null;
 
         /// <summary>
         /// 코루틴 실행
@@ -44,11 +47,20 @@ namespace SexyDu.Tool
         /// </summary>
         public void Cancel()
         {
-            if (this.coroutine != null)
+            if (coroutine != null)
             {
-                this.worker.StopCoroutine(coroutine);
-                this.coroutine = null;
+                worker.StopCoroutine(coroutine);
+                Clear();
             }
+        }
+
+        /// <summary>
+        /// 클리어
+        /// </summary>
+        private void Clear()
+        {
+            coroutine = null;
+            worker = null;
         }
 
         // 코루틴 완료 콜백
