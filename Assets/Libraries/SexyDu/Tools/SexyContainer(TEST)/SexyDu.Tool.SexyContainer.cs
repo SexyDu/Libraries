@@ -3,19 +3,41 @@
 using System;
 using System.Collections.Generic;
 
+/// <summary>
+/// Single Container System 테스트 코드
+/// </summary>
 namespace SexyDu.Tool
 {
-    public class SexyContainer
+    public class AlreadyBindedBaggageException : Exception
+    {
+        public AlreadyBindedBaggageException()
+        {
+
+        }
+
+        private const string DefaultMessageFormat = "이미 적재된 타입({0})의 수하물입니다.";
+        public AlreadyBindedBaggageException(Type type) : base(string.Format(DefaultMessageFormat, type))
+        {
+
+        }
+
+        public AlreadyBindedBaggageException(string message) : base(message)
+        {
+
+        }
+    }
+
+    public class SexyContainer : ISexyContainer
     {
         private static readonly Lazy<SexyContainer> ins = new Lazy<SexyContainer>(new SexyContainer());
-        public static SexyContainer Ins => ins.Value;
+        public static ISexyContainer Ins => ins.Value;
 
         public void Bind<T>(T data) where T : ISexyBaggage
         {
             Type key = typeof(T);
             if (ab.ContainsKey(key))
             {
-
+                throw new AlreadyBindedBaggageException(key);
             }
             else
                 ab.Add(typeof(T), data);
@@ -32,6 +54,7 @@ namespace SexyDu.Tool
             Type key = typeof(T);
             if (ab.ContainsKey(key))
             {
+                // 동일한 타입으로의 Unboxing은 비용이 무시해도 될 수준으로 작기 때문에 효율적
                 return ab[key] as T;
             }
             else
@@ -43,6 +66,7 @@ namespace SexyDu.Tool
             Type key = typeof(T);
             if (Has(key))
             {
+                // 동일한 타입으로의 Unboxing은 비용이 무시해도 될 수준으로 작기 때문에 효율적
                 return (T)ab[key];
             }
             else
@@ -64,6 +88,24 @@ namespace SexyDu.Tool
         //private Dictionary<Type, Capsule<T>> ab = new Dictionary<Type, Capsule<T>();
         private Dictionary<Type, ISexyBaggage> ab = new Dictionary<Type, ISexyBaggage>();
         
+    }
+
+    public interface ISexyContainer
+    {
+        public void Bind<T>(T data) where T : ISexyBaggage;
+
+        public void Unbind<T>() where T : ISexyBaggage;
+
+#if ONLY_CLASS
+        public T Get<T>() where T : class;
+#else
+        public T Get<T>() where T : ISexyBaggage;
+#endif
+
+
+        public bool Has<T>();
+
+        public bool Has(Type key);
     }
 
     public interface ISexyBaggage
