@@ -7,12 +7,14 @@ namespace SexyDu.Sample
 {
     public class UseMonoHelperSample : MonoBehaviour
     {
-        private IEnumerator CoSample()
+        [SerializeField] private int count;
+        private IEnumerator CoSample(int number)
         {
-            while (true)
+            int count = 0;
+            while (count < number)
             {
-                Debug.LogFormat("Running Sample Routine");
-
+                Debug.LogFormat($"Running Sample Routine {count}");
+                count++;
                 yield return null;
             }
         }
@@ -23,7 +25,9 @@ namespace SexyDu.Sample
         {
             StopSample();
 
-            routine = MonoHelper.StartCoroutine(CoSample());
+            routine = MonoHelper.StartCoroutine(CoSample(count)).Subscribe(() => {
+                Debug.LogFormat("코루틴 종료했다!");
+            });
         }
 
         private void StopSample()
