@@ -152,6 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5416888479708441b9409a9b8f09cfe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onStartTesting: 1
   integerBaggage: 0
 --- !u!4 &168855115
 Transform:

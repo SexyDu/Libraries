@@ -6,7 +6,7 @@ namespace SexyDu.ContainerSystem
     /// <summary>
     /// 컨테이너를 연결하여 들고있는 Docker
     /// </summary>
-    public static class ContainerDocker // : IDocker
+    public static class ContainerDocker
     {
         // 도킹된 컨테이너 Dictionary
         private readonly static Dictionary<Type, IDockable> containers = new Dictionary<Type, IDockable>();
@@ -44,6 +44,14 @@ namespace SexyDu.ContainerSystem
         }
 
         /// <summary>
+        /// Lazy(지연 초기화) 컨테이너 반환
+        /// </summary>
+        public static T LazyBring<T>() where T : IDockable
+        {
+            return new Lazy<T>(() => Bring<T>()).Value;
+        }
+
+        /// <summary>
         /// 컨테이너 존재 여부
         /// </summary>
         public static bool Has<T>() where T : IDockable
@@ -58,10 +66,5 @@ namespace SexyDu.ContainerSystem
         {
             return containers.ContainsKey(key);
         }
-    }
-
-    public interface IDockable
-    {
-
     }
 }
