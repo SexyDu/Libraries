@@ -13,6 +13,6 @@
 * (적재된 OnFrameTarget이 존재하는 경우) OnFrameContainer에서만 (MonoHelper를 활용해) Coroutine을 구동하고 적재된 타겟이 수행할 수 있도록 구현
 * 장점
   - 기능마다 Update/FixedUpdate 또는 Coroutine을 구동할 필요가 없어 비용상 효율적
-  - 시스템을 잘 따르면 매 프레임 구동하는 기능을 찾기 용이하여 유지보수에 도움
+  - 매 프레임 구동하는 기능을 찾기 용이하여 유지보수에 도움
 
 ## Touch / UI 서포트 목적의 추가 기능들
