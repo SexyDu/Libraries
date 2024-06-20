@@ -28,6 +28,7 @@ namespace SexyDu.ContainerSystem
         /// </summary>
         public static void Undock<T>() where T : IDockable
         {
+            UnityEngine.Debug.LogFormat("Undock {0}", typeof(T));
             containers.Remove(typeof(T));
         }
 
