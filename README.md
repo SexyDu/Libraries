@@ -8,9 +8,12 @@
 ## MonoHelper
 * MonoBehaviour를 사용하지 않고도 Coroutine을 구동시킬 수 있도록 도와주는 툴
 
-## OnFrameContainer (진행 중)
+## OnFrameSubject (진행 중)
 * 매 프레임 수행해야할 작업을 MonoBehaviour 내에서 Update/FixedUpdate 또는 Coroutine을 사용하지 않고 컨테이너에 적재하여 수행 처리
-* (적재된 OnFrameTarget이 존재하는 경우) OnFrameContainer에서만 (MonoHelper를 활용해) Coroutine을 구동하고 적재된 타겟이 수행할 수 있도록 구현
+* (대상이 경우) OnFrameSubject에서만 (MonoHelper를 활용해) Coroutine을 구동하고 적재된 대상이 수행할 수 있도록 구현
+* 2가지 사용 방식
+  - OnFrameContainer : ContainerSystem에 연결하여 사용하는 방식
+  - OnFrameSingleton : Singleton 형식으로 사용하는 방식
 * 장점
   - 기능마다 Update/FixedUpdate 또는 Coroutine을 구동할 필요가 없어 비용상 효율적
   - 매 프레임 구동하는 기능을 찾기 용이하여 유지보수에 도움
