@@ -3,7 +3,6 @@
 *.sln
 /Library
 /Logs
-/Packages
 .vsconfig
 /Temp
 /UserSettings
@@ -11,3 +10,4 @@
 /ProjectManaging
 /.vs
 *.csproj
+/.vscode
