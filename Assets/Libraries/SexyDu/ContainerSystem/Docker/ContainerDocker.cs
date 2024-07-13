@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 
 namespace SexyDu.ContainerSystem
 {
     /// <summary>
     /// 컨테이너를 연결하여 들고있는 Docker
     /// </summary>
-    public static class ContainerDocker
+    public static partial class ContainerDocker
     {
         // 도킹된 컨테이너 Dictionary
         private readonly static Dictionary<Type, IDockable> containers = new Dictionary<Type, IDockable>();
@@ -20,7 +21,15 @@ namespace SexyDu.ContainerSystem
             if (Has(key))
                 throw new AlreadyDockedContainerException(key);
             else
+            {
                 containers.Add(key, dockable);
+
+#if UNITY_EDITOR
+                CreateOnEditor();
+
+                onEditor?.Dock<T>(dockable);
+#endif
+            }
         }
 
         /// <summary>
@@ -30,6 +39,10 @@ namespace SexyDu.ContainerSystem
         {
             UnityEngine.Debug.LogFormat("Undock {0}", typeof(T));
             containers.Remove(typeof(T));
+
+#if UNITY_EDITOR
+            onEditor?.Undock<T>();
+#endif
         }
 
         /// <summary>
