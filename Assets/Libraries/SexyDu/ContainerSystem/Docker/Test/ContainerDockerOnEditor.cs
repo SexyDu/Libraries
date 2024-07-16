@@ -1,4 +1,7 @@
+#if UNITY_EDITOR
 using System;
+using System.Diagnostics;
+using System.Reflection;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,7 +28,8 @@ namespace SexyDu.ContainerSystem
             Type value = dockable.GetType();
 
             DockableObject dock = new DockableObject(key, value);
-            dock.Dock();
+
+            dock.Dock(GetCallFrame());
 
             docking.Add(dock);
         }
@@ -39,12 +43,54 @@ namespace SexyDu.ContainerSystem
                 if (docking[i].Equals(key))
                 {
                     DockableObject undock = docking[i];
-                    undock.Undock();
+                    undock.Undock(GetCallFrame());
 
                     docking.RemoveAt(i);
                     undocked.Add(undock);
                     break;
                 }
+            }
+        }
+
+        private StackFrame GetCallFrame()
+        {
+            StackTrace stackTrace = new StackTrace(true);
+
+            if (stackTrace.FrameCount < 4)
+                return null;
+            else
+                return stackTrace.GetFrame(3); // 여기 시점 3번째가 실제 호출부
+        }
+    }
+
+    [Serializable]
+    public struct DockingHistory
+    {
+        private const string TimeFormat = "yyyy-MM-dd HH:mm:ss";
+
+        [SerializeField] private string dateTime;
+        [SerializeField][TextArea] private string fileInformation;
+        [SerializeField][TextArea] private string methodInformation;
+
+        public DockingHistory(StackFrame frame)
+        {
+            this.dateTime = DateTime.Now.ToString(TimeFormat);
+
+            if (frame != null)
+            {
+                this.fileInformation = string.Format("{0}\nln {1}, col {2}", frame.GetFileName(), frame.GetFileLineNumber(), frame.GetFileColumnNumber());
+                if (frame.HasMethod())
+                {
+                    MethodBase methodBase = frame.GetMethod();
+                    this.methodInformation = string.Format("{0}.{1}\n(namespace {2})", methodBase.DeclaringType.Name, methodBase.Name, methodBase.DeclaringType.Namespace);
+                }
+                else
+                    this.methodInformation = string.Empty;
+            }
+            else
+            {
+                this.fileInformation = string.Empty;
+                this.methodInformation = string.Empty;
             }
         }
     }
@@ -57,12 +103,8 @@ namespace SexyDu.ContainerSystem
 
         [SerializeField] private string key;
         [SerializeField] private string value;
-        [SerializeField] private string dockedTime;
-        [SerializeField] private string undockedTime;
-
-        private const string TimeFormat = "yyyy-MM-dd HH:mm:ss";
-
-        private string CurrentTimeString => DateTime.Now.ToString(TimeFormat);
+        [SerializeField] private DockingHistory docked;
+        [SerializeField] private DockingHistory undocked;
 
         public DockableObject(Type keyType, Type valueType)
         {
@@ -71,8 +113,9 @@ namespace SexyDu.ContainerSystem
 
             this.key = this.keyType.Name;
             this.value = this.valueType.Name;
-            this.dockedTime = string.Empty;
-            this.undockedTime = string.Empty;
+
+            this.docked = new DockingHistory();
+            this.undocked = new DockingHistory();
         }
 
         public bool Equals(Type type)
@@ -80,14 +123,15 @@ namespace SexyDu.ContainerSystem
             return keyType.Equals(type);
         }
 
-        public void Dock()
+        public void Dock(StackFrame stackFrame = null)
         {
-            this.dockedTime = CurrentTimeString;
+            this.docked = new DockingHistory(stackFrame);
         }
 
-        public void Undock()
+        public void Undock(StackFrame stackFrame = null)
         {
-            this.undockedTime = CurrentTimeString;
+            this.undocked = new DockingHistory(stackFrame);
         }
     }
 }
+#endif

@@ -1,6 +1,9 @@
+#if UNITY_EDITOR
+#define CREATEONEDITOR_WHEN_DOCK
+#endif
+
 using System;
 using System.Collections.Generic;
-using UnityEditor;
 
 namespace SexyDu.ContainerSystem
 {
@@ -11,6 +14,17 @@ namespace SexyDu.ContainerSystem
     {
         // 도킹된 컨테이너 Dictionary
         private readonly static Dictionary<Type, IDockable> containers = new Dictionary<Type, IDockable>();
+
+        /// <summary>
+        /// 초기 설정
+        /// </summary>
+        public static void Initialize()
+        {
+#if UNITY_EDITOR
+            // 에디터 모드 생성
+            CreateOnEditor();
+#endif
+        }
 
         /// <summary>
         /// 컨테이너 도킹
@@ -25,7 +39,10 @@ namespace SexyDu.ContainerSystem
                 containers.Add(key, dockable);
 
 #if UNITY_EDITOR
-                CreateOnEditor();
+#if CREATEONEDITOR_WHEN_DOCK
+                if (onEditor == null)
+                    CreateOnEditor();
+#endif
 
                 onEditor?.Dock<T>(dockable);
 #endif
@@ -37,7 +54,6 @@ namespace SexyDu.ContainerSystem
         /// </summary>
         public static void Undock<T>() where T : IDockable
         {
-            UnityEngine.Debug.LogFormat("Undock {0}", typeof(T));
             containers.Remove(typeof(T));
 
 #if UNITY_EDITOR
