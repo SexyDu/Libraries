@@ -1,7 +1,3 @@
-#if UNITY_EDITOR
-#define CREATEONEDITOR_WHEN_DOCK
-#endif
-
 using System;
 using System.Collections.Generic;
 
@@ -39,11 +35,6 @@ namespace SexyDu.ContainerSystem
                 containers.Add(key, dockable);
 
 #if UNITY_EDITOR
-#if CREATEONEDITOR_WHEN_DOCK
-                if (onEditor == null)
-                    CreateOnEditor();
-#endif
-
                 onEditor?.Dock<T>(dockable);
 #endif
             }

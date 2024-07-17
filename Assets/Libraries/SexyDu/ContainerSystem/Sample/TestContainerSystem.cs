@@ -33,6 +33,9 @@ namespace SexyDu.Sample
 
         private void InitializeContainers()
         {
+            // 컨테이너 도커 초기설정
+            ContainerDocker.Initialize();
+
             // 아래와 같이 도커에 컨테이너를 연결한다.
             ContainerDocker.Dock<ISingleContainer>(new SingleContainer());
             ContainerDocker.Dock<IConvenientContainer>(new ConvenientContainer());
