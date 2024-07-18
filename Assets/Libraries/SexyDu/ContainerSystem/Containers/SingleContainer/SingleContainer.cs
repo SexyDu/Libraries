@@ -9,11 +9,11 @@ namespace SexyDu.ContainerSystem
     public class SingleContainer : ISingleContainer
     {
         // 컨테이너 Dictionary
-        private readonly Dictionary<Type, ISingleBaggage> baggages = null;
+        private readonly Dictionary<Type, IBindable> baggages = null;
 
         public SingleContainer()
         {
-            baggages = new Dictionary<Type, ISingleBaggage>();
+            baggages = new Dictionary<Type, IBindable>();
         }
 
         #region ISingleContainer
@@ -21,7 +21,7 @@ namespace SexyDu.ContainerSystem
         /// 오브젝트 적재
         /// : ISingleContainer
         /// </summary>
-        public void Bind<T>(T data) where T : ISingleBaggage
+        public void Bind<T>(T data) where T : IBindable
         {
             Type key = typeof(T);
             if (Has(key))
@@ -34,7 +34,7 @@ namespace SexyDu.ContainerSystem
         /// 오브젝트 방출
         /// : ISingleContainer
         /// </summary>
-        public void Unbind<T>() where T : ISingleBaggage
+        public void Unbind<T>() where T : IBindable
         {
             baggages.Remove(typeof(T));
         }
@@ -43,7 +43,7 @@ namespace SexyDu.ContainerSystem
         /// 오브젝트 반환
         /// : ISingleContainer
         /// </summary>
-        public T Get<T>() where T : ISingleBaggage
+        public T Get<T>() where T : IBindable
         {
             Type key = typeof(T);
             if (Has(key))
@@ -56,7 +56,7 @@ namespace SexyDu.ContainerSystem
         /// 오브젝트 존재 여부
         /// : ISingleContainer
         /// </summary>
-        public bool Has<T>() where T : ISingleBaggage
+        public bool Has<T>() where T : IBindable
         {
             return Has(typeof(T));
         }

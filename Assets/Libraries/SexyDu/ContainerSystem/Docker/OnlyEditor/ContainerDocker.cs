@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using UnityEngine;
+using SexyDu.ContainerSystem.Editor;
 
 namespace SexyDu.ContainerSystem
 {
@@ -11,7 +12,7 @@ namespace SexyDu.ContainerSystem
         /// <summary>
         /// ContainerDocker 에디터 표출 오브젝트
         /// </summary>
-        private static ContainerDockerOnEditor onEditor = null;
+        private static ContainerDockerViewer onEditor = null;
 
         /// <summary>
         /// ContainerDockerOnEditor 생성
@@ -20,7 +21,7 @@ namespace SexyDu.ContainerSystem
         {
             if (onEditor == null)
             {
-                onEditor = ContainerDockerOnEditor.Create();
+                onEditor = ContainerDockerViewer.Create();
                 Debug.LogFormat("<color=yellow>[에디터 전용]</color> ContainerDocker 정보를 게임오브젝트 '{0} (DontDestroyOnLoad)'에서 확인할 수 있습니다.", onEditor.name);
             }
 #if false

@@ -35,7 +35,7 @@ namespace SexyDu.ContainerSystem
                 containers.Add(key, dockable);
 
 #if UNITY_EDITOR
-                onEditor?.Dock<T>(dockable);
+                onEditor?.History.Dock<T>(dockable);
 #endif
             }
         }
@@ -48,7 +48,7 @@ namespace SexyDu.ContainerSystem
             containers.Remove(typeof(T));
 
 #if UNITY_EDITOR
-            onEditor?.Undock<T>();
+            onEditor?.History.Undock<T>();
 #endif
         }
 

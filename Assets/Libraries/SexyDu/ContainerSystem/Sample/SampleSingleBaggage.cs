@@ -2,7 +2,7 @@ using SexyDu.ContainerSystem;
 
 namespace SexyDu.Sample
 {
-    public class SampleSingleBaggage : ISingleBaggage
+    public class SampleSingleBaggage : IBindable
     {
         private int a;
         private string b;
