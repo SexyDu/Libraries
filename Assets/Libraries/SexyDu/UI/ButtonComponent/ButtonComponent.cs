@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SexyDu.UI
 {
-    public class ButtonComponent : ButtonHandler
+    public partial class ButtonComponent : ButtonHandler
     {
         [Header("ButtonComponent")]
         [SerializeField] private Component colliderComponent; // entered 확인용 콜리더 컴포넌트
@@ -26,6 +26,8 @@ namespace SexyDu.UI
                     Debug.LogErrorFormat("'{0}'의 ButtonComponent에 colliderComponent가 없어 연결을 시도하였으나 해당 오브젝트에 Collider2D가 없음.");
                 }
             }
+
+            InitializeEmployees();
         }
 
         /// <summary>

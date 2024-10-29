@@ -4,6 +4,9 @@ namespace SexyDu
 {
     namespace Touch
     {
+        /// <summary>
+        /// 화면 터치 정보 구조체
+        /// </summary>
         public struct TouchTabInfo
         {
             private Vector2 touchPos;
