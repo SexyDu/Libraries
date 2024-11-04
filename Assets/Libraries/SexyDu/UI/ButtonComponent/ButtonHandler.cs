@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
 using SexyDu.Touch;
 
@@ -21,7 +21,7 @@ namespace SexyDu.UI
             if (Touched)
                 this.fingerId = fingerId;
         }
-        
+
         /// <summary>
         /// 터치 클리어
         /// : ITouchTarget
@@ -40,26 +40,42 @@ namespace SexyDu.UI
         #endregion
 
         #region Interactable
+        // 버튼 동작 수행 여부
         [SerializeField] protected bool interactable = true;
+
+        /// <summary>
+        /// 버튼 동작 수행 여부 설정
+        /// </summary>
         public void SetInteracableStatus(bool interactable)
         {
             this.interactable = interactable;
         }
         #endregion
 
+        #region Event
         // Event delegates triggered on click.
         [FormerlySerializedAs("onClick")]
         [SerializeField]
-        protected Button.ButtonClickedEvent m_OnClick = new Button.ButtonClickedEvent();
-        public Button.ButtonClickedEvent onClick
+        protected UnityEvent m_OnClick = new UnityEvent();
+        public UnityEvent onClick
         {
             get { return m_OnClick; }
             set { m_OnClick = value; }
         }
 
+        protected virtual void OnClick()
+        {
+            m_OnClick?.Invoke();
+        }
+        #endregion
+
         #region Interaction
+        // 버튼 터치 인터렉션
         [SerializeField] private ButtonInteract[] interacts;
 
+        /// <summary>
+        /// 버튼 눌림 인터렉션
+        /// </summary>
         protected void InteractPress()
         {
             for (int i = 0; i < interacts.Length; i++)
@@ -67,6 +83,10 @@ namespace SexyDu.UI
                 interacts[i].OnButtonPress();
             }
         }
+
+        /// <summary>
+        /// 버튼 눌림 해제 인터렉션
+        /// </summary>
         protected void InteractUp()
         {
             for (int i = 0; i < interacts.Length; i++)

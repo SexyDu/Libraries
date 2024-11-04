@@ -186,7 +186,7 @@ namespace SexyDu.UI.UGUI
             Vector2 prev = GetTouchPosition(fingerId);
 
             // 터치 포지션을 찾지 못한 경우 종료
-            if (prev.Equals(Vector2.zero))
+            if (!Config.ValidateTouchPosition(prev))
                 yield break;
 
             // 관성 사용인 경우 초기화
@@ -208,7 +208,7 @@ namespace SexyDu.UI.UGUI
                 Vector2 current = GetTouchPosition(fingerId);
 
                 // 현재 위치값을 찾지 못한 경우(터치 종료)
-                if (current.Equals(Vector2.zero))
+                if (!Config.ValidateTouchPosition(current))
                 {
                     // 관성 코루틴 실행
                     StartInertia(inertiaQueue.PositionPerOneSecond());

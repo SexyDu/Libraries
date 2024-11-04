@@ -1,5 +1,4 @@
 using System.Collections;
-using SexyDu.Touch;
 using UnityEngine;
 
 namespace SexyDu.UI
@@ -40,6 +39,8 @@ namespace SexyDu.UI
             {
                 this.fingerId = fingerId;
                 TouchStart();
+
+                SendEmployees(this.fingerId);
             }
         }
 
@@ -57,8 +58,7 @@ namespace SexyDu.UI
 
                 entered = true;
 
-                ieTouch = CoTouch();
-                StartCoroutine(ieTouch);
+                RunTouchRoutine();
             }
         }
 
@@ -69,16 +69,12 @@ namespace SexyDu.UI
         {
             if (Touched)
             {
-                if (ieTouch != null)
-                {
-                    StopCoroutine(ieTouch);
-                    ieTouch = null;
-                }
+                StopTouchRoutine();
+
+                DisappearEmployees();
 
                 if (entered)
-                {
-                    Debug.Log("클릭됨");
-                }
+                    OnClick();
 
                 ClearTouch();
             }
@@ -112,12 +108,12 @@ namespace SexyDu.UI
         /// </summary>
         private void CheckTouch()
         {
-            Vector2 pos = GetTouchPosition(0);
+            Vector2 pos = GetTouchPosition(fingerId);
 
             // 터치 위치가 정상적으로 잡힌 경우
             if (pos.x > 0 || pos.y > 0)
             {
-                Component component = TouchCenter.Config.GetTouchedComponent2D(pos);
+                Component component = Config.GetTouchedComponent2D(pos);
 
                 entered = component is null ? false : component.Equals(colliderComponent);
             }
@@ -125,6 +121,29 @@ namespace SexyDu.UI
             else
             {
                 TouchEnd();
+            }
+        }
+
+        /// <summary>
+        /// 터치 코루틴 실행
+        /// </summary>
+        private void RunTouchRoutine()
+        {
+            StopTouchRoutine();
+
+            ieTouch = CoTouch();
+            StartCoroutine(ieTouch);
+        }
+
+        /// <summary>
+        /// 터치 코루틴 종료
+        /// </summary>
+        private void StopTouchRoutine()
+        {
+            if (ieTouch is not null)
+            {
+                StopCoroutine(ieTouch);
+                ieTouch = null;
             }
         }
 

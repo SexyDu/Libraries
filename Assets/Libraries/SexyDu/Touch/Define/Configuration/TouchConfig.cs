@@ -116,7 +116,66 @@ namespace SexyDu.Touch
 #endif
         }
 
-        #region Function
+        #region Touch
+        // 유효하지 않은 터치 포지션
+        public readonly Vector2 InvalidTouchPosition = Vector2.zero;
+
+        /// <summary>
+        /// 터치 포지션 유효성 확인
+        /// </summary>
+        public bool ValidateTouchPosition(Vector2 position)
+        {
+            return !position.Equals(InvalidTouchPosition);
+        }
+
+        /// <summary>
+        /// fingerId를 기반으로 터치의 위치값을 반환
+        /// </summary>
+        public Vector2 GetTouchPosition(int fingerId)
+        {
+            for (int i = 0; i < Input.touchCount; i++)
+            {
+                if (Input.touches[i].fingerId == fingerId)
+                    return Input.touches[i].position;
+            }
+
+#if CONSIDER_MOUSE
+            switch (fingerId)
+            {
+                case TouchCenter.MouseIdLeft:
+                    if (Input.GetMouseButton(0))
+                        return Input.mousePosition;
+                    else
+                        break;
+                case TouchCenter.MouseIdRight:
+                    if (Input.GetMouseButton(1))
+                        return Input.mousePosition;
+                    else
+                        break;
+            }
+#endif
+
+            return InvalidTouchPosition;
+        }
+        #endregion
+
+        #region Collision
+        /// <summary>
+        /// [메인 카메라 기준] Collider2D 터치 충돌 컴포넌트 반환
+        /// </summary>
+        public Component GetTouchedComponent2D(int fingerId)
+        {
+            Vector2 pos = GetTouchPosition(fingerId);
+
+            if (ValidateTouchPosition(pos))
+                return GetTouchedComponent2D(pos);
+            else
+                return null;
+        }
+
+        /// <summary>
+        /// [메인 카메라 기준] Collider2D 터치 충돌 컴포넌트 반환
+        /// </summary>
         public Component GetTouchedComponent2D(Vector2 position)
         {
             return GetTouchedComponent2D(MainTouchCenter.MainCam, position);
@@ -134,6 +193,22 @@ namespace SexyDu.Touch
             return hit.collider;
         }
 
+        /// <summary>
+        /// [메인 카메라 기준] Collider(3D) 터치 충돌 컴포넌트 반환
+        /// </summary>
+        public Component GetTouchedComponent3D(int fingerId)
+        {
+            Vector2 pos = GetTouchPosition(fingerId);
+
+            if (ValidateTouchPosition(pos))
+                return GetTouchedComponent3D(pos);
+            else
+                return null;
+        }
+
+        /// <summary>
+        /// [메인 카메라 기준] Collider(3D) 터치 충돌 컴포넌트 반환
+        /// </summary>
         public Component GetTouchedComponent3D(Vector2 position)
         {
             return GetTouchedComponent3D(MainTouchCenter.MainCam, position);
@@ -146,7 +221,7 @@ namespace SexyDu.Touch
         {
             Ray ray = camera.ScreenPointToRay(position);
             RaycastHit hit;
-            
+
             if (Physics.Raycast(ray, out hit))
                 return hit.collider;
             else
