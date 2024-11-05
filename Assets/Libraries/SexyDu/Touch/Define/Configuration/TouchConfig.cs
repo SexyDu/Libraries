@@ -15,6 +15,17 @@ namespace SexyDu.Touch
         // 프로젝트 기본 OrthographicSize
         private const float DefaultOrthographicSize = 5f;
 
+        private float OrthographicSize
+        {
+            get
+            {
+                if (MainTouchCenter == null)
+                    return DefaultOrthographicSize;
+                else
+                    return MainTouchCenter.MainCam.orthographicSize;
+            }
+        }
+
         // 메인 터치 센터
         public TouchCenter MainTouchCenter
         {
@@ -70,10 +81,10 @@ namespace SexyDu.Touch
         /// <summary>
         /// 1픽셀당 유니티 오브젝트 크기/위치값
         /// </summary>
-        private float worldPosPerOnePixel;
-        public float WorldPosPerOnePixel
+        private float unityPositionPerOnePixel;
+        public float UPPOP
         {
-            get { return this.worldPosPerOnePixel; }
+            get { return this.unityPositionPerOnePixel; }
         }
 
         /// <summary>
@@ -101,13 +112,11 @@ namespace SexyDu.Touch
             screenSize = new Vector2(Screen.width, Screen.height);
             screenRatio = screenSize.x / screenSize.y;
 
-            if (MainTouchCenter != null)
-                worldPosPerOnePixel = MainTouchCenter.MainCam.orthographicSize / (screenSize.y * 0.5f);
-            else
-            {
+#if UNITY_EDITOR
+            if (MainTouchCenter == null)
                 Debug.LogWarning("메인 터치 카메라가 설정되기 전에 들어옴, 그래서 5로 박아서 설정");
-                worldPosPerOnePixel = DefaultOrthographicSize / (screenSize.y * 0.5f);
-            }
+#endif
+            unityPositionPerOnePixel = OrthographicSize / (screenSize.y * 0.5f);
 
 #if false
             if(MainTouchCenter != null)
@@ -229,5 +238,44 @@ namespace SexyDu.Touch
         }
         #endregion
 
+        #region Convert
+        /// <summary>
+        /// 스크린(touch) 위치값을 유니티 위치값으로 변환
+        /// </summary>
+        public Vector2 ConvertUnityPosition(Vector2 position)
+        {
+            Vector2 halfScreenSize = ScreenSize * 0.5f;
+
+            // 여기에 픽셀 기준(0, 0)값이 서로 다르니 보정하여 계산
+            /// 유니티는 기준이 화면 중앙이고 스크린은 좌측하단.
+            /// 하여 서로간의 위치 차이인 스크린 절반크기값(halfScreenSize)를 각각 빼주어 계산
+            position.x = (position.x - halfScreenSize.x) * UPPOP;
+            position.y = (position.y - halfScreenSize.y) * UPPOP;
+            return position;
+        }
+
+        /// <summary>
+        /// 유니티 위치값을 스크린(touch) 위치값으로 변환
+        /// </summary>
+        public Vector2 ConvertScreenPosition(Vector2 position)
+        {
+            Vector2 halfScreenSize = ScreenSize * 0.5f;
+            // 유니티 크기(Unit) 1당 스크린(touch) 크기 계산
+            /// 유니티 카메라는 기본적으로 y축을 기준으로 감
+            /// y축을 기준 전체 유니티 크기값은 OrthographicSize * 2
+            ///  - 예를들어 OrthographicSize 5의 경우 화면 기준 유니티 크기값은 10이된다.
+            ///  - 다르게 말해 y축 기준 유니티 크기의 절반이 OrthographicSize인 것이다.
+            /// 하여 스크린 전체를 OrthographicSize * 2로 나누면 유니티 크기 1당 스크린 크기가 계산된다.
+            float screenPerOneUnit = ScreenSize.y / (OrthographicSize * 2f);
+
+            // 여기에 픽셀 기준(0, 0)값이 서로 다르니 보정
+            /// 유니티는 기준이 화면 중앙이고 스크린은 좌측하단.
+            /// 하여 서로간의 위치 차이인 스크린 절반크기값(halfScreenSize)를 각각 더해준다.
+            position.x = (position.x * screenPerOneUnit) + halfScreenSize.x;
+            position.y = (position.y * screenPerOneUnit) + halfScreenSize.y;
+
+            return position;
+        }
+        #endregion
     }
 }
