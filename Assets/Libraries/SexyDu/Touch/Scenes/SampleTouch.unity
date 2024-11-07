@@ -782,7 +782,7 @@ GameObject:
   - component: {fileID: 2138418694}
   - component: {fileID: 2138418693}
   - component: {fileID: 2138418692}
-  - component: {fileID: 2138418691}
+  - component: {fileID: 2138418695}
   m_Layer: 0
   m_Name: blue
   m_TagString: Untagged
@@ -790,20 +790,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2138418691
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2138418690}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f37f52fced1d84245ad99c7c9176bce7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 2138418694}
-  MaxTouchCount: 10
 --- !u!61 &2138418692
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -916,6 +902,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2138418695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2138418690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8d56632f0c094ce3ac36c0f1b7d4095, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxTouchCount: 10
+  onAwakeInit: 1
+  target: {fileID: 2138418694}
+  handleTypes: 010000000200000003000000
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

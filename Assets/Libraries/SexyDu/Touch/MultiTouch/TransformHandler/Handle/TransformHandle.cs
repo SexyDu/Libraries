@@ -2,13 +2,13 @@ using UnityEngine;
 
 namespace SexyDu.Touch
 {
-    public abstract class MultiTouchActor : IMultiTouchActor
+    public abstract class TransformHandle : ITransformHandle
     {
         // 터치 바디
-        public IMultiTouchBody body
+        protected ITransformHandler body
         {
-            set;
-            protected get;
+            private set;
+            get;
         }
 
         /// <summary>
@@ -28,9 +28,11 @@ namespace SexyDu.Touch
         /// <summary>
         /// 바디 설정
         /// </summary>
-        public virtual void SetBody(IMultiTouchBody body)
+        public virtual ITransformHandle SetBody(ITransformHandler body)
         {
             this.body = body;
+
+            return this;
         }
 
         /// <summary>

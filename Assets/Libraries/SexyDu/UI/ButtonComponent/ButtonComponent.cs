@@ -33,7 +33,7 @@ namespace SexyDu.UI
         /// 터치 입력 함수
         /// : ITouchTarget
         /// </summary>
-        public override void AddTouch(int fingerId)
+        public override void ReceiveTouch(int fingerId)
         {
             if (!Touched)
             {

@@ -15,7 +15,7 @@ namespace SexyDu.UI.UGUI
         {
             if (interactable)
             {
-                AddTouch(eventData.pointerId);
+                ReceiveTouch(eventData.pointerId);
                 InteractPress();
             }
         }
@@ -48,7 +48,7 @@ namespace SexyDu.UI.UGUI
         private int fingerId = int.MinValue;
         protected int FingerId => fingerId;
 
-        public override void AddTouch(int fingerId)
+        public override void ReceiveTouch(int fingerId)
         {
             this.fingerId = fingerId;
         }

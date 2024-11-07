@@ -6,10 +6,20 @@ using UnityEngine;
 
 namespace SexyDu.Touch
 {
+    /// <summary>
+    /// 터치 대상 기본 클래스
+    /// </summary>
     public abstract class TouchTarget : MonoBehaviour, ITouchTarget
     {
-        public abstract void AddTouch(int fingerId);
+        /// <summary>
+        /// 터치된 fingerId 수신
+        /// </summary>
+        /// <param name="fingerId"></param>
+        public abstract void ReceiveTouch(int fingerId);
 
+        /// <summary>
+        /// 터치 클리어
+        /// </summary>
         public abstract void ClearTouch();
 
         protected TouchConfig Config => TouchCenter.Config;
@@ -20,6 +30,9 @@ namespace SexyDu.Touch
         /// </summary>
         protected float UPPOP => Config.UPPOP;
 
+        /// <summary>
+        /// fingerId에 해당하는 터치의 위치값
+        /// </summary>
         protected Vector2 GetTouchPosition(int fingerId)
         {
             return Config.GetTouchPosition(fingerId);

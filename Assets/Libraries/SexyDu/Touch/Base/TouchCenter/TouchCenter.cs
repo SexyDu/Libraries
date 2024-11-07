@@ -53,7 +53,7 @@ namespace SexyDu.Touch
             // 캔버스 터치가 아닌 경우만 수행
             if (!IsCanvasTouch(touch))
                 // 터치된 타겟이 있는 경우만 AddTouch
-                GetTouchedTarget(mainCam, touch)?.AddTouch(touch.fingerId);
+                GetTouchedTarget(mainCam, touch)?.ReceiveTouch(touch.fingerId);
         }
 
         /// <summary>
@@ -182,7 +182,7 @@ namespace SexyDu.Touch
                 if (left)
                 {
                     // 터치된 타겟이 있는 경우만 AddTouch
-                    GetTouchedTarget(mainCam, Input.mousePosition)?.AddTouch(MouseIdLeft);
+                    GetTouchedTarget(mainCam, Input.mousePosition)?.ReceiveTouch(MouseIdLeft);
                 }
                 else
                 {

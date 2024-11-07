@@ -2,12 +2,12 @@ using UnityEngine;
 
 namespace SexyDu.Touch
 {
-    public interface IMultiTouchActor
+    public interface ITransformHandle
     {
         /// <summary>
         /// 바디 설정
         /// </summary>
-        public void SetBody(IMultiTouchBody body);
+        public ITransformHandle SetBody(ITransformHandler body);
 
         /// <summary>
         /// 터치 초기 설정

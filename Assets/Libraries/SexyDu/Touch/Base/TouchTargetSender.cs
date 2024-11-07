@@ -18,7 +18,7 @@ namespace SexyDu.UI.UGUI
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            target.AddTouch(eventData.pointerId);
+            target.ReceiveTouch(eventData.pointerId);
         }
     }
 }

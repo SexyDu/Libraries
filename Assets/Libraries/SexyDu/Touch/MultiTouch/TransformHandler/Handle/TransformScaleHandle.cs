@@ -3,9 +3,9 @@ using UnityEngine;
 namespace SexyDu.Touch
 {
     /// <summary>
-    /// 멀티터치 크기 조절 액터
+    /// 멀티터치 크기 변경 수행 행들
     /// </summary>
-    public class MultiTouchScaleActor : MultiTouchActor
+    public class TransformScaleHandle : TransformHandle
     {
         // 이전 터치의 평균 거리값
         private float previous = 0f;

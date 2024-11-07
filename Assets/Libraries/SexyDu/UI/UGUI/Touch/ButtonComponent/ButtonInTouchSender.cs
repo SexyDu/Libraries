@@ -15,7 +15,7 @@ namespace SexyDu.UI.UGUI
         {
             if (interactable)
             {
-                AddTouch(eventData.pointerId);
+                ReceiveTouch(eventData.pointerId);
                 InteractPress();
 
                 StartTouch();
@@ -79,7 +79,7 @@ namespace SexyDu.UI.UGUI
         {
             if (touchReceiver != null)
             {
-                touchReceiver.AddTouch(FingerId);
+                touchReceiver.ReceiveTouch(FingerId);
                 ClearTouch();
             }
         }

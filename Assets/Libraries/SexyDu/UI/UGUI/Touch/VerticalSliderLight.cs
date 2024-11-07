@@ -61,7 +61,7 @@ namespace SexyDu.UI.UGUI
         /// 터치 추가
         /// : TouchTarget : ITouchTarget
         /// </summary>
-        public override void AddTouch(int fingerId)
+        public override void ReceiveTouch(int fingerId)
         {
             StartSlide(fingerId);
         }
