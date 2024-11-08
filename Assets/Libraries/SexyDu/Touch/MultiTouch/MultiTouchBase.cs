@@ -9,6 +9,18 @@ namespace SexyDu.Touch
     /// </summary>
     public abstract class MultiTouchBase : TouchTarget
     {
+        /// <summary>
+        /// 오브젝트 비활성화 시 이벤트
+        /// </summary>
+        protected virtual void OnDisable()
+        {
+            ClearTouch();
+        }
+
+        /// <summary>
+        /// 터치된 fingerId 수신
+        /// </summary>
+        /// <param name="fingerId"></param>
         public override void ReceiveTouch(int fingerId)
         {
             if (touches.Count < MaxTouchCount)
@@ -38,9 +50,7 @@ namespace SexyDu.Touch
 
             if (touches.Count == 0)
             {
-                Stop();
-
-                ClearMultiTouchData();
+                ClearTouch();
             }
         }
         /// <summary>
@@ -48,7 +58,11 @@ namespace SexyDu.Touch
         /// </summary>
         public override void ClearTouch()
         {
+            Stop();
+
             touches.Clear();
+
+            ClearMultiTouchData();
         }
 
         #region TouchData

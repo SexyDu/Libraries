@@ -54,7 +54,7 @@ namespace SexyDu.Touch
             return totalPosition * (1f / totalTime);
         }
 
-        public struct FrameInfo
+        private struct FrameInfo
         {
             private float position;
             private float time;
