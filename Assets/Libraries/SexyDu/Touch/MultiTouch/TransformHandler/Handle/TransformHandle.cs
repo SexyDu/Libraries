@@ -12,18 +12,14 @@ namespace SexyDu.Touch
         }
 
         /// <summary>
-        /// Process처리로 인해 발생한 위치 이동값
-        /// </summary>
-        public abstract Vector2 DeltaPositionAfterProcess { get; }
-
-        /// <summary>
         /// 터치 초기 설정
         /// </summary>
         public abstract void Setting();
         /// <summary>
         /// 터치 처리
         /// </summary>
-        public abstract void Process();
+        /// <returns>처리에 따른 위치 이동값(delta position)</returns>
+        public abstract Vector2 Process();
 
         /// <summary>
         /// 바디 설정

@@ -917,7 +917,7 @@ MonoBehaviour:
   MaxTouchCount: 10
   onAwakeInit: 1
   target: {fileID: 2138418694}
-  handleTypes: 010000000200000003000000
+  handleTypes: 010203
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

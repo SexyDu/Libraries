@@ -12,9 +12,6 @@ namespace SexyDu.Touch
         // 대상 Transform의 크기
         private Vector3 scale = Vector3.zero;
 
-        private Vector2 deltaPosition = Vector2.zero;
-        public override Vector2 DeltaPositionAfterProcess => deltaPosition;
-
         public override void Setting()
         {
             scale = body.Target.localScale;
@@ -22,7 +19,7 @@ namespace SexyDu.Touch
             previous = GetDistanceAverage(body.Data);
         }
 
-        public override void Process()
+        public override Vector2 Process()
         {
             // 현재 터치의 평균 거리값
             float current = GetDistanceAverage(body.Data);
@@ -50,8 +47,8 @@ namespace SexyDu.Touch
             );
             // 크기 변경 후 이를 고려한 터치센터와 대상간의 위치 아치
             Vector2 differenceAfter = differenceBefore * ratio;
-            // 위 차이를 빼서 deltaPosition 계산
-            deltaPosition = differenceAfter - differenceBefore;
+            // 위 차이를 빼서 deltaPosition 계산 후 반환
+            return differenceAfter - differenceBefore;
         }
 
         /// <summary>
@@ -70,8 +67,6 @@ namespace SexyDu.Touch
 #else
                 sum += Vector2.Distance(data.center, data.Touches[i].position);
 #endif
-
-
             }
 
             return sum *= data.CountForMultiple;

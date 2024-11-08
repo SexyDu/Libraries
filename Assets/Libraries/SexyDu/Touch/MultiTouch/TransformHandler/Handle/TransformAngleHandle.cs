@@ -9,9 +9,6 @@ namespace SexyDu.Touch
     {
         private Vector3 eulerAngles = Vector3.zero;
 
-        private Vector2 deltaPosition = Vector2.zero;
-        public override Vector2 DeltaPositionAfterProcess => deltaPosition;
-
         public override void Setting()
         {
             eulerAngles = body.Target.localEulerAngles;
@@ -19,7 +16,7 @@ namespace SexyDu.Touch
             previous = GetAngles(body.Data.center, body.Data.Touches);
         }
 
-        public override void Process()
+        public override Vector2 Process()
         {
             // 현재 터치의 각도 배열
             float[] current = GetAngles(body.Data.center, body.Data.Touches);
@@ -41,16 +38,18 @@ namespace SexyDu.Touch
             // 각도가 변경된 경우 각도 변경에 따른 위치 변경값 설정
             if (averageAngle != 0f)
             {
+                // 현재 오브젝트 위치값
+                Vector2 currentPoint = body.Target.position;
                 // 현재 터치 센터의 유니티 위치값
                 Vector2 centerUnit = TouchCenter.Config.ConvertUnityPosition(body.Data.center);
-                Vector2 newPoint = RotatePoint(body.Target.position, centerUnit, averageAngle);
+                // 새로 계산된 오브젝트 위치값
+                Vector2 newPoint = RotatePoint(currentPoint, centerUnit, averageAngle);
 
                 // 새 위치값에서 현재 위치값을 빼서 변화량 계산
-                deltaPosition.x = newPoint.x - body.Target.position.x;
-                deltaPosition.y = newPoint.y - body.Target.position.y;
+                return newPoint - currentPoint;
             }
             else
-                deltaPosition = Vector2.zero;
+                return Vector2.zero;
         }
         /// <summary>
         /// 대상 각도 변경

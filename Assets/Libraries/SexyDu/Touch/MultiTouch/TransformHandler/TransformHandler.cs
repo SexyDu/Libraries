@@ -8,13 +8,16 @@ namespace SexyDu.Touch
     public class TransformHandler : MultiTouchBase, ITransformHandler
     {
         [SerializeField] private bool onAwakeInit = true;
-        
+
         protected virtual void Awake()
         {
             if (onAwakeInit)
                 Initialize();
         }
 
+        /// <summary>
+        /// 초기 설정
+        /// </summary>
         public virtual void Initialize()
         {
             InitializeHandles();
@@ -62,10 +65,12 @@ namespace SexyDu.Touch
         {
             do
             {
+                // 데이터의 터치수와 실제 입력받은 터치수가 같으면 터치 프로세스 진행
                 if (data.Count == touches.Count)
                     ProcessTouch();
+                // 다른 경우 새로운 터치 수에 따른 설정 진행
                 else
-                    InitializeTouch();
+                    SettingTouch();
 
                 yield return null;
             } while (true);
@@ -74,7 +79,7 @@ namespace SexyDu.Touch
         /// <summary>
         /// 터치 초기값 설정
         /// </summary>
-        private void InitializeTouch()
+        private void SettingTouch()
         {
             position = target.position;
 
@@ -111,14 +116,18 @@ namespace SexyDu.Touch
 
         #region Handles
         [Header("Handles")]
-        [SerializeField] private HandleType[] handleTypes;
+        [SerializeField] private HandleType[] handleTypes; // 사용할 핸들 타입
 
+        // 핸들 인터페이스
         private ITransformHandle[] handles = null;
 
+        /// <summary>
+        /// 핸들 초기 설정
+        /// </summary>
         private void InitializeHandles()
         {
             List<ITransformHandle> list = new List<ITransformHandle>();
-            
+
             for (int i = 0; i < handleTypes.Length; i++)
             {
                 try
@@ -137,6 +146,12 @@ namespace SexyDu.Touch
             handles = list.ToArray();
         }
 
+        /// <summary>
+        /// 핸들 타입에 맞는 핸들 생성 및 인터페이스 반환
+        /// </summary>
+        /// <param name="type">핸들 타입</param>
+        /// <returns>생성된 핸들 인터페이스</returns>
+        /// <exception cref="NotSupportedException">타입이 없는 경우의 Exception</exception>
         private ITransformHandle CreateHandle(HandleType type)
         {
             switch (type)
@@ -152,6 +167,9 @@ namespace SexyDu.Touch
             }
         }
 
+        /// <summary>
+        /// 전체 핸들 설정
+        /// </summary>
         private void SettingHandles()
         {
             for (int i = 0; i < handles.Length; i++)
@@ -160,13 +178,16 @@ namespace SexyDu.Touch
             }
         }
 
+        /// <summary>
+        /// 전체 핸들 업무 수행
+        /// </summary>
+        /// <returns>업무 수행에 따른 위치 이동값</returns>
         private Vector2 ProcessHandles()
         {
             Vector2 deltaPosition = Vector2.zero;
             for (int i = 0; i < handles.Length; i++)
             {
-                handles[i].Process();
-                deltaPosition += handles[i].DeltaPositionAfterProcess;
+                deltaPosition += handles[i].Process();
             }
 
             return deltaPosition;
@@ -174,13 +195,13 @@ namespace SexyDu.Touch
         #endregion
 
 
-        [System.Serializable]
-        private enum HandleType
+        [Serializable]
+        private enum HandleType : byte
         {
             Unknown = 0,
-            Position = 1,
-            Scale = 2,
-            Angle = 3,
+            Position = 1, // 위치 이동
+            Scale = 2, // 크기 변경
+            Angle = 3, // 각도 조절
         }
     }
 }

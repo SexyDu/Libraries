@@ -1,3 +1,7 @@
+#if UNITY_EDITOR || !(UNITY_ANDROID || UNITY_IOS)
+#define CONSIDER_MOUSE
+#endif
+
 using UnityEngine;
 
 namespace SexyDu
@@ -16,14 +20,6 @@ namespace SexyDu
             public int FingerId => fingerId;
             public Vector2 TouchPos => touchPos;
             public float TouchTime => touchTime;
-            
-            public bool IsMouse
-            {
-                get
-                {
-                    return fingerId == TouchCenter.MouseIdLeft || fingerId == TouchCenter.MouseIdRight;
-                }
-            }
 
             public TouchTabInformation(int fingerId)
             {
@@ -41,18 +37,16 @@ namespace SexyDu
 
             private Vector2 GetCurrentPosition()
             {
-                if (IsMouse)
+                for (int i = 0; i < Input.touches.Length; i++)
                 {
+                    if (Input.touches[i].fingerId.Equals(fingerId))
+                        return Input.touches[i].position;
+                }
+
+#if CONSIDER_MOUSE
+                if (TouchCenter.Config.IsMouse(fingerId))
                     return Input.mousePosition;
-                }
-                else
-                {
-                    for (int i = 0; i < Input.touches.Length; i++)
-                    {
-                        if (Input.touches[i].fingerId.Equals(fingerId))
-                            return Input.touches[i].position;
-                    }
-                }
+#endif
 
                 return TouchCenter.Config.InvalidTouchPosition;
             }

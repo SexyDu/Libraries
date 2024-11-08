@@ -1,3 +1,7 @@
+#if UNITY_EDITOR || !(UNITY_ANDROID || UNITY_IOS)
+#define CONSIDER_MOUSE
+#endif
+
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -166,6 +170,13 @@ namespace SexyDu.Touch
 
             return InvalidTouchPosition;
         }
+
+#if CONSIDER_MOUSE
+        public bool IsMouse(int fingerId)
+        {
+            return fingerId == TouchCenter.MouseIdLeft || fingerId == TouchCenter.MouseIdRight;
+        }
+#endif
         #endregion
 
         #region Collision

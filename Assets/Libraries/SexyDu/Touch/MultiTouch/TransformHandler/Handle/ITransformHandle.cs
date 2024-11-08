@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace SexyDu.Touch
 {
+    /// <summary>
+    /// 멀티터치 Transform 업무수행 핸들 인터페이스
+    /// </summary>
     public interface ITransformHandle
     {
         /// <summary>
@@ -17,11 +20,7 @@ namespace SexyDu.Touch
         /// <summary>
         /// 터치 처리
         /// </summary>
-        public void Process();
-
-        /// <summary>
-        /// Process처리로 인해 발생한 위치 이동값
-        /// </summary>
-        public Vector2 DeltaPositionAfterProcess { get; }
+        /// <returns>처리에 따른 위치 이동값(delta position)</returns>
+        public Vector2 Process();
     }
 }

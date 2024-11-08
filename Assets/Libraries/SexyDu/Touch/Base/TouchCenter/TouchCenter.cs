@@ -18,11 +18,6 @@ namespace SexyDu.Touch
 
         protected EventSystem eventSystem => EventSystem.current;
 
-#if CONSIDER_MOUSE
-        public const int MouseIdLeft = 100;
-        public const int MouseIdRight = 101;
-#endif
-
         protected virtual void Awake()
         {
             mainCam = GetComponent<Camera>();
@@ -129,24 +124,23 @@ namespace SexyDu.Touch
         /// </summary>
         private void Process()
         {
-            // 신규 터치 감지 여부
-            bool hasTouchBegan = false;
-
+#if CONSIDER_MOUSE
+            bool hasBeginTouch = false;
+#endif
             for (int i = 0; i < Input.touchCount; i++)
             {
                 if (Input.touches[i].phase.Equals(TouchPhase.Began))
                 {
                     SendTouchToTarget(Input.touches[i]);
-                    hasTouchBegan = true;
+#if CONSIDER_MOUSE
+                    hasBeginTouch = true;
+#endif
                 }
             }
 
 #if CONSIDER_MOUSE
-            // 신규 터치가 없는 경우 마우스 처리
-            if (!hasTouchBegan)
-            {
+            if (!hasBeginTouch)
                 ProcessMouse();
-            }
 #endif
         }
 
@@ -160,6 +154,14 @@ namespace SexyDu.Touch
         #endregion
 
 #if CONSIDER_MOUSE
+        public const int MouseIdLeft = 100;
+        public const int MouseIdRight = 101;
+
+        public bool IsMouse(int fingerId)
+        {
+            return fingerId == MouseIdLeft || fingerId == MouseIdRight;
+        }
+
         private void ProcessMouse()
         {
             if (!IsCanvasMouse())
@@ -168,7 +170,7 @@ namespace SexyDu.Touch
                 {
                     SendMouseToTarget(true);
                 }
-                else if (Input.GetMouseButton(1))
+                else if (Input.GetMouseButtonDown(1))
                 {
                     SendMouseToTarget(false);
                 }
@@ -177,6 +179,7 @@ namespace SexyDu.Touch
 
         private void SendMouseToTarget(bool left)
         {
+            Debug.Log($"SendMouseToTarget({left})");
             if (!IsCanvasMouse())
             {
                 if (left)

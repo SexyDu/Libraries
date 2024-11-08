@@ -9,19 +9,18 @@ namespace SexyDu.Touch
     {
         private Vector2 previous = Vector2.zero;
 
-        private Vector2 deltaPosition = Vector2.zero;
-        public override Vector2 DeltaPositionAfterProcess => deltaPosition;
-
         public override void Setting()
         {
             previous = body.Data.center;
         }
 
-        public override void Process()
+        public override Vector2 Process()
         {
-            deltaPosition = (body.Data.center - previous) * UPPOP;
+            Vector2 deltaPosition = (body.Data.center - previous) * UPPOP;
 
             previous = body.Data.center;
+
+            return deltaPosition;
         }
     }
 }

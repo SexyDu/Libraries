@@ -1,3 +1,7 @@
+#if UNITY_EDITOR || !(UNITY_ANDROID || UNITY_IOS)
+#define CONSIDER_MOUSE
+#endif
+
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
@@ -24,20 +28,19 @@ namespace SexyDu.Touch
         /// </summary>
         public virtual void Detect(int fingerId)
         {
-            switch (fingerId)
+            for (int i = 0; i < Input.touches.Length; i++)
             {
-                case TouchCenter.MouseIdLeft:
-                case TouchCenter.MouseIdRight:
-                    Detect(fingerId, Input.mousePosition);
+                if (Input.touches[i].fingerId.Equals(fingerId))
+                {
+                    Detect(fingerId, Input.touches[i].position);
                     return;
-                default:
-                    for (int i = 0; i < Input.touches.Length; i++)
-                    {
-                        if (Input.touches[i].fingerId.Equals(fingerId))
-                            Detect(fingerId, Input.touches[i].position);
-                    }
-                    return;
+                }
             }
+
+#if CONSIDER_MOUSE
+            if (TouchCenter.Config.IsMouse(fingerId))
+                Detect(fingerId, Input.mousePosition);
+#endif
         }
 
         /// <summary>
@@ -71,7 +74,7 @@ namespace SexyDu.Touch
             employer?.ReceiveReport();
         }
 
-#region Event
+        #region Event
         // Event delegates triggered on click.
         [FormerlySerializedAs("onEvent")]
         [SerializeField]
@@ -90,6 +93,6 @@ namespace SexyDu.Touch
 
             Cancel();
         }
-#endregion
+        #endregion
     }
 }
