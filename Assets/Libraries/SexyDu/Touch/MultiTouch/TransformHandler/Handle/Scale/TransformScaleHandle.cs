@@ -82,7 +82,7 @@ namespace SexyDu.Touch
         /// 대상 크기 설정
         /// </summary>
         /// <param name="size"></param>
-        private void Set(float size)
+        protected virtual void Set(float size)
         {
             scale.x = scale.y = size;
             body.Target.localScale = scale;

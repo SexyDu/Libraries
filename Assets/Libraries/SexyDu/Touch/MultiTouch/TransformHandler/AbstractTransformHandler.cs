@@ -41,7 +41,7 @@ namespace SexyDu.Touch
         /// </summary>
         public MultiTouchData Data => data;
         #endregion
-        
+
         protected override IEnumerator CoRoutine()
         {
             do
@@ -96,6 +96,18 @@ namespace SexyDu.Touch
         }
 
         #region Handles
+#if true
+        /// <summary>
+        /// 전체 핸들 설정
+        /// </summary>
+        protected abstract void SettingHandles();
+
+        /// <summary>
+        /// 전체 핸들 업무 수행
+        /// </summary>
+        /// <returns>업무 수행에 따른 위치 이동값</returns>
+        protected abstract Vector2 ProcessHandles();
+#else
         // 핸들 인터페이스
         protected ITransformHandle[] handles = null;
 
@@ -133,6 +145,7 @@ namespace SexyDu.Touch
 
             return deltaPosition;
         }
+#endif
         #endregion
     }
 }

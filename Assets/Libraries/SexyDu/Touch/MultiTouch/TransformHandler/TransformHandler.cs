@@ -1,10 +1,12 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace SexyDu.Touch
 {
-    public class TransformHandler : AbstractTransformHandler, ITransformHandler
+    /// <summary>
+    /// 기본 트랜스폼 핸들러
+    /// * 위치 변경, 크기 조절
+    /// </summary>
+    public class TransformHandler : AbstractTransformHandler, ITransformHandler, IReleasable
     {
         [SerializeField] private bool onAwakeInit = true;
 
@@ -12,6 +14,11 @@ namespace SexyDu.Touch
         {
             if (onAwakeInit)
                 Initialize();
+        }
+
+        protected virtual void OnDestroy()
+        {
+            Release();
         }
 
         /// <summary>
@@ -22,12 +29,16 @@ namespace SexyDu.Touch
             InitializeHandles();
         }
 
-        #region Transform
-        // 최소 위치값
-        [SerializeField] private Vector2 minimumPosition;
-        // 최대 위치값
-        [SerializeField] private Vector2 maximumPosition;
+        /// <summary>
+        /// 리소스 해제
+        /// </summary>
+        public virtual void Release()
+        {
+            positionHandle = null;
+            scaleHandle = null;
+        }
 
+        #region Transform
         /// <summary>
         /// 대상 위치 설정
         /// : AbstractTransformHandler
@@ -52,22 +63,125 @@ namespace SexyDu.Touch
 
             target.position = position;
         }
+        #endregion
 
-        public TransformHandler SetLimitedMinimumPosition(Vector2 minimum)
+        #region Handles
+        /// <summary>
+        /// 핸들 초기 설정
+        /// </summary>
+        protected virtual void InitializeHandles()
+        {
+            positionHandle = new TransformPositionHandle();
+            positionHandle.SetBody(this);
+
+            scaleHandle = new TransformLimitedScaleHandle(minimumScale, maximumScale);
+            scaleHandle.SetBody(this);
+        }
+
+        /// <summary>
+        /// 전체 핸들 설정
+        /// : AbstractTransformHandler
+        /// </summary>
+        protected override void SettingHandles()
+        {
+            positionHandle.Setting();
+            scaleHandle.Setting();
+        }
+        /// <summary>
+        /// 전체 핸들 업무 수행
+        /// : AbstractTransformHandler
+        /// </summary>
+        /// <returns>업무 수행에 따른 위치 이동값</returns>
+        protected override Vector2 ProcessHandles()
+        {
+            Vector2 deltaPosition = positionHandle.Process();
+            deltaPosition += scaleHandle.Process();
+
+            return deltaPosition;
+        }
+        #endregion
+
+        #region Handle - Position
+        // 위치 조절 핸들
+        private TransformPositionHandle positionHandle;
+
+        [Header("Position")]
+        // 최소 위치값
+        [SerializeField] private Vector2 minimumPosition;
+        // 최대 위치값
+        [SerializeField] private Vector2 maximumPosition;
+
+        /// <summary>
+        /// 제한 위치값 설정
+        /// </summary>
+        public TransformHandler SetLimitedPosition(Vector2 minimum, Vector2 maximum)
         {
             minimumPosition = minimum;
+            maximumPosition = maximum;
 
             return this;
         }
-
-        public TransformHandler SetLimitedMaximumPosition(Vector2 maximum)
+        /// <summary>
+        /// 최소 위치값 설정
+        /// </summary>
+        public TransformHandler SetMinimumPosition(Vector2 val)
         {
-            maximumPosition = maximum;
+            minimumPosition = val;
+
+            return this;
+        }
+        /// <summary>
+        /// 최대 위치값 설정
+        /// </summary>
+        public TransformHandler SetMaximumPosition(Vector2 val)
+        {
+            maximumPosition = val;
 
             return this;
         }
         #endregion
 
+        #region Handle - Scale
+        // 크기 조절 핸들
+        private TransformLimitedScaleHandle scaleHandle;
+
+        [Header("Scale")]
+        [SerializeField] private float minimumScale;
+        [SerializeField] private float maximumScale;
+
+        /// <summary>
+        /// 제한 크기값 설정
+        /// </summary>
+        public TransformHandler SetLimitedScale(float minimum, float maximum)
+        {
+            minimumScale = minimum;
+            maximumScale = maximum;
+
+            return this;
+        }
+        /// <summary>
+        /// 최소 크기값 설정
+        /// </summary>
+        public TransformHandler SetMinimumScale(float val)
+        {
+            minimumScale = val;
+
+            return this;
+        }
+        /// <summary>
+        /// 최대 크기값 설정
+        /// </summary>
+        /// <param name="val"></param>
+        /// <returns></returns>
+        public TransformHandler SetMaximumScale(float val)
+        {
+            maximumScale = val;
+
+            return this;
+        }
+        #endregion
+
+#if false
         #region Handles
         [Header("Handles")]
         [SerializeField] private HandleType[] handleTypes; // 사용할 핸들 타입
@@ -129,5 +243,7 @@ namespace SexyDu.Touch
             Scale = 2, // 크기 변경
             Angle = 3, // 각도 조절
         }
+#endif
+
     }
 }

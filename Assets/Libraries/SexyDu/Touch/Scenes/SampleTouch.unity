@@ -782,7 +782,7 @@ GameObject:
   - component: {fileID: 2138418694}
   - component: {fileID: 2138418693}
   - component: {fileID: 2138418692}
-  - component: {fileID: 2138418695}
+  - component: {fileID: 2138418696}
   m_Layer: 0
   m_Name: blue
   m_TagString: Untagged
@@ -902,7 +902,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2138418695
+--- !u!114 &2138418696
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -911,15 +911,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 2138418690}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8d56632f0c094ce3ac36c0f1b7d4095, type: 3}
+  m_Script: {fileID: 11500000, guid: 24c920d159b6d4d938a9feacf651ee36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   MaxTouchCount: 10
   target: {fileID: 2138418694}
   onAwakeInit: 1
-  minimumPosition: {x: -1, y: -1}
-  maximumPosition: {x: 1, y: 1}
-  handleTypes: 010203
+  minimumPosition: {x: -1.71, y: -10}
+  maximumPosition: {x: 1.71, y: 10}
+  minimumScale: 1
+  maximumScale: 3
+  handleTypes: 01
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
