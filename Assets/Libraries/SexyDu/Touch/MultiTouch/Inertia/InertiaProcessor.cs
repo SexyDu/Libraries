@@ -4,8 +4,11 @@ using UnityEngine;
 
 namespace SexyDu.Touch
 {
+    /// <summary>
+    /// 관성력 작동기
+    /// </summary>
     [Serializable]
-    public class TestInertiaProcessor
+    public class InertiaProcessor : IInertiaProcessor
     {
         /// <summary>
         /// 계산을 위한 프레임 정보
@@ -26,8 +29,9 @@ namespace SexyDu.Touch
 
         /// <summary>
         /// 관성 대상 설정
+        /// : IInertiaProcessor
         /// </summary>
-        public TestInertiaProcessor Set(IInertiaTarget target)
+        public IInertiaProcessor Set(IInertiaTarget target)
         {
             this.target = target;
 
@@ -35,8 +39,9 @@ namespace SexyDu.Touch
         }
         /// <summary>
         /// 코루틴 워커 설정
+        /// : IInertiaProcessor
         /// </summary>
-        public TestInertiaProcessor Set(MonoBehaviour worker)
+        public IInertiaProcessor Set(MonoBehaviour worker)
         {
             this.worker = worker;
 
@@ -46,7 +51,7 @@ namespace SexyDu.Touch
         /// <summary>
         /// 감속 수치에 따라 관성력을 유지할지에 대한 여부 반환
         /// </summary>
-        public bool Continue(Vector2 inertiaForce)
+        private bool IsContinue(Vector2 inertiaForce)
         {
             inertiaForce.x = Mathf.Abs(inertiaForce.x);
             inertiaForce.y = Mathf.Abs(inertiaForce.y);
@@ -72,14 +77,15 @@ namespace SexyDu.Touch
                 force -= variance;
                 // 관성 이동
                 target.Inertia(force);
-            } while (Continue(force));
+            } while (IsContinue(force));
         }
 
         /// <summary>
         /// 관성 동작 실행
+        /// : IInertiaProcessor
         /// </summary>
-        /// <param name="inertialForce">관성력</param>
-        /// <param name="deltaTime">관성력 작용 시간</param>
+        /// <param name="inertiaForce">관성력</param>
+        /// <param name="deltaTime">관성력 작용 시간(deltaTime)</param>
         public void Run(Vector2 inertialForce, float deltaTime)
         {
             Stop();
@@ -92,7 +98,8 @@ namespace SexyDu.Touch
         }
 
         /// <summary>
-        /// 관성 동작 실행 종료
+        /// 관성 동작 종료
+        /// : IInertiaProcessor
         /// </summary>
         public void Stop()
         {
@@ -106,7 +113,7 @@ namespace SexyDu.Touch
         /// 실제 프레임 시간을 고려하여 관성력 보정
         /// </summary>
         /// <param name="inertialForce">관성력</param>
-        /// <param name="deltaTime">관성력 작용 시간</param>
+        /// <param name="deltaTime">관성력 작용 시간(deltaTime)</param>
         private Vector2 GetDeltaPositionOnFrame(Vector2 inertialForce, float deltaTime)
         {
             /// 실제 관성력 : 관성력 작용 시간 = 기준 관성력 : 기준 관성력 작용 시간(기준 프레임 당 시간)

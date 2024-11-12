@@ -646,7 +646,7 @@ GameObject:
   - component: {fileID: 1517707268}
   - component: {fileID: 1517707267}
   - component: {fileID: 1517707266}
-  - component: {fileID: 1517707265}
+  - component: {fileID: 1517707269}
   m_Layer: 0
   m_Name: inertia
   m_TagString: Untagged
@@ -654,30 +654,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1517707265
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1517707264}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5106455e076b441b7a7e05accff8db10, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MaxTouchCount: 10
-  target: {fileID: 1517707268}
-  onAwakeInit: 1
-  positionLimiter:
-    minimum: {x: -1, y: -3}
-    maximum: {x: 1, y: 3}
-  minimumScale: 1
-  maximumScale: 5
-  inertiaProcessor:
-    decelerationRate: 0.9
-    inertiaBreak: 0.01
-  textMesh: {fileID: 1402844854}
 --- !u!61 &1517707266
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -792,6 +768,29 @@ Transform:
   - {fileID: 1402844853}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1517707269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1517707264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 841a7453a78f845d09825f9c6c5404b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxTouchCount: 10
+  target: {fileID: 1517707268}
+  onAwakeInit: 1
+  positionLimiter:
+    minimum: {x: 0, y: 0}
+    maximum: {x: 0, y: 0}
+  minimumScale: 1
+  maximumScale: 5
+  inertiaProcessor:
+    decelerationRate: 0.9
+    inertiaBreak: 0.01
 --- !u!1 &1623336854
 GameObject:
   m_ObjectHideFlags: 0
@@ -1298,7 +1297,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   touchHandlers:
   - {fileID: 2138418696}
-  - {fileID: 1517707265}
+  - {fileID: 1517707269}
 --- !u!4 &1969443832
 Transform:
   m_ObjectHideFlags: 0

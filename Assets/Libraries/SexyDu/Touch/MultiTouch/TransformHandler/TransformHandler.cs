@@ -9,6 +9,7 @@ namespace SexyDu.Touch
     /// </summary>
     public class TransformHandler : AbstractTransformHandler, ITransformHandler, IReleasable
     {
+        [Header("TransformHandler")]
         [SerializeField] private bool onAwakeInit = true;
 
         protected virtual void Awake()
