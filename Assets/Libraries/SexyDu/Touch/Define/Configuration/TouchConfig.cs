@@ -287,6 +287,19 @@ namespace SexyDu.Touch
 
             return position;
         }
+
+        /// <summary>
+        /// 현재 화면의 Unity 크기 기준 영역값 반환
+        /// </summary>
+        public Vector2 GetUnitArea()
+        {
+            float orthographicSize = OrthographicSize;
+
+            /// 현재 화면영역은 -return ~ return의 Unity 크기를 가진다.
+            /// -return.x ~ return.x
+            /// -return.y ~ return.y
+            return new Vector2(orthographicSize * screenRatio, orthographicSize);
+        }
         #endregion
     }
 }

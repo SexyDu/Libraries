@@ -37,6 +37,11 @@ namespace SexyDu.Touch
         protected virtual void RemoveTouch(int fingerId)
         {
             touches.Remove(fingerId);
+
+            if (touches.Count == 0)
+            {
+                EndTouch();
+            }
         }
         /// <summary>
         /// 복수 터치 제거
@@ -50,9 +55,18 @@ namespace SexyDu.Touch
 
             if (touches.Count == 0)
             {
-                ClearTouch();
+                EndTouch();
             }
         }
+
+        /// <summary>
+        /// 터치 종료 처리
+        /// </summary>
+        protected virtual void EndTouch()
+        {
+            ClearTouch();
+        }
+        
         /// <summary>
         /// 터치 클리어
         /// </summary>
@@ -71,6 +85,7 @@ namespace SexyDu.Touch
         // 터치 수
         public int Count => touches.Count;
         // 최대 터치 수
+        [Range(1, 10)]
         [SerializeField] private int MaxTouchCount = 10;
         /// <summary>
         /// 인덱스 기반 터치 위치 반환

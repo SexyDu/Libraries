@@ -1,15 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
+using SexyDu.Touch;
 using UnityEngine;
-using UnityEngine.Scripting;
 
 namespace SexyDu.Sample
 {
     public class SampleTouch : MonoBehaviour
     {
+        [SerializeField] private TransformHandler[] touchHandlers;
+
         private void Awake()
         {
             Application.targetFrameRate = 60;
+
+            Vector2 unitMaximumArea = TouchCenter.Config.GetUnitArea();
+            Vector2 unitMinimumArea = -unitMaximumArea;
+            for (int i = 0; i < touchHandlers.Length; i++)
+            {
+                touchHandlers[i].SetMinimumPosition(unitMinimumArea).SetMaximumPosition(unitMaximumArea);
+            }
         }
 
         public void OnClick()
