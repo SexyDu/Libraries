@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 426973055ecac42e68b883cf32ff836b, type: 3}
   m_Name: TargetFolder
   m_EditorClassIdentifier: 
-  folderAsset: {fileID: 102900000, guid: b34aa3761f95a491d8e96561367c3b2f, type: 3}
+  folderAsset: {fileID: 0}
   keepMeta: 0
   deleteEmptyFolder: 0
