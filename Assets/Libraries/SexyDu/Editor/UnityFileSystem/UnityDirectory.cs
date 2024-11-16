@@ -7,6 +7,11 @@ namespace SexyDu.OnEditor
     /// </summary>
     public interface IUnityDirectory : IUnityFileSystem
     {
+        /// <summary>
+        /// 폴더 내부 비우기
+        /// </summary>
+        /// <param name="keepMeta">메타파일 유지 여부</param>
+        /// <param name="deleteEmptyFolder">(메타파일 유지에 따른 고려) 실행 후 폴더 내부가 비어있는 경우 해당 폴더 삭제 여부</param>
         public void Drain(bool keepMeta = false, bool deleteEmptyFolder = true);
     }
     /// <summary>

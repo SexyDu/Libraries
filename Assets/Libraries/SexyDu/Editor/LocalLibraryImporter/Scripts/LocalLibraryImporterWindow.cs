@@ -3,15 +3,20 @@ using UnityEngine;
 
 namespace SexyDu.OnEditor.LocalLibraryImporter
 {
-
-    // TODO
-    /// 1. ToDoWindow는 가져오고 나서 윈도우 잘 유지 되는데 LocalLibraryImporterWindow는 설정이 사라지거나 에러가 발생. 이유를 찾자.
-    /// 2. 전부 주석 작성하자.
+    /// <summary>
+    /// 로컬라이브러리 임포터 윈도우
+    /// </summary>
     public partial class LocalLibraryImporterWindow : EditorWindow
     {
         private void OnEnable()
         {
             SettingGUIStyles();
+
+            if (target == null)
+                target = Resources.Load<TargetFolder>(TargetFolder.ResourcePath);
+
+            if (source == null)
+                source = Resources.Load<SourceData>(SourceData.ResourcePath);
         }
 
         [MenuItem("SexyDu/LocalLibraryImporter")]
@@ -20,7 +25,7 @@ namespace SexyDu.OnEditor.LocalLibraryImporter
             LocalLibraryImporterWindow window = GetWindow<LocalLibraryImporterWindow>();
             window.titleContent = new GUIContent("LocalLibraryImporter");
             window.minSize = new Vector2(100f, 100f);
-            // window.Initialize();
+            window.Initialize();
 
             window.Show(true);
         }
@@ -50,23 +55,26 @@ namespace SexyDu.OnEditor.LocalLibraryImporter
             }
         }
         #endregion
-        private TargetFolder target = new TargetFolder();
+        // 대상 폴더 에셋 정보
+        private TargetFolder target = null;
 
-        // 원본 정보 구조체
-        private SourceData source = new SourceData();
+        // 원본 정보
+        private SourceData source = null;
 
 
         private void OnGUI()
         {
             EditorGUILayout.Space(10);
-
+            // 대상 폴더 UI
             OnGUITarget();
 
             EditorGUILayout.Space(20);
-
+            // 원본 정보 UI
             OnGUISource();
         }
-
+        /// <summary>
+        /// 대상 폴더 UI 함수
+        /// </summary>
         private void OnGUITarget()
         {
             EditorGUILayout.LabelField("대상", titleStyle);
@@ -93,7 +101,9 @@ namespace SexyDu.OnEditor.LocalLibraryImporter
                 EditorGUI.indentLevel--;
             }
         }
-
+        /// <summary>
+        /// 원본 정보 UI
+        /// </summary>
         private void OnGUISource()
         {
             EditorGUILayout.LabelField("원본", titleStyle);
@@ -114,7 +124,9 @@ namespace SexyDu.OnEditor.LocalLibraryImporter
                 OnGUIFileSystems();
             }
         }
-
+        /// <summary>
+        /// 원본 파일 시스템 UI
+        /// </summary>
         private void OnGUIFileSystems()
         {
             for (int i = 0; i < source.fileSystems.Length; i++)
@@ -139,6 +151,8 @@ namespace SexyDu.OnEditor.LocalLibraryImporter
             {
                 target.Bring(source.GetSelectedFileSystems());
                 RefreshEditor();
+
+                EditorUtility.DisplayDialog("성공", $"가져오기를 완료 했습니다.", "OK");
             }
         }
 
@@ -150,6 +164,7 @@ namespace SexyDu.OnEditor.LocalLibraryImporter
             // 에셋 데이터베이스 새로 고침 (새로운 파일이나 변경된 파일을 감지)
             AssetDatabase.Refresh();
 
+            /// 위 Refresh 시 스크립트에 변경이 있는 경우에 알아서 아래 동작이 수행되기 때문에 비활성화
             // // 스크립트 재컴파일 요청
             // EditorUtility.RequestScriptReload();
         }
