@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine.Networking;
 
@@ -11,13 +12,13 @@ namespace SexyDu
         public interface IRESTReceipt
         {
             // 요청 URL
-            public string Url { get; }
-            // 요청 형식
-            public RESTMethod Method { get; }
+            public Uri uri { get; }
+            // 요청 형식, GET/POST/PATCH/DELETE
+            public RESTMethod method { get; }
             // 요청 타임아웃
-            public int Timeout { get; }
+            public int timeout { get; }
             // 요청 헤더
-            public Dictionary<string, string> Headers { get; }
+            public Dictionary<string, string> headers { get; }
         }
 
         /// <summary>
@@ -27,7 +28,7 @@ namespace SexyDu
         public interface IPostableRESTReceipt : IRESTReceipt
         {
             // 요청 포스트 데이터
-            public string PostData { get; }
+            public string body { get; }
         }
 
         /// <summary>
@@ -43,10 +44,14 @@ namespace SexyDu
 
         /// <summary>
         /// REST 수신 결과 타입
-        /// * 해당 내용은 UntiyWebRequest.Result와 동일
+        /// * 해당 내용은 UntiyWebRequest.Result 참조
         /// </summary>
         public enum RESTResult : byte
         {
+            Unknown = 0,
+
+            /// <UnityWebRequest.Result>
+            /// UnityWebRequest.Result 동일 영역
             //
             // 요약:
             //     The request hasn't finished yet.
@@ -70,7 +75,13 @@ namespace SexyDu
             //     Error processing data. The request succeeded in communicating with the server,
             //     but encountered an error when processing the received data. For example, the
             //     data was corrupted or not in the correct format.
-            DataProcessingError
+            DataProcessingError,
+            /// </UnityWebRequest.Result>
+            /// 
+            
+            // 인증 토큰이 유효하지 않은 경우
+            /// 아직 토큰에 대해 고려하지 않기 때문에 일단 주석
+            // InvalidAuthentionToken,
         }
 
         /// <summary>
@@ -88,7 +99,7 @@ namespace SexyDu
             public RESTResult result { get; }
             // 수신 헤더 (딕셔너리)
             public Dictionary<string, string> headers { get; }
-            
+
             /// <summary>
             /// REST API 성공 여부
             /// </summary>
