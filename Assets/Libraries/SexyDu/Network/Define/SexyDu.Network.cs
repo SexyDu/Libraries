@@ -1,36 +1,9 @@
-using System;
 using System.Collections.Generic;
-using UnityEngine.Networking;
 
 namespace SexyDu
 {
     namespace Network
     {
-        /// <summary>
-        /// REST API 요청 접수증 기본 인터페이스
-        /// </summary>
-        public interface IRESTReceipt
-        {
-            // 요청 URL
-            public Uri uri { get; }
-            // 요청 형식, GET/POST/PATCH/DELETE
-            public RESTMethod method { get; }
-            // 요청 타임아웃
-            public int timeout { get; }
-            // 요청 헤더
-            public Dictionary<string, string> headers { get; }
-        }
-
-        /// <summary>
-        /// Post 데이터를 포함한 REST API 요청 접수증
-        /// Methos POST, PATCH, DELETE에 사용 가능
-        /// </summary>
-        public interface IPostableRESTReceipt : IRESTReceipt
-        {
-            // 요청 포스트 데이터
-            public string body { get; }
-        }
-
         /// <summary>
         /// REST API 요청 메소드 타입
         /// </summary>
@@ -82,83 +55,6 @@ namespace SexyDu
             // 인증 토큰이 유효하지 않은 경우
             /// 아직 토큰에 대해 고려하지 않기 때문에 일단 주석
             // InvalidAuthentionToken,
-        }
-
-        /// <summary>
-        /// REST 수신 데이터 인터페이스
-        /// </summary>
-        public interface IRESTResponse
-        {
-            // 수신 코드
-            public long code { get; }
-            // 수신 문자열
-            public string text { get; }
-            // 수신 에러
-            public string error { get; }
-            // 수신 결과
-            public RESTResult result { get; }
-            // 수신 헤더 (딕셔너리)
-            public Dictionary<string, string> headers { get; }
-
-            /// <summary>
-            /// REST API 성공 여부
-            /// </summary>
-            public bool IsSuccess => result == RESTResult.Success;
-            /// <summary>
-            /// Empty 여부
-            /// </summary>
-            /// <returns></returns>
-            public bool IsEmpty => code == long.MinValue;
-            /// <summary>
-            /// InternalServerError 여부
-            /// </summary>
-            public bool IsInternalServerError => code == 500;
-        }
-
-        /// <summary>
-        /// REST 수신 데이터
-        /// </summary>
-        public struct RESTResponse : IRESTResponse
-        {
-            // response code
-            public readonly long code
-            {
-                get;
-            }
-            // 수신받은 Text 문자열 (json 등)
-            public readonly string text
-            {
-                get;
-            }
-            // 에러 문자열
-            public readonly string error
-            {
-                get;
-            }
-            // 결과
-            public readonly RESTResult result
-            {
-                get;
-            }
-            // 헤더 정보
-            public readonly Dictionary<string, string> headers
-            {
-                get;
-            }
-
-            public RESTResponse(long code, string text, string error, RESTResult result, Dictionary<string, string> headers = null)
-            {
-                this.code = code;
-                this.text = text;
-                this.error = error;
-                this.result = result;
-                this.headers = headers;
-            }
-
-            /// <summary>
-            /// 빈 수신 데이터
-            /// </summary>
-            public static readonly RESTResponse Empty = new RESTResponse(long.MinValue, string.Empty, string.Empty, RESTResult.ConnectionError);
         }
     }
 }

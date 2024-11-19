@@ -1,14 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
 namespace SexyDu.Network.Sample
 {
     public class Sample : MonoBehaviour
     {
-        private const string URL = "https://docs.google.com/spreadsheets/d/1k5_O590zRYRgkiiIqCjqD3rXEsz4ebSNEXeLJS01QkA/export?format=tsv";// "https://docs.google.com/spreadsheets/d/1k5_O590zRYRgkiiIqCjqD3rXEsz4ebSNEXeLJS01QkA/edit?usp=sharing";
+        // 원본 공유 Url : https://drive.google.com/file/d/12IJ4bLTWvOz3trgNhYu8lAu3r_0aDAUA/view?usp=sharing
+        // 실제 URL
+        /// URL을 바꾼 이유는 원본 공유 URL은 해당 파일의 구글 드라이브 미리보기 화면에 대한 URL이라 제대로 데이터가 받아지지 않는다.
+        /// 하여 'https://drive.google.com/uc?export=download&id={FILE_ID}' 형식으로 수정 되어야한다.
+        private const string URL = "https://drive.google.com/uc?export=download&id=12IJ4bLTWvOz3trgNhYu8lAu3r_0aDAUA";
 
         public long code;
         [TextArea] public string text;
@@ -27,7 +27,11 @@ namespace SexyDu.Network.Sample
                 {
                     code = res.code;
 
-                    text = res.text;
+                    Debug.Log($"res.text : {res.text}");
+                    if (res.text.Length > 100)
+                        text = res.text.Substring(0, 100);
+                    else
+                        text = res.text;
 
                     error = res.error;
 
