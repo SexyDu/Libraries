@@ -19,6 +19,24 @@ namespace SexyDu.OnEditor.LocalLibraryImporter
                 source = Resources.Load<SourceData>(SourceData.ResourcePath);
         }
 
+        #region GUIStyle
+        // 타이틀 스타일
+        private GUIStyle titleStyle = null;
+        /// <summary>
+        /// GUI 스타일 설정
+        /// </summary>
+        private void SettingGUIStyles()
+        {
+            if (titleStyle == null)
+            {
+                titleStyle = new GUIStyle();
+                titleStyle.fontSize = 15;
+                titleStyle.fontStyle = FontStyle.Normal;
+                titleStyle.normal.textColor = Color.white;
+            }
+        }
+        #endregion
+
         [MenuItem("SexyDu/LocalLibraryImporter")]
         static void Open()
         {
@@ -37,24 +55,7 @@ namespace SexyDu.OnEditor.LocalLibraryImporter
         {
             Debug.LogFormat("Initialize");
         }
-
-        #region GUIStyle
-        // 타이틀 스타일
-        private GUIStyle titleStyle = null;
-        /// <summary>
-        /// GUI 스타일 설정
-        /// </summary>
-        private void SettingGUIStyles()
-        {
-            if (titleStyle == null)
-            {
-                titleStyle = new GUIStyle();
-                titleStyle.fontSize = 15;
-                titleStyle.fontStyle = FontStyle.Normal;
-                titleStyle.normal.textColor = Color.white;
-            }
-        }
-        #endregion
+        
         // 대상 폴더 에셋 정보
         private TargetFolder target = null;
 
@@ -64,7 +65,7 @@ namespace SexyDu.OnEditor.LocalLibraryImporter
 
         private void OnGUI()
         {
-            EditorGUILayout.Space(10);
+            // EditorGUILayout.Space(10);
             // 대상 폴더 UI
             OnGUITarget();
 
