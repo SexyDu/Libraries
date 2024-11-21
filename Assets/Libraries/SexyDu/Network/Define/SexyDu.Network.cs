@@ -7,7 +7,7 @@ namespace SexyDu
         /// <summary>
         /// REST API 요청 메소드 타입
         /// </summary>
-        public enum RESTMethod : byte
+        public enum NetworkMethod : byte
         {
             GET = 0,
             POST,
@@ -19,7 +19,7 @@ namespace SexyDu
         /// REST 수신 결과 타입
         /// * 해당 내용은 UntiyWebRequest.Result 참조
         /// </summary>
-        public enum RESTResult : byte
+        public enum NetworkResult : byte
         {
             Unknown = 0,
 

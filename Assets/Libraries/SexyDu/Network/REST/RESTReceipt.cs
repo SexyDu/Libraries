@@ -7,9 +7,9 @@ namespace SexyDu.Network
     ///     단순 데이터 처리이기 때문에 class를 사용하지 않고 struct를 사용함
 
     /// <summary>
-    /// UnityWebRequest를 사용한 REST API 접수증
+    /// REST API 요청 접수증
     /// </summary>
-    public struct UnityRESTReceipt : IRESTReceipt
+    public struct RESTReceipt : IRESTReceipt
     {
         public Uri uri
         {
@@ -17,7 +17,7 @@ namespace SexyDu.Network
             private set;
         }
 
-        public RESTMethod method
+        public NetworkMethod method
         {
             get;
             private set;
@@ -35,7 +35,7 @@ namespace SexyDu.Network
             private set;
         }
 
-        public UnityRESTReceipt(RESTMethod method)
+        public RESTReceipt(NetworkMethod method)
         {
             this.method = method;
 
@@ -45,27 +45,27 @@ namespace SexyDu.Network
         }
 
         #region Builder
-        public UnityRESTReceipt SetUri(string url)
+        public RESTReceipt SetUri(string url)
         {
             this.uri = new Uri(url);
             return this;
         }
-        public UnityRESTReceipt SetMethod(RESTMethod method)
+        public RESTReceipt SetMethod(NetworkMethod method)
         {
             this.method = method;
             return this;
         }
-        public UnityRESTReceipt SetTimeout(int timeout)
+        public RESTReceipt SetTimeout(int timeout)
         {
             this.timeout = timeout;
             return this;
         }
-        public UnityRESTReceipt SetHeaders(Dictionary<string, string> headers)
+        public RESTReceipt SetHeaders(Dictionary<string, string> headers)
         {
             this.headers = headers;
             return this;
         }
-        public UnityRESTReceipt AddHeader(string key, string value)
+        public RESTReceipt AddHeader(string key, string value)
         {
             if (headers == null)
                 headers = new Dictionary<string, string>();
@@ -77,9 +77,9 @@ namespace SexyDu.Network
     }
 
     /// <summary>
-    /// Post(body)할 데이터가 포함된 UnityWebRequest를 사용한 REST API 접수증
+    /// Post(body)할 데이터가 포함된 REST API 요청 접수증
     /// </summary>
-    public struct UnityPostableRESTReceipt : IPostableRESTReceipt
+    public struct PostableRESTReceipt : IPostableRESTReceipt
     {
         public Uri uri
         {
@@ -87,7 +87,7 @@ namespace SexyDu.Network
             private set;
         }
 
-        public RESTMethod method
+        public NetworkMethod method
         {
             get;
             private set;
@@ -111,7 +111,7 @@ namespace SexyDu.Network
             private set;
         }
 
-        public UnityPostableRESTReceipt(RESTMethod method)
+        public PostableRESTReceipt(NetworkMethod method)
         {
             this.method = method;
 
@@ -122,27 +122,27 @@ namespace SexyDu.Network
         }
 
         #region Builder
-        public UnityPostableRESTReceipt SetUri(string url)
+        public PostableRESTReceipt SetUri(string url)
         {
             this.uri = new Uri(url);
             return this;
         }
-        public UnityPostableRESTReceipt SetMethod(RESTMethod method)
+        public PostableRESTReceipt SetMethod(NetworkMethod method)
         {
             this.method = method;
             return this;
         }
-        public UnityPostableRESTReceipt SetTimeout(int timeout)
+        public PostableRESTReceipt SetTimeout(int timeout)
         {
             this.timeout = timeout;
             return this;
         }
-        public UnityPostableRESTReceipt SetHeaders(Dictionary<string, string> headers)
+        public PostableRESTReceipt SetHeaders(Dictionary<string, string> headers)
         {
             this.headers = headers;
             return this;
         }
-        public UnityPostableRESTReceipt AddHeader(string key, string value)
+        public PostableRESTReceipt AddHeader(string key, string value)
         {
             if (headers == null)
                 headers = new Dictionary<string, string>();
@@ -150,7 +150,7 @@ namespace SexyDu.Network
 
             return this;
         }
-        public UnityPostableRESTReceipt SetBody(string body)
+        public PostableRESTReceipt SetBody(string body)
         {
             this.body = body;
             return this;

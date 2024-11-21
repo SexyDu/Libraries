@@ -5,9 +5,9 @@ using SexyDu.Tool;
 namespace SexyDu.Network
 {
     /// <summary>
-    /// [PostData 미사용] REST API 워커
+    /// [PostData 미사용] SexyDu의 MonoHelper 기반의 REST API 워커
     /// </summary>
-    public class SexyRESTWorker : UnityRESTWorker
+    public class SexyRESTWorker : UnityRESTWorker, IRESTWorker
     {
         /// <summary>
         /// 생성자
@@ -23,7 +23,7 @@ namespace SexyDu.Network
         /// <summary>
         /// API 요청 수행
         /// </summary>
-        public SexyRESTWorker Request(UnityRESTReceipt receipt)
+        public IRESTWorker Request(IRESTReceipt receipt)
         {
             MonoHelper.StartCoroutine(CoRequest(receipt));
 
@@ -32,7 +32,7 @@ namespace SexyDu.Network
         /// <summary>
         /// API 요청 수행 코루틴
         /// </summary>
-        private IEnumerator CoRequest(UnityRESTReceipt receipt)
+        private IEnumerator CoRequest(IRESTReceipt receipt)
         {
             using (UnityWebRequest req = MakeUnityWebRequest(receipt))
             {
@@ -44,7 +44,7 @@ namespace SexyDu.Network
                 // 요청 전달
                 yield return req.SendWebRequest();
 
-                RESTResponse res = MakeRESTResponse(req);
+                TextResponse res = MakeResponse(req);
 
                 callback?.Invoke(res);
             }
@@ -52,9 +52,9 @@ namespace SexyDu.Network
     }
 
     /// <summary>
-    /// [PostData 사용] REST API 워커
+    /// [PostData 사용] SexyDu의 MonoHelper 기반의 REST API 워커
     /// </summary>
-    public class SexyPostableRESTWorker : UnityRESTWorker
+    public class SexyPostableRESTWorker : UnityRESTWorker, IPostableRESTWorker
     {
         /// <summary>
         /// 생성자
@@ -70,7 +70,7 @@ namespace SexyDu.Network
         /// <summary>
         /// API 요청 수행
         /// </summary>
-        public SexyPostableRESTWorker Request(UnityPostableRESTReceipt receipt)
+        public IPostableRESTWorker Request(IPostableRESTReceipt receipt)
         {
             MonoHelper.StartCoroutine(CoRequest(receipt));
 
@@ -79,7 +79,7 @@ namespace SexyDu.Network
         /// <summary>
         /// API 요청 수행 코루틴
         /// </summary>
-        private IEnumerator CoRequest(UnityPostableRESTReceipt receipt)
+        private IEnumerator CoRequest(IPostableRESTReceipt receipt)
         {
             using (UnityWebRequest req = MakeUnityWebRequest(receipt))
             {
@@ -101,7 +101,7 @@ namespace SexyDu.Network
                 // 요청 전달
                 yield return req.SendWebRequest();
 
-                RESTResponse res = MakeRESTResponse(req);
+                TextResponse res = MakeResponse(req);
 
                 callback?.Invoke(res);
             }

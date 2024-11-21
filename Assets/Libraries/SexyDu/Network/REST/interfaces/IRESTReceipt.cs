@@ -11,7 +11,7 @@ namespace SexyDu.Network
         // 요청 Uri
         public Uri uri { get; }
         // 요청 형식, GET/POST/PATCH/DELETE
-        public RESTMethod method { get; }
+        public NetworkMethod method { get; }
         // 요청 타임아웃
         public int timeout { get; }
         // 요청 헤더
