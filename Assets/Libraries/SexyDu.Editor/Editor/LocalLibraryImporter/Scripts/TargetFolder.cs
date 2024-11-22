@@ -11,6 +11,7 @@ namespace SexyDu.OnEditor.LocalLibraryImporter
     [CreateAssetMenu(fileName = "TargetFolder", menuName = "SexyDu/Editor/LocalLibraryImporter/TargetFolder")]
     public partial class TargetFolder : ScriptableObject
     {
+        // Resources 경로
         public const string ResourcePath = "LocalLibraryImporter/TargetFolder";
 
         // 가져올 대상 폴더 에셋

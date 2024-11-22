@@ -8,6 +8,12 @@ namespace SexyDu.OnEditor.LocalLibraryImporter
     /// </summary>
     public partial class LocalLibraryImporterWindow : EditorWindow
     {
+        // 대상 폴더 에셋 정보
+        private TargetFolder target = null;
+
+        // 원본 정보
+        private SourceData source = null;
+
         private void OnEnable()
         {
             SettingGUIStyles();
@@ -55,12 +61,6 @@ namespace SexyDu.OnEditor.LocalLibraryImporter
         {
             Debug.LogFormat("Initialize");
         }
-        
-        // 대상 폴더 에셋 정보
-        private TargetFolder target = null;
-
-        // 원본 정보
-        private SourceData source = null;
 
 
         private void OnGUI()

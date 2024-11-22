@@ -25,7 +25,7 @@ namespace SexyDu.Network
         /// <summary>
         /// 접수증을 받아 UnityWebRequest를 생성하여 반환
         /// </summary>
-        protected UnityWebRequest MakeUnityWebRequest(IBinaryReceipt receipt)
+        protected virtual UnityWebRequest MakeUnityWebRequest(IBinaryReceipt receipt)
         {
             UnityWebRequest req = UnityWebRequestTexture.GetTexture(receipt.uri);
             SetTimeout(req, receipt.timeout);
@@ -35,7 +35,7 @@ namespace SexyDu.Network
         /// <summary>
         /// UnityWebRequest의 수신 데이터를 기반으로 수신 데이터 재구성 및 반환
         /// </summary>
-        protected TextureResponse MakeResponse(UnityWebRequest target)
+        protected virtual TextureResponse MakeResponse(UnityWebRequest target)
         {
             return new TextureResponse(DownloadHandlerTexture.GetContent(target), target.responseCode, target.error, ToRESTResult(target.result));
         }

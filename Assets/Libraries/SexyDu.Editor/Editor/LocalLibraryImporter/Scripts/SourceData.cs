@@ -13,6 +13,7 @@ namespace SexyDu.OnEditor.LocalLibraryImporter
     [CreateAssetMenu(fileName = "SourceData", menuName = "SexyDu/Editor/LocalLibraryImporter/SourceData")]
     public class SourceData : ScriptableObject
     {
+        // Resources 경로
         public const string ResourcePath = "LocalLibraryImporter/SourceData";
 
         // 원본 폴더 경로
