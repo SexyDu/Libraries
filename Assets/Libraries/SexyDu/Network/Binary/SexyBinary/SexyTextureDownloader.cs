@@ -14,7 +14,7 @@ namespace SexyDu.Network
         /// </summary>
         /// <param name="receipt">접수증</param>
         /// <returns>다운로더 인터페이스</returns>
-        public ITextureDownloader Request(IBinaryReceipt receipt)
+        public override ITextureDownloader Request(IBinaryReceipt receipt)
         {
             MonoHelper.StartCoroutine(CoRequest(receipt));
             

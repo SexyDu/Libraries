@@ -12,7 +12,7 @@ namespace SexyDu.Network.Editor
         /// <summary>
         /// Texture 다운로드 요청
         /// </summary>
-        public ITextureDownloader Request(IBinaryReceipt receipt)
+        public override ITextureDownloader Request(IBinaryReceipt receipt)
         {
             EditorCoroutine.StartCoroutine(CoRequest(receipt));
 

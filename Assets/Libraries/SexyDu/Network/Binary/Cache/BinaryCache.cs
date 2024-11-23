@@ -1,10 +1,7 @@
 namespace SexyDu.Network
 {
-    public abstract class BinaryCache : ICacheObject
+    public abstract class BinaryCache : ICache
     {
-        // 해당 캐시의 url
-        public abstract string Url { get; }
-
         /// <summary>
         /// 다운로더 반환
         /// </summary>

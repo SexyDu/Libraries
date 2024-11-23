@@ -14,7 +14,7 @@ namespace SexyDu.Network
         /// </summary>
         /// <param name="receipt">접수증</param>
         /// <returns>자기 자신</returns>
-        public IBytesDownloader Request(IBinaryReceipt receipt)
+        public override IBytesDownloader Request(IBinaryReceipt receipt)
         {
             MonoHelper.StartCoroutine(CoRequest(receipt));
 
