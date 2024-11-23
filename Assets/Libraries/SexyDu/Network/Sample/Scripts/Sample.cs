@@ -102,6 +102,20 @@ namespace SexyDu.Network.Sample
                     Set(res);
                 });
             }
+
+            if (GUI.Button(new Rect(200f, 0f, 100f, 100f), "TextureCache"))
+            {
+                Clear();
+
+                new TextureCache().
+                Request(new BinaryReceipt().SetUri(imageUrl)).
+                Subscribe((res) =>
+                {
+                    texture = res.tex;
+
+                    Set(res);
+                });
+            }
         }
     }
 }

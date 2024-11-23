@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: TextureDownloadTester
   m_EditorClassIdentifier: 
   requestData:
-    url: https://pm.pstatic.net/resources/asset/sp_main.b27083b1.png
+    url: 
     method: 0
     timeout: 0
   responseData:
-    code: 200
+    code: -9223372036854775808
     error: 
-    result: 2
-    responseTime: 0.069947
+    result: 0
+    responseTime: 0
     tex: {fileID: 0}
