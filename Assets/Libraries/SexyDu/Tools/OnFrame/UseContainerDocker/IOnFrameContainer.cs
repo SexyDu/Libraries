@@ -9,6 +9,6 @@ namespace SexyDu.Tool
     /// </summary>
     public interface IOnFrameContainer : IOnFrameSubject, IDockable, IDisposable
     {
-        
+        public bool Has(IOnFrameTarget target);
     }
 }
