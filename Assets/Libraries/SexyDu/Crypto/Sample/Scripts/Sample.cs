@@ -60,6 +60,13 @@ namespace SexyDu.Crypto
                     Debug.Log($"decryptedText: {decryptedText}");
                 }
             }
+
+            if (GUI.Button(new Rect(310, 10, 100, 100), "SHA-256"))
+            {
+                SHA256Encryptor sha256 = new SHA256Encryptor();
+                string hash = sha256.Encrypt(plainText);
+                Debug.Log($"hash: {hash}");
+            }
         }
 
         /// <summary>

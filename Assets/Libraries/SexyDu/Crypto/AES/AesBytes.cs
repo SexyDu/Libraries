@@ -107,7 +107,7 @@ namespace SexyDu.Crypto
         /// <returns>HMAC 적용 데이터</returns>
         private byte[] ApplyHmac(byte[] data)
         {
-            return Combine(data, GetHmacHash(data));
+            return BufferTool.Combine(data, GetHmacHash(data));
         }
         /// <summary>
         /// HMAC 제거 데이터 반환
@@ -116,45 +116,16 @@ namespace SexyDu.Crypto
         /// <returns>HMAC 제거 데이터</returns>
         private byte[] SkimHmac(byte[] data)
         {
-            byte[] encrypted = new byte[data.Length - hmac.Key.Length];
-            byte[] hmacHash = new byte[hmac.Key.Length];
-            Buffer.BlockCopy(data, 0, encrypted, 0, encrypted.Length);
-            Buffer.BlockCopy(data, encrypted.Length, hmacHash, 0, hmacHash.Length);
+            // encrypt 영역과 hmac 영역 분할
+            (byte[] encrypted, byte[] hmacHash) = BufferTool.Split(data, data.Length - hmac.Key.Length);
 
             byte[] computedHash = hmac.ComputeHash(encrypted);
-            if (!Compare(computedHash, hmacHash))
+            if (!BufferTool.Compare(computedHash, hmacHash))
                 throw new HmacVerificationException("HMAC 검증 실패: 데이터가 변조되었을 수 있습니다.");
             return encrypted;
         }
 
-        /// <summary>
-        /// 데이터 결합
-        /// </summary>
-        /// <param name="data1">데이터 1</param>
-        /// <param name="data2">데이터 2</param>
-        /// <returns>결합 데이터</returns>
-        private byte[] Combine(byte[] data1, byte[] data2)
-        {
-            byte[] result = new byte[data1.Length + data2.Length];
-            Buffer.BlockCopy(data1, 0, result, 0, data1.Length);
-            Buffer.BlockCopy(data2, 0, result, data1.Length, data2.Length);
-            return result;
-        }
-        /// <summary>
-        /// 데이터 비교
-        /// </summary>
-        /// <param name="data1">데이터 1</param>
-        /// <param name="data2">데이터 2</param>
-        /// <returns>비교 결과</returns>
-        private bool Compare(byte[] data1, byte[] data2)
-        {
-            if (data1.Length != data2.Length) return false;
-            for (int i = 0; i < data1.Length; i++)
-            {
-                if (data1[i] != data2[i]) return false;
-            }
-            return true;
-        }
+        
         #endregion
 
 #if UNITY_EDITOR
