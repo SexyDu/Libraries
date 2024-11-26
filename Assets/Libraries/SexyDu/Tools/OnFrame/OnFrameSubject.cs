@@ -12,7 +12,7 @@ namespace SexyDu.Tool
         /// <summary>
         /// OnFrame 대상
         /// </summary>
-        private List<IOnFrameTarget> targets = new List<IOnFrameTarget>();
+        protected List<IOnFrameTarget> targets = new List<IOnFrameTarget>();
         private bool HasTarget => targets.Count > 0;
 
         /// <summary>
