@@ -36,6 +36,8 @@ namespace SexyDu.Crypto
         }
 
         [SerializeField] private string plainText;
+        [SerializeField] private string salt;
+        [SerializeField] private int iteration = 1;
         private void OnGUI()
         {
             if (GUI.Button(new Rect(10, 10, 100, 100), "Encrypt"))
@@ -64,7 +66,7 @@ namespace SexyDu.Crypto
             if (GUI.Button(new Rect(310, 10, 100, 100), "SHA-256"))
             {
                 SHA256Encryptor sha256 = new SHA256Encryptor();
-                string hash = sha256.Encrypt(plainText);
+                string hash = string.IsNullOrEmpty(salt) ? sha256.Encrypt(plainText) : sha256.Encrypt(plainText, salt, iteration);
                 Debug.Log($"hash: {hash}");
             }
         }

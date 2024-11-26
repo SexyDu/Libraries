@@ -7,7 +7,7 @@ namespace SexyDu.Crypto
     /// <summary>
     /// byte array AES 암호화 클래스
     /// </summary>
-    public class AesBytes : AesEncryptor
+    public class AesBytes : AesEncryptor, IEncryptBytes, IDecryptBytes
     {
         public AesBytes() : base() { }
 

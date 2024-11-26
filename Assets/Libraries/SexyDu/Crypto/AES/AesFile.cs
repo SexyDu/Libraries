@@ -5,7 +5,7 @@ namespace SexyDu.Crypto
     /// <summary>
     /// 파일 AES 암호화 클래스
     /// </summary>
-    public class AesFile : AesBytes
+    public class AesFile : AesBytes, IEncryptedFileWriter, IEncryptedFileReader
     {
         public AesFile() : base() { }
 

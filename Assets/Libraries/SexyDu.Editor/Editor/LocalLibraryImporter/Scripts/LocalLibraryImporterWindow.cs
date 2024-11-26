@@ -98,6 +98,13 @@ namespace SexyDu.OnEditor.LocalLibraryImporter
                 EditorGUILayout.LabelField("시스템경로", GUILayout.Width(77));
                 EditorGUILayout.SelectableLabel(target.systemPath, GUILayout.MinWidth(40), GUILayout.Height(18));
                 EditorGUILayout.EndHorizontal();
+
+                if (GUILayout.Button("Sample 제거"))
+                {
+                    target.RemoveSample();
+                    RefreshEditor();
+                    EditorUtility.DisplayDialog("성공", $"샘플을 제거했습니다.", "OK");
+                }
                 EditorGUI.indentLevel--;
             }
         }
@@ -149,6 +156,7 @@ namespace SexyDu.OnEditor.LocalLibraryImporter
 
             if (GUILayout.Button("가져오기"))
             {
+                Debug.LogFormat("가져오기");
                 target.Bring(source.GetSelectedFileSystems());
                 RefreshEditor();
 

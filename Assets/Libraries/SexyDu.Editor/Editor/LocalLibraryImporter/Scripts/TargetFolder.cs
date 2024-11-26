@@ -71,6 +71,7 @@ namespace SexyDu.OnEditor.LocalLibraryImporter
         /// </summary>
         public void Bring(IUnityFileSystem[] fileSystems)
         {
+            Debug.LogFormat("Bring : {0}", fileSystems.Length);
             for (int i = 0; i < fileSystems.Length; i++)
             {
                 Bring(fileSystems[i]);
@@ -156,6 +157,7 @@ namespace SexyDu.OnEditor.LocalLibraryImporter
             // 파일 덮어쓰기
             File.Copy(sourcePath, destinationPath, true);
         }
+
         /// <summary>
         /// 소스 경로의 폴더를 목표 경로로 복사
         /// </summary>
@@ -203,6 +205,43 @@ namespace SexyDu.OnEditor.LocalLibraryImporter
                 CopyDirectory(dir, destDir, excludedMeta);
             }
         }
+
+        #region Remove Sample
+        private const string SampleFolderName = "Sample";
+        /// <summary>
+        /// 샘플 폴더 제거
+        /// </summary>
+        public void RemoveSample()
+        {
+            RemoveSample(new DirectoryInfo(systemPath));
+        }
+        /// <summary>
+        /// 샘플 폴더 제거
+        /// </summary>
+        /// <param name="dir">대상 폴더</param>
+        private void RemoveSample(DirectoryInfo dir)
+        {
+            if (!dir.Exists)
+            {
+                Debug.LogWarning($"대상 폴더가 존재하지 않습니다: {dir.FullName}");
+                return;
+            }
+            // Sample 폴더를 찾아다가 제거
+            DirectoryInfo[] childs = dir.GetDirectories();
+            foreach (DirectoryInfo child in childs)
+            {
+                // 샘플인 경우 제거
+                if (child.Name == SampleFolderName)
+                {
+                    UnityDirectory removeDir = new UnityDirectory(child);
+                    removeDir.Delete(false);
+                }
+                // 아닌 경우 재귀적으로 처리
+                else
+                    RemoveSample(child);
+            }
+        }
+        #endregion
 
         /// 값 또는 오브젝트 연결 변경 확인 기능
         #region Comparison

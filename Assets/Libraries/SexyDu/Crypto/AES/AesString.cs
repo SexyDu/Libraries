@@ -8,7 +8,7 @@ namespace SexyDu.Crypto
     /// <summary>
     /// string AES 암호화 클래스
     /// </summary>
-    public class AesString : AesEncryptor
+    public class AesString : AesEncryptor, IEncryptString, IDecryptString
     {
         public AesString() : base() { }
 
