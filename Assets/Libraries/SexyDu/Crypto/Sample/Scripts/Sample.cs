@@ -1,41 +1,41 @@
-using System;
-using System.Text;
+using System.IO;
 using UnityEngine;
 
 namespace SexyDu.Crypto
 {
     public class Sample : MonoBehaviour
     {
-        private AesEncryptor aes = new AesEncryptor();
-
         [SerializeField] private string inputFile;
         [SerializeField] private string outputFile;
         [SerializeField] private Texture2D texture2D;
-// .// GPT 답변 보고 수정하자
-        private const string KeyStr = "generalsexy.secretkey18@song.com";
-        private const string IvStr = "sexy.iv@song.com";
-        
+
         // 2PqHQ/DxV5QxMM9RH6fh7Z7pSSNbqsauwQVG25d4IyU=
         private readonly char[] caKey = new char[44] { '2', 'P', 'q', 'H', 'Q', '/', 'D', 'x', 'V', '5', 'Q', 'x', 'M', 'M', '9', 'R', 'H', '6', 'f', 'h', '7', 'Z', '7', 'p', 'S', 'S', 'N', 'b', 'q', 's', 'a', 'u', 'w', 'Q', 'V', 'G', '2', '5', 'd', '4', 'I', 'y', 'U', '=' };
         // lR3ynui08Gqq4gmkA3osNA==
         private readonly char[] caIv = new char[24] { 'l', 'R', '3', 'y', 'n', 'u', 'i', '0', '8', 'G', 'q', 'q', '4', 'g', 'm', 'k', 'A', '3', 'o', 's', 'N', 'A', '=', '=' };
+        private readonly char[] HMAC_Chars = new char[44] { 'E', 'U', 'J', '3', 'K', 'Q', 'x', 'b', 'H', 'Y', 'd', 'Q', 'f', 'z', 'D', 'd', 'j', 'n', 'd', '2', 'P', 'p', 'b', 'X', 'V', 'f', 'Q', 'D', '3', 'Z', '7', 'G', 'u', 'g', 'B', '8', 'C', 'd', '/', 'I', 'g', 'R', 'A', '=' };
 
         private void Encrypt()
         {
-            byte[] key = Convert.FromBase64CharArray(caKey, 0, caKey.Length);
-            byte[] iv = Convert.FromBase64CharArray(caIv, 0, caIv.Length);
-            aes.Encrypt(inputFile, outputFile, key, iv);
-            Debug.LogFormat("key : {0} bytes\niv : {1} bytes", key.Length, iv.Length);
+            using (AesFile aes = new AesFile())
+            {
+                aes.SetHmac(HMAC_Chars).SetKey(caKey).SetIv(caIv);
+
+                aes.Write(outputFile, File.ReadAllBytes(inputFile));
+            }
         }
 
         private void Decrypt()
         {
-            byte[] key = Convert.FromBase64CharArray(caKey, 0, caKey.Length);
-            byte[] iv = Convert.FromBase64CharArray(caIv, 0, caIv.Length);
-            byte[] data = aes.Decrypt(outputFile, key, iv);
-            texture2D = ByteArrayToTexture2D(data);
+            using (AesFile aes = new AesFile())
+            {
+                aes.SetHmac(HMAC_Chars).SetKey(caKey).SetIv(caIv);
+
+                texture2D = ByteArrayToTexture2D(aes.Read(outputFile));
+            }
         }
 
+        [SerializeField] private string plainText;
         private void OnGUI()
         {
             if (GUI.Button(new Rect(10, 10, 100, 100), "Encrypt"))
@@ -46,6 +46,19 @@ namespace SexyDu.Crypto
             if (GUI.Button(new Rect(110, 10, 100, 100), "Bring"))
             {
                 Decrypt();
+            }
+
+            if (GUI.Button(new Rect(210, 10, 100, 100), "Text"))
+            {
+                using (AesString aes = new AesString())
+                {
+                    Debug.Log($"plainText: {plainText}");
+                    aes.SetKey(caKey).SetIv(caIv);
+                    string cipherText = aes.Encrypt(plainText);
+                    Debug.Log($"cipherText: {cipherText}");
+                    string decryptedText = aes.Decrypt(cipherText);
+                    Debug.Log($"decryptedText: {decryptedText}");
+                }
             }
         }
 
