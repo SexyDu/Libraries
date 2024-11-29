@@ -17,7 +17,7 @@ namespace SexyDu.Crypto
 
         private void Encrypt()
         {
-            using (AesFile aes = new AesFile())
+            using (AesFileHandler aes = new AesFileHandler())
             {
                 aes.SetHmac(HMAC_Chars).SetKey(caKey).SetIv(caIv);
 
@@ -27,7 +27,7 @@ namespace SexyDu.Crypto
 
         private void Decrypt()
         {
-            using (AesFile aes = new AesFile())
+            using (AesFileHandler aes = new AesFileHandler())
             {
                 aes.SetHmac(HMAC_Chars).SetKey(caKey).SetIv(caIv);
 
@@ -66,7 +66,7 @@ namespace SexyDu.Crypto
             if (GUI.Button(new Rect(310, 10, 100, 100), "SHA-256"))
             {
                 SHA256Encryptor sha256 = new SHA256Encryptor();
-                string hash = string.IsNullOrEmpty(salt) ? sha256.Encrypt(plainText) : sha256.Encrypt(plainText, salt, iteration);
+                string hash = string.IsNullOrEmpty(salt) ? sha256.Encrypt(plainText) : sha256.Encrypt(plainText, salt.ToCharArray(), iteration);
                 Debug.Log($"hash: {hash}");
             }
         }

@@ -6,10 +6,19 @@ using UnityEngine;
 namespace SexyDu.Network
 {
     /// <summary>
-    /// 텍스쳐 캐시
+    /// 암호화 텍스쳐 캐시
     /// </summary>
-    public class TextureCache : BinaryCache, ITextureDownloader
+    public class TextureEncryptedCache : EncryptedBinaryCache, ITextureDownloader
     {
+        public TextureEncryptedCache() { }
+
+        /// <summary>
+        /// 암호화 키 및 초기화 벡터 설정
+        /// </summary>
+        /// <param name="key">암호화 키(base64 44 length = 32byte = 256bit)</param>
+        /// <param name="iv">초기화 벡터(base64 24 length = 16byte = 128bit)</param>
+        public TextureEncryptedCache(char[] key, char[] iv) : base(key, iv) { }
+
         public override void Dispose()
         {
             base.Dispose();

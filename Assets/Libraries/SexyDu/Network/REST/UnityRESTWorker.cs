@@ -1,4 +1,5 @@
 using System;
+using Unity.Mathematics;
 using UnityEngine.Networking;
 
 namespace SexyDu.Network
@@ -26,8 +27,16 @@ namespace SexyDu.Network
             this.includeResponseHeaders = includeResponseHeaders;
         }
 
+        /// <summary>
+        /// 해제
+        /// </summary>
+        public override void Dispose()
+        {
+            callback = null;
+        }
+
         // REST API 수신 콜백
-        protected Action<ITextResponse> callback = null;
+        private Action<ITextResponse> callback = null;
 
         /// <summary>
         /// REST API 수신 콜백 등록
@@ -40,9 +49,22 @@ namespace SexyDu.Network
         }
 
         /// <summary>
+        /// 옵저버에 노티 (UnityWebRequest 수신 데이터를 기반으로 수신 데이터 재구성)
+        /// </summary>
+        /// <param name="req">UnityWebRequest</param>
+        protected virtual void Notify(UnityWebRequest req)
+        {
+            if (callback != null)
+            {
+                TextResponse res = MakeResponse(req);
+                callback.Invoke(res);
+            }
+        }
+
+        /// <summary>
         /// UnityWebRequest의 수신 데이터를 기반으로 수신 데이터 재구성 및 반환
         /// </summary>
-        protected TextResponse MakeResponse(UnityWebRequest target)
+        private TextResponse MakeResponse(UnityWebRequest target)
         {
             if (includeResponseHeaders)
                 return new TextResponse(target.downloadHandler.text, target.responseCode, target.error, ToRESTResult(target.result), target.GetResponseHeaders());
@@ -58,7 +80,7 @@ namespace SexyDu.Network
             UnityWebRequest req = MakeUnityWebRequest(receipt.method, receipt.uri, string.Empty);
             SetTimeout(req, receipt.timeout);
             SetRequestHeaders(req, receipt.headers);
-            
+
             return req;
         }
         /// <summary>

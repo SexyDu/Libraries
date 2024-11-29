@@ -20,12 +20,32 @@ namespace SexyDu.Network
         /// <param name="includeResponseHeaders">수신 데이터에 ResponseHeaders 포함 여부</param>
         public SexyRESTWorker(bool includeResponseHeaders) : base(includeResponseHeaders) { }
 
+        // 요청 코루틴 관리자
+        private CoroutineCommander requestCommander = null;
+
+        /// <summary>
+        /// 해제
+        /// </summary>
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            if (requestCommander != null)
+            {
+                requestCommander.Dispose();
+                requestCommander = null;
+            }
+        }
+
+        // 요청 코루틴 관리자
+        // private CoroutineCommander requestCommander = null;
+
         /// <summary>
         /// API 요청 수행
         /// </summary>
         public IRESTWorker Request(IRESTReceipt receipt)
         {
-            MonoHelper.StartCoroutine(CoRequest(receipt));
+            requestCommander = MonoHelper.StartCoroutine(CoRequest(receipt));
 
             return this;
         }
@@ -44,9 +64,8 @@ namespace SexyDu.Network
                 // 요청 전달
                 yield return req.SendWebRequest();
 
-                TextResponse res = MakeResponse(req);
-
-                callback?.Invoke(res);
+                // 옵저버에 노티
+                Notify(req);
             }
         }
     }
@@ -68,11 +87,27 @@ namespace SexyDu.Network
         public SexyPostableRESTWorker(bool includeResponseHeaders) : base(includeResponseHeaders) { }
 
         /// <summary>
+        /// 해제
+        /// </summary>
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            if (requestCommander != null)
+            {
+                requestCommander.Dispose();
+                requestCommander = null;
+            }
+        }
+        // 요청 코루틴 관리자
+        private CoroutineCommander requestCommander = null;
+
+        /// <summary>
         /// API 요청 수행
         /// </summary>
         public IPostableRESTWorker Request(IPostableRESTReceipt receipt)
         {
-            MonoHelper.StartCoroutine(CoRequest(receipt));
+            requestCommander = MonoHelper.StartCoroutine(CoRequest(receipt));
 
             return this;
         }
@@ -101,9 +136,8 @@ namespace SexyDu.Network
                 // 요청 전달
                 yield return req.SendWebRequest();
 
-                TextResponse res = MakeResponse(req);
-
-                callback?.Invoke(res);
+                // 옵저버에 노티
+                Notify(req);
             }
         }
     }

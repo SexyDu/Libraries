@@ -10,13 +10,30 @@ namespace SexyDu.Network
     public class SexyBytesDownloader : UnityBytesDownloader, IBytesDownloader
     {
         /// <summary>
+        /// 해제
+        /// </summary>
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            if (requestCommander != null)
+            {
+                requestCommander.Dispose();
+                requestCommander = null;
+            }
+        }
+
+        // 요청 코루틴 관리자
+        private CoroutineCommander requestCommander = null;
+
+        /// <summary>
         /// 요청 수행
         /// </summary>
         /// <param name="receipt">접수증</param>
         /// <returns>자기 자신</returns>
         public override IBytesDownloader Request(IBinaryReceipt receipt)
         {
-            MonoHelper.StartCoroutine(CoRequest(receipt));
+            requestCommander = MonoHelper.StartCoroutine(CoRequest(receipt));
 
             return this;
         }
@@ -30,10 +47,9 @@ namespace SexyDu.Network
             {
                 // 요청 전달
                 yield return req.SendWebRequest();
-                
-                BytesResponse res = MakeResponse(req);
 
-                callback?.Invoke(res);
+                // 옵저버에 노티
+                Notify(req);
             }
         }
     }

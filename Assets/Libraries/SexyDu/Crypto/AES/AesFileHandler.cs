@@ -1,15 +1,16 @@
 using System.IO;
+using SexyDu.FileIO;
 
 namespace SexyDu.Crypto
 {
     /// <summary>
     /// 파일 AES 암호화 클래스
     /// </summary>
-    public class AesFile : AesBytes, IEncryptedFileWriter, IEncryptedFileReader
+    public class AesFileHandler : AesBytes, IFileWriter, IFileReader
     {
-        public AesFile() : base() { }
+        public AesFileHandler() : base() { }
 
-        public AesFile(byte[] key, byte[] iv) : base(key, iv) { }
+        public AesFileHandler(byte[] key, byte[] iv) : base(key, iv) { }
 
         /// <summary>
         /// 파일 암호화하여 저장

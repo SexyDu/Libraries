@@ -22,6 +22,8 @@ namespace SexyDu.Crypto
             aes.IV = iv;
         }
 
+        public AesEncryptor(char[] key, char[] iv) : this(Convert.FromBase64CharArray(key, 0, key.Length), Convert.FromBase64CharArray(iv, 0, iv.Length)) { }
+
         public virtual void Dispose()
         {
             aes.Dispose();

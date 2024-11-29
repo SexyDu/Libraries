@@ -51,5 +51,13 @@ namespace SexyDu.Crypto
             }
             return true;
         }
+
+        public static string ToString(byte[] bytes)
+        {
+            System.Text.StringBuilder sb = new System.Text.StringBuilder(bytes[0].ToString());
+            for (int i = 1; i < bytes.Length; i++)
+                sb.AppendFormat(", {0}", bytes[i]);
+            return sb.ToString();
+        }
     }
 }

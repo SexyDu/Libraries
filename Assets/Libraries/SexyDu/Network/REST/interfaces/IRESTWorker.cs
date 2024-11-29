@@ -27,7 +27,7 @@ namespace SexyDu.Network
     /// <summary>
     /// REST API 콜백 옵저버 서브젝트 인터페이스
     /// </summary>
-    public interface IRESTSubject
+    public interface IRESTSubject :  IDisposable
     {
         /// <summary>
         /// REST API 수신 시 Response 콜백 등록

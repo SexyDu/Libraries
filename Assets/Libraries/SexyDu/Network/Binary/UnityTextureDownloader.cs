@@ -10,6 +10,14 @@ namespace SexyDu.Network
     public abstract class UnityTextureDownloader : UnityNetworker, ITextureDownloader
     {
         /// <summary>
+        /// 해제
+        /// </summary>
+        public override void Dispose()
+        {
+            callback = null;
+        }
+
+        /// <summary>
         /// 접수증을 받아 다운로드 작업을 수행
         /// </summary>
         /// <param name="receipt">접수증</param>
@@ -17,15 +25,28 @@ namespace SexyDu.Network
         public abstract ITextureDownloader Request(IBinaryReceipt receipt);
 
         // 수신 콜백
-        protected Action<ITextureResponse> callback = null;
+        private Action<ITextureResponse> callback = null;
         /// <summary>
         /// 수신 콜백 등록
         /// </summary>
-        public virtual ITextureSubject Subscribe(Action<ITextureResponse> callback)
+        public virtual ITextureDownloader Subscribe(Action<ITextureResponse> callback)
         {
             this.callback = callback;
 
             return this;
+        }
+
+        /// <summary>
+        /// 옵저버에 노티 (UnityWebRequest 수신 데이터를 기반으로 수신 데이터 재구성)
+        /// </summary>
+        /// <param name="req">UnityWebRequest</param>
+        protected virtual void Notify(UnityWebRequest req)
+        {
+            if (callback != null)
+            {
+                TextureResponse res = MakeResponse(req);
+                callback.Invoke(res);
+            }
         }
 
         /// <summary>

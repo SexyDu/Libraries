@@ -1,6 +1,6 @@
 /// 암화화에 사용될 인터페이스 모음
-
 using System;
+using System.Threading.Tasks;
 
 namespace SexyDu.Crypto
 {
@@ -10,6 +10,7 @@ namespace SexyDu.Crypto
     public interface IEncryptBytes : IDisposable
     {
         byte[] Encrypt(byte[] bytes);
+        Task<byte[]> EncryptAsync(byte[] bytes);
     }
 
     /// <summary>
@@ -18,6 +19,7 @@ namespace SexyDu.Crypto
     public interface IDecryptBytes : IDisposable
     {
         byte[] Decrypt(byte[] bytes);
+        Task<byte[]> DecryptAsync(byte[] bytes);
     }
 
     /// <summary>
@@ -34,21 +36,5 @@ namespace SexyDu.Crypto
     public interface IDecryptString : IDisposable
     {
         string Decrypt(string str);
-    }
-
-    /// <summary>
-    /// 파일 암호화 인터페이스
-    /// </summary>
-    public interface IEncryptedFileWriter : IDisposable
-    {
-        void Write(string path, byte[] data);
-    }
-
-    /// <summary>
-    /// 파일 복호화 인터페이스
-    /// </summary>
-    public interface IEncryptedFileReader : IDisposable
-    {
-        byte[] Read(string path);
     }
 }

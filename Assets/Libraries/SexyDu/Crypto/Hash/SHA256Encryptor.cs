@@ -21,17 +21,17 @@ namespace SexyDu.Crypto
             byte[] bytes = Encoding.UTF8.GetBytes(plainText);
             return ToHashString(Encrypt(bytes));
         }
-
+        
         /// <summary>
         /// 문자열 암호화
         /// </summary>
         /// <param name="plainText">암호화할 문자열</param>
         /// <param name="salt">Salt</param>
         /// <returns>암호화된 문자열</returns>
-        public string Encrypt(string plainText, string salt)
+        public string Encrypt(string plainText, char[] salt)
         {
             byte[] plainBytes = Encoding.UTF8.GetBytes(plainText);
-            byte[] saltBytes = Convert.FromBase64String(salt);
+            byte[] saltBytes = Convert.FromBase64CharArray(salt, 0, salt.Length);
 
             byte[] combined = BufferTool.Combine(plainBytes, saltBytes);
             return ToHashString(Encrypt(combined));
@@ -44,10 +44,10 @@ namespace SexyDu.Crypto
         /// <param name="salt">Salt</param>
         /// <param name="iteration">반복 횟수</param>
         /// <returns>암호화된 문자열</returns>
-        public string Encrypt(string plainText, string salt, int iteration)
+        public string Encrypt(string plainText, char[] salt, int iteration)
         {
             byte[] bytes = Encoding.UTF8.GetBytes(plainText);
-            byte[] saltBytes = Convert.FromBase64String(salt);
+            byte[] saltBytes = Convert.FromBase64CharArray(salt, 0, salt.Length);
             for (int i = 0; i < iteration; i++)
             {
                 bytes = BufferTool.Combine(bytes, saltBytes);
@@ -62,12 +62,12 @@ namespace SexyDu.Crypto
         /// <param name="plainText">암호화할 문자열</param>
         /// <param name="salts">Salt</param>
         /// <returns>암호화된 문자열</returns>
-        public string Encrypt(string plainText, params string[] salts)
+        public string Encrypt(string plainText, params char[][] salts)
         {
             byte[] bytes = Encoding.UTF8.GetBytes(plainText);
-            foreach (string salt in salts)
+            foreach (char[] salt in salts)
             {
-                bytes = BufferTool.Combine(bytes, Convert.FromBase64String(salt));
+                bytes = BufferTool.Combine(bytes, Convert.FromBase64CharArray(salt, 0, salt.Length));
                 bytes = Encrypt(bytes);
             }
             return ToHashString(bytes);

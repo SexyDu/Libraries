@@ -10,14 +10,31 @@ namespace SexyDu.Network
     public class SexyTextureDownloader : UnityTextureDownloader, ITextureDownloader
     {
         /// <summary>
+        /// 해제
+        /// </summary>
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            if (requestCommander != null)
+            {
+                requestCommander.Dispose();
+                requestCommander = null;
+            }
+        }
+
+        // 요청 코루틴 관리자
+        private CoroutineCommander requestCommander = null;
+
+        /// <summary>
         /// 요청 수행
         /// </summary>
         /// <param name="receipt">접수증</param>
         /// <returns>다운로더 인터페이스</returns>
         public override ITextureDownloader Request(IBinaryReceipt receipt)
         {
-            MonoHelper.StartCoroutine(CoRequest(receipt));
-            
+            requestCommander = MonoHelper.StartCoroutine(CoRequest(receipt));
+
             return this;
         }
 
@@ -31,9 +48,8 @@ namespace SexyDu.Network
                 // 요청 전달
                 yield return req.SendWebRequest();
 
-                TextureResponse res = MakeResponse(req);
-
-                callback?.Invoke(res);
+                // 옵저버에게 노티
+                Notify(req);
             }
         }
     }

@@ -14,6 +14,8 @@ namespace SexyDu.Crypto
 
         public AesString(byte[] key, byte[] iv) : base(key, iv) { }
 
+        public AesString(char[] key, char[] iv) : base(key, iv) { }
+
         /// <summary>
         /// 문자열 암호화
         /// </summary>

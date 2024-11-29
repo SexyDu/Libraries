@@ -7,8 +7,13 @@ namespace SexyDu.Network
     /// <summary>
     /// UnityWebRequest를 사용하는 기반 네트워커 클래스
     /// </summary>
-    public abstract class UnityNetworker : INetworker
+    public abstract class UnityNetworker : INetworker, IDisposable
     {
+        /// <summary>
+        /// 해제
+        /// </summary>
+        public abstract void Dispose();
+
         /// <summary>
         /// 타임아웃 설정
         /// </summary>

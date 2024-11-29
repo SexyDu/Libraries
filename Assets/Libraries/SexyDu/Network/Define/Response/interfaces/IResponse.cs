@@ -19,7 +19,7 @@ namespace SexyDu.Network
         /// <summary>
         /// REST API 성공 여부
         /// </summary>
-        public bool IsSuccess => result == NetworkResult.Success;
+        public bool IsSuccess => result == NetworkResult.Success || result == NetworkResult.SuccessFromCache;
         /// <summary>
         /// Empty 여부
         /// </summary>

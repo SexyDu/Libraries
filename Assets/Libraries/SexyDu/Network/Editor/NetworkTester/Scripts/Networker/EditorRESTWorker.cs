@@ -57,7 +57,7 @@ namespace SexyDu.Network.Editor
                 yield return null;
             } while (!req.isDone);
 
-            callback?.Invoke(MakeResponse(req));
+            Notify(req);
 
             req.Dispose();
         }

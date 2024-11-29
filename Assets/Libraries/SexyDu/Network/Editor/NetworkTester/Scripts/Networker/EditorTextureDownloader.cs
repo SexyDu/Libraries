@@ -36,9 +36,7 @@ namespace SexyDu.Network.Editor
                     yield return null;
                 } while (!req.isDone);
 
-                TextureResponse res = MakeResponse(req);
-
-                callback?.Invoke(res);
+                Notify(req);
             }
         }
 

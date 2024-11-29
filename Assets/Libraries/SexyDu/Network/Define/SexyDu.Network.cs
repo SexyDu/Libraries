@@ -51,6 +51,8 @@ namespace SexyDu
             DataProcessingError,
             /// </UnityWebRequest.Result>
             /// 
+
+            SuccessFromCache,
             
             // 인증 토큰이 유효하지 않은 경우
             /// 아직 토큰에 대해 고려하지 않기 때문에 일단 주석
