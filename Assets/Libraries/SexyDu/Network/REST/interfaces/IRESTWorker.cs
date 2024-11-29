@@ -5,7 +5,7 @@ namespace SexyDu.Network
     /// <summary>
     /// REST API 작업자 인터페이스
     /// </summary>
-    public interface IRESTWorker : IRESTSubject
+    public interface IRESTWorker : IRESTSubject, INetworker
     {
         /// <summary>
         /// REST API 요청

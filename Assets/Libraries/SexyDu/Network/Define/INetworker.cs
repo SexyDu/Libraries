@@ -1,7 +1,12 @@
+using System;
+
 namespace SexyDu.Network
 {
-    public interface INetworker
+    public interface INetworker : IDisposable
     {
-        // TODO: Working Status, Cancel 기능 추가 필요
+        /// <summary>
+        /// 작업 중 여부
+        /// </summary>
+        public bool IsWorking { get; }
     }
 }

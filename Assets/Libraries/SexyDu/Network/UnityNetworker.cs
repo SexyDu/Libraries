@@ -10,9 +10,24 @@ namespace SexyDu.Network
     public abstract class UnityNetworker : INetworker, IDisposable
     {
         /// <summary>
+        /// 작업 중 여부
+        /// </summary>
+        public abstract bool IsWorking { get; }
+
+        /// <summary>
         /// 해제
         /// </summary>
         public abstract void Dispose();
+
+        /// <summary>
+        /// 작업 종료
+        /// </summary>
+        protected virtual void Terminate()
+        {
+            Dispose();
+
+            UnityEngine.Debug.Log("UnityNetworker Terminate");
+        }
 
         /// <summary>
         /// 타임아웃 설정

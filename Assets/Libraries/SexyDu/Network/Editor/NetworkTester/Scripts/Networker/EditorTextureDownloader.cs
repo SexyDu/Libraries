@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine.Networking;
 using SexyDu.OnEditor;
+using System;
 
 namespace SexyDu.Network.Editor
 {
@@ -9,12 +10,28 @@ namespace SexyDu.Network.Editor
     /// </summary>
     public class EditorTextureDownloader : UnityTextureDownloader, ITextureDownloader
     {
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            if (coroutine != null)
+            {
+                coroutine.Dispose();
+                coroutine = null;
+            }
+        }
+
+        // 작업 코루틴 관리자
+        private IDisposable coroutine = null;
+        // 작업 중 여부
+        public override bool IsWorking => coroutine != null;
+
         /// <summary>
         /// Texture 다운로드 요청
         /// </summary>
         public override ITextureDownloader Request(IBinaryReceipt receipt)
         {
-            EditorCoroutine.StartCoroutine(CoRequest(receipt));
+            coroutine = EditorCoroutine.StartCoroutine(CoRequest(receipt));
 
             return this;
         }
@@ -38,6 +55,8 @@ namespace SexyDu.Network.Editor
 
                 Notify(req);
             }
+
+            Terminate();
         }
 
         /// <summary>

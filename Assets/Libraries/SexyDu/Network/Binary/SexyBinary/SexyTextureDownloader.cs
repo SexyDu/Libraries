@@ -27,6 +27,11 @@ namespace SexyDu.Network
         private CoroutineCommander requestCommander = null;
 
         /// <summary>
+        /// 작업 중 여부
+        /// </summary>
+        public override bool IsWorking => requestCommander != null;
+
+        /// <summary>
         /// 요청 수행
         /// </summary>
         /// <param name="receipt">접수증</param>
@@ -51,6 +56,8 @@ namespace SexyDu.Network
                 // 옵저버에게 노티
                 Notify(req);
             }
+            // 작업 종료
+            Terminate();
         }
     }
 }

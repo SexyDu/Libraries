@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine.Networking;
 using SexyDu.OnEditor;
+using System;
 
 namespace SexyDu.Network.Editor
 {
@@ -22,6 +23,21 @@ namespace SexyDu.Network.Editor
         public EditorRESTWorker(bool includeResponseHeaders) : base(includeResponseHeaders)
         { }
 
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            if (coroutine != null)
+            {
+                coroutine.Dispose();
+                coroutine = null;
+            }
+        }
+        // 작업 코루틴 관리자
+        private IDisposable coroutine = null;
+        // 작업 중 여부
+        public override bool IsWorking => coroutine != null;
+
         /// <summary>
         /// [PostData 미포함] API 요청
         /// </summary>
@@ -29,7 +45,7 @@ namespace SexyDu.Network.Editor
         {
             UnityWebRequest req = MakeUnityWebRequest(receipt);
 
-            EditorCoroutine.StartCoroutine(CoRequest(req));
+            coroutine = EditorCoroutine.StartCoroutine(CoRequest(req));
 
             return this;
         }
@@ -40,7 +56,7 @@ namespace SexyDu.Network.Editor
         {
             UnityWebRequest req = MakeUnityWebRequest(receipt);
 
-            EditorCoroutine.StartCoroutine(CoRequest(req));
+            coroutine = EditorCoroutine.StartCoroutine(CoRequest(req));
 
             return this;
         }
@@ -60,6 +76,8 @@ namespace SexyDu.Network.Editor
             Notify(req);
 
             req.Dispose();
+
+            Terminate();
         }
     }
 }

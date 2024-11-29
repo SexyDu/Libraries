@@ -22,11 +22,21 @@ namespace SexyDu.Network
 
         public virtual void Dispose()
         {
-            if (loader != null)
+            if (worker != null)
             {
-                loader.Dispose();
-                loader = null;
+                worker.Dispose();
+                worker = null;
             }
+        }
+
+        /// <summary>
+        /// 작업 종료
+        /// </summary>
+        protected virtual void Terminate()
+        {
+            Dispose();
+
+            Debug.Log("BinaryCache Terminate");
         }
 
         /// <summary>
@@ -39,11 +49,11 @@ namespace SexyDu.Network
         /// <summary>
         /// 작업중인 다운로더 Disposable
         /// </summary>
-        protected IDisposable loader = null;
+        protected IDisposable worker = null;
         /// <summary>
         /// 작업 중인지 여부
         /// </summary>
-        public bool IsWorking => loader != null;
+        public bool IsWorking => worker != null;
 
         /// <summary>
         /// 파일 읽고 옵저버에 노티하는 코루틴

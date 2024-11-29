@@ -22,6 +22,8 @@ namespace SexyDu.Network
 
         // 요청 코루틴 관리자
         private CoroutineCommander requestCommander = null;
+        // 작업 중 여부
+        public override bool IsWorking => requestCommander != null;
 
         /// <summary>
         /// 해제
@@ -56,17 +58,15 @@ namespace SexyDu.Network
         {
             using (UnityWebRequest req = MakeUnityWebRequest(receipt))
             {
-                // 타임아웃 설정
-                SetTimeout(req, receipt.timeout);
-                // 헤더 설정
-                SetRequestHeaders(req, receipt.headers);
-
                 // 요청 전달
                 yield return req.SendWebRequest();
-
+                
                 // 옵저버에 노티
                 Notify(req);
             }
+
+            // 작업 종료
+            Terminate();
         }
     }
 
@@ -101,6 +101,8 @@ namespace SexyDu.Network
         }
         // 요청 코루틴 관리자
         private CoroutineCommander requestCommander = null;
+        // 작업 중 여부
+        public override bool IsWorking => requestCommander != null;
 
         /// <summary>
         /// API 요청 수행
@@ -128,17 +130,15 @@ namespace SexyDu.Network
                 }
 #endif
 
-                // 타임아웃 설정
-                SetTimeout(req, receipt.timeout);
-                // 헤더 설정
-                SetRequestHeaders(req, receipt.headers);
-
                 // 요청 전달
                 yield return req.SendWebRequest();
 
                 // 옵저버에 노티
                 Notify(req);
             }
+
+            // 작업 종료
+            Terminate();
         }
     }
 }

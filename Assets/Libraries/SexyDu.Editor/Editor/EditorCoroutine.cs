@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEditor;
 
@@ -6,13 +7,18 @@ namespace SexyDu.OnEditor
     /// <summary>
     /// Editor용 Coroutine 수행자
     /// </summary>
-    public class EditorCoroutine
+    public class EditorCoroutine : IDisposable
     {
         public static EditorCoroutine StartCoroutine(IEnumerator _routine)
         {
             EditorCoroutine coroutine = new EditorCoroutine(_routine);
             coroutine.Start();
             return coroutine;
+        }
+
+        public void Dispose()
+        {
+            Stop();
         }
 
         readonly IEnumerator routine;

@@ -1,4 +1,7 @@
+#define USE_COROUTINE
+
 using System;
+using System.Collections;
 using System.IO;
 using SexyDu.Tool;
 using UnityEngine;
@@ -35,6 +38,9 @@ namespace SexyDu.Network
         {
             if (IsWorking)
                 throw new InvalidOperationException("이미 작업중입니다. 요청 전 작업 확인 처리를 하거나 중단 처리(Dispose)를 수행하세요.");
+#if USE_COROUTINE
+            worker = MonoHelper.StartCoroutine(CoRequest(receipt));
+#else
             // uri 기반의 캐시 경로 가져오기
             string filePath = GetCachePath(receipt.uri.AbsoluteUri);
 
@@ -42,13 +48,13 @@ namespace SexyDu.Network
             if (File.Exists(filePath))
             {
                 // 캐시 파일 읽은 후 옵저버에 노티
-                loader = MonoHelper.StartCoroutine(CoReadFileAndNotify(filePath));
+                worker = MonoHelper.StartCoroutine(CoReadFileAndNotify(filePath));
             }
             // 캐시 파일이 존재하지 않는 경우
             else
             {
                 // 다운로더 요청 후 캐시 파일 쓰기 및 옵저버에 노티
-                loader = MakeDownloader().Request(receipt).Subscribe(res =>
+                worker = MakeDownloader().Request(receipt).Subscribe(res =>
                 {
                     MonoHelper.StartCoroutine(CoWriteFile(filePath, res.data));
 
@@ -56,9 +62,45 @@ namespace SexyDu.Network
                     Notify(res.data, res.code, res.error, res.result);
                 });
             }
-
+#endif
             return this;
         }
+
+#if USE_COROUTINE
+        private IEnumerator CoRequest(IBinaryReceipt receipt)
+        {
+            // uri 기반의 캐시 경로 가져오기
+            string filePath = GetCachePath(receipt.uri.AbsoluteUri);
+
+            // 캐시 파일이 존재하는 경우
+            if (File.Exists(filePath))
+            {
+                // 캐시 파일 읽은 후 옵저버에 노티
+                yield return CoReadFileAndNotify(filePath);
+            }
+            // 캐시 파일이 존재하지 않는 경우
+            else
+            {
+                byte[] responseData = null;
+
+                // 다운로더 요청 후 캐시 파일 쓰기 및 옵저버에 노티
+                INetworker worker = MakeDownloader().Request(receipt).Subscribe(res =>
+                {
+                    responseData = res.data;
+
+                    // 옵저버에 노티
+                    Notify(res.data, res.code, res.error, res.result);
+                });
+                // 작업 완료 대기
+                yield return new WaitUntil(() => !worker.IsWorking);
+
+                // 캐시 파일 쓰기
+                yield return CoWriteFile(filePath, responseData);
+            }
+
+            Terminate();
+        }
+#endif
 
         // 텍스쳐 콜백
         private Action<ITextureResponse> callback = null;
