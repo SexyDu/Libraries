@@ -6,7 +6,7 @@ namespace SexyDu.Network
     /// <summary>
     /// UnityWebRequest를 사용한 RESTWorker 추상 클래스
     /// </summary>
-    public abstract class UnityRESTWorker : UnityNetworker, IRESTSubject
+    public abstract class UnityRESTWorker : UnityNetworker, IRESTWorker
     {
         // 수신 데이터에 ResponseHeaders 포함 여부
         private readonly bool includeResponseHeaders = false;
@@ -34,13 +34,18 @@ namespace SexyDu.Network
             callback = null;
         }
 
+        /// <summary>
+        /// REST API 요청
+        /// </summary>
+        public abstract IRESTWorker Request(IRESTReceipt receipt);
+
         // REST API 수신 콜백
         private Action<ITextResponse> callback = null;
 
         /// <summary>
         /// REST API 수신 콜백 등록
         /// </summary>
-        public virtual IRESTSubject Subscribe(Action<ITextResponse> callback)
+        public virtual IRESTWorker Subscribe(Action<ITextResponse> callback)
         {
             this.callback = callback;
 
@@ -75,17 +80,6 @@ namespace SexyDu.Network
         /// IRESTReceipt 형식의 REST 접수증을 받아 UnityWebRequest를 생성하여 반환
         /// </summary>
         protected UnityWebRequest MakeUnityWebRequest(IRESTReceipt receipt)
-        {
-            UnityWebRequest req = MakeUnityWebRequest(receipt.method, receipt.uri, string.Empty);
-            SetTimeout(req, receipt.timeout);
-            SetRequestHeaders(req, receipt.headers);
-
-            return req;
-        }
-        /// <summary>
-        /// IPostableRESTReceipt 형식의 REST 접수증을 받아 UnityWebRequest를 생성하여 반환
-        /// </summary>
-        protected UnityWebRequest MakeUnityWebRequest(IPostableRESTReceipt receipt)
         {
             UnityWebRequest req = MakeUnityWebRequest(receipt.method, receipt.uri, receipt.body);
             SetTimeout(req, receipt.timeout);

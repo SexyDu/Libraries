@@ -154,7 +154,7 @@ namespace SexyDu.Network.Editor
 
                 if (headers != null)
                     headers.Clear();
-                
+
                 postData = string.Empty;
             }
 
@@ -182,21 +182,14 @@ namespace SexyDu.Network.Editor
             /// </summary>
             public IRESTReceipt GetRESTReceipt()
             {
-                if (HasPostData)
-                {
-                    return new PostableRESTReceipt(method)
-                    .SetUri(url)
-                    .SetTimeout(timeout)
-                    .SetHeaders(GetHeaders())
-                    .SetBody(postData);
-                }
-                else
-                {
-                    return new RESTReceipt(method)
+                var receipt = new RESTReceipt(method)
                     .SetUri(url)
                     .SetTimeout(timeout)
                     .SetHeaders(GetHeaders());
-                }
+                if (HasPostData)
+                    receipt.SetBody(postData);
+
+                return receipt;
             }
         }
 

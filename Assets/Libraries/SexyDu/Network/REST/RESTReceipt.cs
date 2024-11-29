@@ -35,6 +35,12 @@ namespace SexyDu.Network
             private set;
         }
 
+        public string body
+        {
+            get;
+            private set;
+        }
+
         public RESTReceipt(NetworkMethod method)
         {
             this.method = method;
@@ -42,6 +48,7 @@ namespace SexyDu.Network
             uri = null;
             timeout = 0;
             headers = null;
+            body = string.Empty;
         }
 
         #region Builder
@@ -73,84 +80,7 @@ namespace SexyDu.Network
 
             return this;
         }
-        #endregion
-    }
-
-    /// <summary>
-    /// Post(body)할 데이터가 포함된 REST API 요청 접수증
-    /// </summary>
-    public struct PostableRESTReceipt : IPostableRESTReceipt
-    {
-        public Uri uri
-        {
-            get;
-            private set;
-        }
-
-        public NetworkMethod method
-        {
-            get;
-            private set;
-        }
-
-        public int timeout
-        {
-            get;
-            private set;
-        }
-
-        public Dictionary<string, string> headers
-        {
-            get;
-            private set;
-        }
-
-        public string body
-        {
-            get;
-            private set;
-        }
-
-        public PostableRESTReceipt(NetworkMethod method)
-        {
-            this.method = method;
-
-            uri = null;
-            timeout = 0;
-            headers = null;
-            body = string.Empty;
-        }
-
-        #region Builder
-        public PostableRESTReceipt SetUri(string url)
-        {
-            this.uri = new Uri(url);
-            return this;
-        }
-        public PostableRESTReceipt SetMethod(NetworkMethod method)
-        {
-            this.method = method;
-            return this;
-        }
-        public PostableRESTReceipt SetTimeout(int timeout)
-        {
-            this.timeout = timeout;
-            return this;
-        }
-        public PostableRESTReceipt SetHeaders(Dictionary<string, string> headers)
-        {
-            this.headers = headers;
-            return this;
-        }
-        public PostableRESTReceipt AddHeader(string key, string value)
-        {
-            if (headers == null)
-                headers = new Dictionary<string, string>();
-            headers.Add(key, value);
-
-            return this;
-        }
-        public PostableRESTReceipt SetBody(string body)
+        public RESTReceipt SetBody(string body)
         {
             this.body = body;
             return this;

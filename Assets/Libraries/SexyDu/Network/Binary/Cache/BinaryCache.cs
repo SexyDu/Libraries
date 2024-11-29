@@ -31,12 +31,15 @@ namespace SexyDu.Network
 
         /// <summary>
         /// 작업 종료
+        ///  * 로컬에서 작업 종료 시 호출
         /// </summary>
         protected virtual void Terminate()
         {
             Dispose();
 
-            Debug.Log("BinaryCache Terminate");
+#if UNITY_EDITOR
+            UnityEngine.Debug.Log("BinaryCache Terminate");
+#endif
         }
 
         /// <summary>

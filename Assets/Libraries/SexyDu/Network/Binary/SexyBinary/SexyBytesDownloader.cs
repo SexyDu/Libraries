@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine.Networking;
 using SexyDu.Tool;
@@ -38,6 +39,9 @@ namespace SexyDu.Network
         /// <returns>자기 자신</returns>
         public override IBytesDownloader Request(IBinaryReceipt receipt)
         {
+            if (IsWorking)
+                throw new InvalidOperationException("이미 작업중입니다. 요청 전 작업 확인 처리를 하거나 중단 처리(Dispose)를 수행하세요.");
+                
             requestCommander = MonoHelper.StartCoroutine(CoRequest(receipt));
 
             return this;

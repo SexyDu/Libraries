@@ -8,7 +8,7 @@ namespace SexyDu.Network.Editor
     /// <summary>
     /// 에디터 전용 REST API 작업자
     /// </summary>
-    public class EditorRESTWorker : UnityRESTWorker, IRESTWorker, IPostableRESTWorker
+    public class EditorRESTWorker : UnityRESTWorker
     {
         /// <summary>
         /// 생성자
@@ -41,41 +41,32 @@ namespace SexyDu.Network.Editor
         /// <summary>
         /// [PostData 미포함] API 요청
         /// </summary>
-        public IRESTWorker Request(IRESTReceipt receipt)
+        public override IRESTWorker Request(IRESTReceipt receipt)
         {
-            UnityWebRequest req = MakeUnityWebRequest(receipt);
+            if (IsWorking)
+                throw new InvalidOperationException("이미 작업중입니다. 요청 전 작업 확인 처리를 하거나 중단 처리(Dispose)를 수행하세요.");
 
-            coroutine = EditorCoroutine.StartCoroutine(CoRequest(req));
-
-            return this;
-        }
-        /// <summary>
-        /// [PostData 포함] API 요청
-        /// </summary>
-        public IPostableRESTWorker Request(IPostableRESTReceipt receipt)
-        {
-            UnityWebRequest req = MakeUnityWebRequest(receipt);
-
-            coroutine = EditorCoroutine.StartCoroutine(CoRequest(req));
+            coroutine = EditorCoroutine.StartCoroutine(CoRequest(receipt));
 
             return this;
         }
 
-        private IEnumerator CoRequest(UnityWebRequest req)
+        private IEnumerator CoRequest(IRESTReceipt receipt)
         {
-            // 요청 전달
-            req.SendWebRequest();
-            /// EditorCoroutine의 경우 MoveNext를 기반으로 동작하기 때문에
-            /// yield return req.SendWebRequest()를 한번에 통과하여 데이터를 받아올 수 없다.
-            /// 하여 아래와 같이 request가 완료되었는지를 매 프레임 확인하여 수행한다.
-            do
+            using (UnityWebRequest req = MakeUnityWebRequest(receipt))
             {
-                yield return null;
-            } while (!req.isDone);
+                // 요청 전달
+                req.SendWebRequest();
+                /// EditorCoroutine의 경우 MoveNext를 기반으로 동작하기 때문에
+                /// yield return req.SendWebRequest()를 한번에 통과하여 데이터를 받아올 수 없다.
+                /// 하여 아래와 같이 request가 완료되었는지를 매 프레임 확인하여 수행한다.
+                do
+                {
+                    yield return null;
+                } while (!req.isDone);
 
-            Notify(req);
-
-            req.Dispose();
+                Notify(req);
+            }
 
             Terminate();
         }

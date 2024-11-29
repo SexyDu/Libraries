@@ -31,6 +31,9 @@ namespace SexyDu.Network.Editor
         /// </summary>
         public override ITextureDownloader Request(IBinaryReceipt receipt)
         {
+            if (IsWorking)
+                throw new InvalidOperationException("이미 작업중입니다. 요청 전 작업 확인 처리를 하거나 중단 처리(Dispose)를 수행하세요.");
+                
             coroutine = EditorCoroutine.StartCoroutine(CoRequest(receipt));
 
             return this;

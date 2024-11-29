@@ -27,11 +27,11 @@ namespace SexyDu.Network
         /// <returns>다운로더 인터페이스</returns>
         public virtual ITextureDownloader Request(IBinaryReceipt receipt)
         {
+            if (IsWorking)
+                throw new InvalidOperationException("이미 작업중입니다. 요청 전 작업 확인 처리를 하거나 중단 처리(Dispose)를 수행하세요.");
 #if USE_COROUTINE
             worker = MonoHelper.StartCoroutine(CoRequest(receipt));
 #else
-            if (IsWorking)
-                throw new InvalidOperationException("이미 작업중입니다. 요청 전 작업 확인 처리를 하거나 중단 처리(Dispose)를 수행하세요.");
             // uri 기반의 캐시 경로 가져오기
             string filePath = GetCachePath(receipt.uri.AbsoluteUri);
 
