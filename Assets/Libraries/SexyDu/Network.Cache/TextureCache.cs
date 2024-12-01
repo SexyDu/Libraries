@@ -6,7 +6,7 @@ using System.IO;
 using SexyDu.Tool;
 using UnityEngine;
 
-namespace SexyDu.Network
+namespace SexyDu.Network.Cache
 {
     /// <summary>
     /// 텍스쳐 캐시

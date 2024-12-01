@@ -1,14 +1,12 @@
 using System;
-using UnityEngine;
 
-namespace SexyDu.Network
+namespace SexyDu.Network.Cache
 {
+    // Dispose에서 entry에서 RemoveBasket(자기 자신) 호출
     public interface ICacheBasket : IDisposable
     {
-    }
+        public void Pour(object obj);
 
-    public interface ITextureCacheBasket : ICacheBasket
-    {
-        public void Pour(Texture2D texture);
+        public void OnBrokenEntry();
     }
 }

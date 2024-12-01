@@ -5,7 +5,7 @@ using SexyDu.Crypto;
 using SexyDu.FileIO;
 using UnityEngine;
 
-namespace SexyDu.Network
+namespace SexyDu.Network.Cache
 {
     public abstract class BinaryCache : ICache, IDisposable
     {

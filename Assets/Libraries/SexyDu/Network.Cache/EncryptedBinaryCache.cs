@@ -1,7 +1,7 @@
 using SexyDu.Crypto;
 using SexyDu.FileIO;
 
-namespace SexyDu.Network
+namespace SexyDu.Network.Cache
 {
     public abstract class EncryptedBinaryCache : BinaryCache
     {
