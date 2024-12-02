@@ -12,6 +12,8 @@ namespace SexyDu.Crypto
 
         public AesFileHandler(byte[] key, byte[] iv) : base(key, iv) { }
 
+        public AesFileHandler(char[] key, char[] iv) : base(key, iv) { }
+
         /// <summary>
         /// 파일 암호화하여 저장
         /// </summary>

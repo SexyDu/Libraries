@@ -8,7 +8,7 @@ namespace SexyDu.Crypto
     /// <summary>
     /// byte array AES 암호화 클래스
     /// </summary>
-    public class AesBytes : AesEncryptor, IEncryptBytes, IDecryptBytes
+    public class AesBytes : AesEncryptor, IBytesEncryptor
     {
         public AesBytes() : base() { }
 
@@ -117,12 +117,12 @@ namespace SexyDu.Crypto
         // HMAC 객체
         private HMACProcessor hmac = null;
         // HMAC 사용 여부
-        private bool UseHmac => hmac != null;
+        public bool UseHmac => hmac != null;
         /// <summary>
         /// HMAC 설정
         /// </summary>
         /// <param name="base64key">base64 문자열 HMAC 키</param>
-        public AesBytes SetHmac(char[] base64key)
+        public IBytesEncryptor SetHmac(char[] base64key)
         {
             return SetHmac(Convert.FromBase64CharArray(base64key, 0, base64key.Length));
         }
@@ -130,7 +130,7 @@ namespace SexyDu.Crypto
         /// HMAC 설정
         /// </summary>
         /// <param name="key">HMAC 키</param>
-        public AesBytes SetHmac(byte[] key)
+        public IBytesEncryptor SetHmac(byte[] key)
         {
             hmac = new HMACProcessor(key);
             return this;

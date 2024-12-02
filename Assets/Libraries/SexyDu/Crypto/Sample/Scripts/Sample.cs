@@ -17,9 +17,9 @@ namespace SexyDu.Crypto
 
         private void Encrypt()
         {
-            using (AesFileHandler aes = new AesFileHandler())
+            using (AesFileHandler aes = new AesFileHandler(caKey, caIv))
             {
-                aes.SetHmac(HMAC_Chars).SetKey(caKey).SetIv(caIv);
+                aes.SetHmac(HMAC_Chars);
 
                 aes.Write(outputFile, File.ReadAllBytes(inputFile));
             }
@@ -27,9 +27,9 @@ namespace SexyDu.Crypto
 
         private void Decrypt()
         {
-            using (AesFileHandler aes = new AesFileHandler())
+            using (AesFileHandler aes = new AesFileHandler(caKey, caIv))
             {
-                aes.SetHmac(HMAC_Chars).SetKey(caKey).SetIv(caIv);
+                aes.SetHmac(HMAC_Chars);
 
                 texture2D = ByteArrayToTexture2D(aes.Read(outputFile));
             }

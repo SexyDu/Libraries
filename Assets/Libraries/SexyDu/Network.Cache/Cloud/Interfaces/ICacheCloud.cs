@@ -2,16 +2,22 @@ using System;
 
 namespace SexyDu.Network.Cache
 {
-    public interface ICacheCloud : IRequestableCacheEntry, IRemovableCacheEntry { }
+    public interface ICacheCloud : IRequestableCacheEntry, IRemovableCacheEntry
+    {
+        public bool HasEntry<T>(string url);
+
+        public ICacheEntry GetEntry<T>(string url);
+    }
 
     public interface IRequestableCacheEntry
     {
-        public ICacheEntry Request<T>(IBinaryReceipt receipt);
+        public ICacheEntry Request<T>(ICacheReceipt receipt);
     }
 
     public interface IRemovableCacheEntry
     {
-        public void Remove(string url);
+        public void Remove<T>(string url);
+        public void Remove(Type type, string url);
     }
 
     public interface ICacheEntry : IDisposable
@@ -19,7 +25,7 @@ namespace SexyDu.Network.Cache
         public string Url { get; }
         public Type Type { get; }
 
-        public void AddBasket(ICacheBasket basket);
-        public void RemoveBasket(ICacheBasket basket);
+        public ICacheEntry AddBasket(ICacheBasket basket);
+        public ICacheEntry RemoveBasket(ICacheBasket basket);
     }
 }

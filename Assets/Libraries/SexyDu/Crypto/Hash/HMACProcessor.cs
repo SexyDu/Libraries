@@ -33,7 +33,6 @@ namespace SexyDu.Crypto
         /// <returns>HMAC 검증 데이터</returns>
         public byte[] Attach(byte[] data)
         {
-            var hash = computer.ComputeHash(data);
             return BufferTool.Combine(data, computer.ComputeHash(data));
         }
 

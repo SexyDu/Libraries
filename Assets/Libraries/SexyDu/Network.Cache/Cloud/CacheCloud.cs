@@ -1,63 +1,58 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace SexyDu.Network.Cache
 {
-    // . // CacheCloud 다시 테스트해보자
-    public class CacheCloud : ICacheCloud//(IRequestableCacheEntry, IRemovableCacheEntry)
+    . // 주석 달고 코드 정리
+    public partial class CacheCloud : ICacheCloud//(IRequestableCacheEntry, IRemovableCacheEntry)
     {
         private readonly Dictionary<string, CacheEntry> entries = new();
 
-        public ICacheEntry Request<T>(IBinaryReceipt receipt)
+        public bool HasEntry<T>(string url) => HasEntry(GetKey<T>(url));
+        private bool HasEntry(string key) => entries.ContainsKey(key);
+
+        public ICacheEntry GetEntry<T>(string url)
         {
-            if (entries.ContainsKey(receipt.uri.AbsoluteUri))
-            {
-                if (entries[receipt.uri.AbsoluteUri].Type == typeof(T))
-                    return entries[receipt.uri.AbsoluteUri];
-                else
-                    throw new TypeAccessException($"Type mismatch: {entries[receipt.uri.AbsoluteUri].Type.Name}(Loaded) != {typeof(T).Name}(Requested)");
-            }
+            string key = GetKey<T>(url);
+            if (HasEntry(key))
+                return entries[key];
             else
-            {
-                if (typeof(T) == typeof(Texture2D))
-                    return RequestTexture(receipt);
-                else
-                    throw new NotSupportedException($"Not supported type: {typeof(T).Name}");
-            }
+                return null;
         }
 
-        private ICacheEntry RequestTexture(IBinaryReceipt receipt)
+        private string GetKey<T>(string url)
         {
-            if (!entries.ContainsKey(receipt.uri.AbsoluteUri))
-            {
-                CacheEntry entry = new CacheEntry(receipt.uri.AbsoluteUri, typeof(Texture2D));
-                entries[entry.url] = entry;
-
-                new TextureCache().Request(receipt).Subscribe(res =>
-                {
-                    if (res.IsSuccess)
-                    {
-                        if (!entry.IsDisposed)
-                            entry.Set(res.tex);
-                        else
-                            UnityEngine.Object.Destroy(res.tex);
-                    }
-                    else
-                    {
-                        /// TODO: 실패일 경우 원인 파악하고 Dictionary에서 삭제 코드 넣자
-                        entry.Dispose();
-                    }
-                });
-            }
-
-            return entries[receipt.uri.AbsoluteUri];
+            return GetKey(typeof(T), url);
         }
 
-        public void Remove(string url)
+        private string GetKey(Type type, string url)
         {
-            if (entries.ContainsKey(url))
-                entries[url].Dispose();
+            return string.Format("{0}:{1}", type.Name, url);
+        }
+
+        public ICacheEntry Request<T>(ICacheReceipt receipt)
+        {
+            Type requestedType = typeof(T);
+            string key = GetKey(requestedType, receipt.uri.AbsoluteUri);
+
+            if (entries.ContainsKey(key))
+                return entries[key];
+            else
+                return Request(requestedType, key, receipt);
+        }
+
+        public void Remove<T>(string url) => Remove(GetKey<T>(url));
+
+        public void Remove(Type type, string url) => Remove(GetKey(type, url));
+
+        private void Remove(string key)
+        {
+            if (entries.ContainsKey(key))
+            {
+                if (!entries[key].IsDisposed)
+                    entries[key].Dispose();
+                entries.Remove(key);
+            }
         }
     }
 
@@ -82,14 +77,21 @@ namespace SexyDu.Network.Cache
             this.type = type;
         }
 
-        // url이 null이면 dispose 된 것으로 간주
-        public bool IsDisposed => manager == null;
+        // baskets이 null이면 dispose 된 것으로 간주
+        public bool IsDisposed => baskets == null;
 
         public void Dispose()
         {
-            foreach (var basket in baskets)
-                basket.OnBrokenEntry();
-            baskets.Clear();
+            if (IsDisposed)
+                return;
+
+            if (baskets != null)
+            {
+                foreach (var basket in baskets)
+                    basket.OnBrokenEntry();
+                baskets.Clear();
+                baskets = null;
+            }
 
             if (data != null)
             {
@@ -97,7 +99,7 @@ namespace SexyDu.Network.Cache
                 data = null;
             }
 
-            manager.Remove(url);
+            manager.Remove(type, url);
             manager = null;
         }
 
@@ -126,25 +128,32 @@ namespace SexyDu.Network.Cache
             return this;
         }
 
-        private readonly List<ICacheBasket> baskets = new();
+        private List<ICacheBasket> baskets = new();
 
-        public void AddBasket(ICacheBasket basket)
+        public ICacheEntry AddBasket(ICacheBasket basket)
         {
             if (IsDisposed)
-                return;
+                return null;
 
             baskets.Add(basket);
 
             if (data != null)
                 basket.Pour(data);
+
+            return this;
         }
 
-        public void RemoveBasket(ICacheBasket basket)
+        public ICacheEntry RemoveBasket(ICacheBasket basket)
         {
+            if (IsDisposed)
+                return null;
+
             baskets.Remove(basket);
 
             if (baskets.Count == 0)
                 Dispose();
+
+            return this;
         }
 
         private void Distribute()
