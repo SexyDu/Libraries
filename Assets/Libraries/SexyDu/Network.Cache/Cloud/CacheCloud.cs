@@ -1,5 +1,3 @@
-#define USE_COMBINED_REQUEST
-
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -48,25 +46,34 @@ namespace SexyDu.Network.Cache
             return string.Format("{0}:{1}", type.Name, url);
         }
 
-#if USE_COMBINED_REQUEST
         /// <summary>
         /// 캐시 엔트리 요청
         /// </summary>
         public ICacheEntry Request<T>(ICacheReceipt receipt) where T : class
         {
             Type requestedType = typeof(T);
+            // Cloud에서 지원하지 않는 타입 거르기
             if (IsNotSupportedType(requestedType))
                 return null;
-
+            // 캐시 엔트리 키
             string key = GetKey(requestedType, receipt.uri.AbsoluteUri);
 
+            // 키에 해당하는 캐시 엔트리가 없으면 생성 및 요청
             if (!HasEntry(key))
             {
+                // 생성 및 딕셔너리 추가
                 CacheEntry entry = new CacheEntry(key).Set(this);
                 entries[key] = entry;
 
+                // 요청 및 캐시 엔트리 설정
                 new SexyCache<T>().Request(receipt).Subscribe(res =>
                 {
+#if true
+                    if (!entry.IsDisposed)
+                        entry.Set(res);
+                    else
+                        res.Release();
+#else
                     if (res.IsSuccess)
                     {
                         if (!entry.IsDisposed)
@@ -79,28 +86,15 @@ namespace SexyDu.Network.Cache
                         /// TODO: 실패일 경우 원인 파악하고 Dictionary에서 삭제 코드 넣자
                         entry.Dispose();
                     }
-                });
+#endif
 
-                return entry;
+                });
             }
 
+            // 키에 해당하는 캐시 엔트리 반환
             return entries[key];
         }
-#else
-        /// <summary>
-        /// 캐시 엔트리 요청
-        /// </summary>
-        public ICacheEntry Request<T>(ICacheReceipt receipt) where T : class
-        {
-            Type requestedType = typeof(T);
-            string key = GetKey(requestedType, receipt.uri.AbsoluteUri);
 
-            if (HasEntry(key))
-                return entries[key];
-            else
-                return Request(requestedType, key, receipt);
-        }
-#endif
         /// <summary>
         /// 캐시 엔트리 삭제
         /// </summary>

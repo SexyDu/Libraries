@@ -65,7 +65,7 @@ namespace SexyDu.Network.Cache
         {
             if (callback != null)
             {
-                callback.Invoke(new Response<T>(Convert(data), code, error, result));
+                callback.Invoke(new Response<T>(data == null ? null : Convert(data), code, error, result));
             }
         }
 
