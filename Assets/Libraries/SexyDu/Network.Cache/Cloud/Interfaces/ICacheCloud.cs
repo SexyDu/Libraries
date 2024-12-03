@@ -5,7 +5,7 @@ namespace SexyDu.Network.Cache
     /// <summary>
     /// 캐시 클라우드 인터페이스
     /// </summary>
-    public interface ICacheCloud : IRequestableCacheEntry, IRemovableCacheEntry
+    public interface ICacheCloud
     {
         /// <summary>
         /// 캐시 엔트리 존재 여부 확인
@@ -22,13 +22,6 @@ namespace SexyDu.Network.Cache
         /// <param name="url">URL</param>
         /// <returns>캐시 엔트리</returns>
         public ICacheEntry GetEntry<T>(string url);
-    }
-
-    /// <summary>
-    /// 캐시 엔트리 요청 인터페이스
-    /// </summary>
-    public interface IRequestableCacheEntry
-    {
         /// <summary>
         /// 캐시 엔트리 요청
         /// </summary>
@@ -36,13 +29,6 @@ namespace SexyDu.Network.Cache
         /// <param name="receipt">접수증</param>
         /// <returns>캐시 엔트리</returns>
         public ICacheEntry Request<T>(ICacheReceipt receipt);
-    }
-
-    /// <summary>
-    /// 캐시 엔트리 삭제 인터페이스
-    /// </summary>
-    public interface IRemovableCacheEntry
-    {
         /// <summary>
         /// 캐시 엔트리 삭제
         /// </summary>
