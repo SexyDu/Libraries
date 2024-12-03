@@ -40,7 +40,8 @@ namespace SexyDu.Tools
         }
         #endregion
 
-        // 메인 스레드 디스패처 수행
+        #region Proxy IMainThreadDispatcher
+            // 메인 스레드 디스패처 수행
         private readonly MainThreadDispatcher dispatcher = new MainThreadDispatcher();
 
         private void Update()
@@ -57,6 +58,7 @@ namespace SexyDu.Tools
         {
             return dispatcher.EnqueueAsync(action);
         }
+        #endregion
     }
 }
 #endif

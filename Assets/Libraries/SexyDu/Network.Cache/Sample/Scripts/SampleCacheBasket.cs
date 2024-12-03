@@ -6,6 +6,7 @@ namespace SexyDu.Network.Cache.Sample
     {
         [SerializeField] private bool useEncryptor = false;
         [SerializeField] private bool useHmac = false;
+        [SerializeField] private bool useSprite = false;
 
         private void OnEnable()
         {
@@ -22,17 +23,16 @@ namespace SexyDu.Network.Cache.Sample
         private void OnDisable()
         {
             Dispose();
+
+            if (sprite != null)
+            {
+                Object.Destroy(sprite);
+                // sprite = null;
+            }
         }
 
         private void OnDestroy()
         {
-            if (texture != null)
-            {
-                Object.Destroy(texture);
-            }
-
-            Dispose();
-
             cloud = null;
         }
 
@@ -41,6 +41,7 @@ namespace SexyDu.Network.Cache.Sample
         private ICacheEntry entry = null;
 
         [SerializeField] private Texture2D texture = null;
+        [SerializeField] private Sprite sprite = null;
         public SampleCacheBasket SetCacheCloud(ICacheCloud cloud)
         {
             this.cloud = cloud;
@@ -68,6 +69,9 @@ namespace SexyDu.Network.Cache.Sample
         {
             Debug.LogFormat("Pour");
             texture = obj as Texture2D;
+
+            if (useSprite)
+                sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
         }
 
         public void OnBrokenEntry()

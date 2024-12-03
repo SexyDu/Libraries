@@ -1,18 +1,16 @@
-#define USE_TASK
+// #define FIX_FILE_NAME
 
 using System;
 using System.Collections;
 using System.IO;
-#if USE_TASK
 using System.Threading.Tasks;
-#endif
 using SexyDu.Crypto;
 using SexyDu.FileIO;
 using UnityEngine;
 
 namespace SexyDu.Network.Cache
 {
-    public abstract partial class BinaryCache : ICache
+    public abstract class BinaryCache : ICache
     {
         // 기본 캐시 경로
         protected static readonly string BaseCachePath
@@ -47,6 +45,10 @@ namespace SexyDu.Network.Cache
 #endif
         }
 
+        /// <summary>
+        /// 요청 수행 코루틴
+        /// </summary>
+        /// <param name="receipt">접수증</param>
         protected virtual IEnumerator CoRequest(ICacheReceipt receipt)
         {
             // uri 기반의 캐시 경로 가져오기
@@ -56,13 +58,9 @@ namespace SexyDu.Network.Cache
             if (File.Exists(filePath))
             {
                 // 캐시 파일 읽은 후 옵저버에 노티
-#if USE_TASK
                 Task<byte[]> task = ReadFileAsync(filePath, receipt.encryptor);
                 yield return new WaitUntil(() => task.IsCompleted);
                 Notify(task.Result, 0, null, NetworkResult.Success);
-#else
-                yield return CoReadFileAndNotify(filePath);
-#endif
             }
             // 캐시 파일이 존재하지 않는 경우
             else
@@ -80,14 +78,9 @@ namespace SexyDu.Network.Cache
                 // 작업 완료 대기
                 yield return new WaitUntil(() => !worker.IsWorking);
 
-#if USE_TASK
                 Task task = WriteFileAsync(filePath, responseData, receipt.encryptor);
                 // 캐시 파일 쓰기
                 yield return new WaitUntil(() => task.IsCompleted);
-#else
-                // 캐시 파일 쓰기
-                yield return CoWriteFile(filePath, responseData);
-#endif
             }
 
             Terminate();
@@ -109,7 +102,6 @@ namespace SexyDu.Network.Cache
         /// </summary>
         public bool IsWorking => worker != null;
 
-#if USE_TASK
         /// <summary>
         /// 비동기 파일 읽기
         /// </summary>
@@ -136,41 +128,6 @@ namespace SexyDu.Network.Cache
                 await writer.WriteAsync(path, data);
             }
         }
-#else
-        /// <summary>
-        /// 파일 읽고 옵저버에 노티하는 코루틴
-        /// </summary>
-        /// <param name="path">파일 경로</param>
-        /// <returns>자기 자신</returns>
-        protected virtual IEnumerator CoReadFileAndNotify(string path)
-        {
-            using (var reader = MakeFileReader())
-            {
-                var task = reader.ReadAsync(path);
-                yield return new WaitUntil(() => task.IsCompleted);
-                byte[] data = task.Result;
-                if (encryptor != null)
-                    data = encryptor.Decrypt(data);
-                Notify(data, 200, null, NetworkResult.SuccessFromCache);
-            }
-        }
-        /// <summary>
-        /// 파일 쓰기 코루틴
-        /// </summary>
-        /// <param name="path">파일 경로</param>
-        /// <param name="data">데이터</param>
-        /// <returns>자기 자신</returns>
-        protected virtual IEnumerator CoWriteFile(string path, byte[] data)
-        {
-            using (var writer = MakeFileWriter())
-            {
-                if (encryptor != null)
-                    data = encryptor.Encrypt(data);
-                var task = writer.WriteAsync(path, data);
-                yield return new WaitUntil(() => task.IsCompleted);
-            }
-        }
-#endif
 
         /// <summary>
         /// 다운로더 반환
@@ -218,6 +175,9 @@ namespace SexyDu.Network.Cache
         {
             using (SHA256Encryptor hash = new SHA256Encryptor())
             {
+#if FIX_FILE_NAME
+                return hash.Encrypt(receipt.uri.AbsoluteUri, GetBaseHashSalt());
+#else
                 // 암호화가 없는 경우  BaseHashSalt 사용
                 if (receipt.encryptor == null)
                     return hash.Encrypt(receipt.uri.AbsoluteUri, GetBaseHashSalt());
@@ -226,11 +186,12 @@ namespace SexyDu.Network.Cache
                 {
                     // HMAC 사용 시 HMAC Key 및 IV 사용
                     if (receipt.encryptor.UseHmac)
-                        return hash.Encrypt(receipt.uri.AbsoluteUri, receipt.encryptor.GetHmacKey(), receipt.encryptor.GetIv());
+                        return hash.Encrypt(receipt.uri.AbsoluteUri, receipt.encryptor.HmacKey, receipt.encryptor.Iv);
                     // HMAC 미사용 시 BaseHashSalt 및 IV 사용
                     else
-                        return hash.Encrypt(receipt.uri.AbsoluteUri, GetBaseHashSalt(), receipt.encryptor.GetIv());
+                        return hash.Encrypt(receipt.uri.AbsoluteUri, GetBaseHashSalt(), receipt.encryptor.Iv);
                 }
+#endif
             }
         }
 

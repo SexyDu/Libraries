@@ -4,18 +4,40 @@ using SexyDu.Crypto;
 
 namespace SexyDu.Network.Cache
 {
-    . // 여기도 주석 달고 정리
+    /// <summary>
+    /// 캐시 암호화 인터페이스
+    /// </summary>
     public interface ICacheEncryptor : IBytesEncryptor
     {
-        char[] GetKey();
-        char[] GetIv();
-        char[] GetHmacKey();
+        /// <summary>
+        /// 암호화 Key 반환
+        /// </summary>
+        /// <returns>암호화 Key</returns>
+        char[] Key { get; }
+        /// <summary>
+        /// 암호화 IV 반환
+        /// </summary>
+        /// <returns>암호화 IV</returns>
+        char[] Iv { get; }
+        /// <summary>
+        /// HMAC Key 반환
+        /// </summary>
+        /// <returns>HMAC Key</returns>
+        char[] HmacKey { get; }
 
+        /// <summary>
+        /// 기본 HMAC Key 설정
+        /// </summary>
+        /// <returns>자기 자신</returns>
         ICacheEncryptor UseDefaultHmac();
     }
 
+    /// <summary>
+    /// 캐시 암호화 객체
+    /// </summary>
     public class CacheEncryptor : ICacheEncryptor
     {
+        // 암호화 객체
         private readonly IBytesEncryptor encryptor = null;
 
         private CacheEncryptor()
@@ -29,20 +51,17 @@ namespace SexyDu.Network.Cache
             this.iv = iv;
         }
 
-        public char[] GetHmacKey()
+        public CacheEncryptor(IBytesEncryptor encryptor)
         {
-            return key;
+            this.encryptor = encryptor;
         }
 
-        public char[] GetIv()
-        {
-            return iv;
-        }
-
-        public char[] GetKey()
-        {
-            return hmacKey;
-        }
+        // 암호화 키
+        public char[] Key => key;
+        // 암호화 IV
+        public char[] Iv => iv;
+        // HMAC Key
+        public char[] HmacKey => hmacKey;
 
         #region Proxy IBytesEncryptor
         public void Dispose()
