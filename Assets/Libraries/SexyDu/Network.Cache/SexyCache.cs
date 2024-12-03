@@ -16,7 +16,7 @@ namespace SexyDu.Network.Cache
         {
             Type type = typeof(T);
             if (type == typeof(Sprite))
-                Debug.LogWarning($"Sprite 타입 캐시 사용 시 리소스 해제에 유의하세요.");
+                Debug.LogWarning($"Sprite 캐시 사용 시 리소스 해제에 유의하세요. ('Sprite.texture'도 함께 해제하세요.)");
         }
         #endif
 
