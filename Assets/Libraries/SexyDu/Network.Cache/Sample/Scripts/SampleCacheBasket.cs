@@ -20,7 +20,7 @@ namespace SexyDu.Network.Cache.Sample
             if (sr == null)
                 entry = cloud.Request<Texture2D>(new CacheReceipt().SetUri(url).SetEncryptor(encryptor)).AddBasket(this);
             else
-                entry = cloud.Request<Sprite>(new CacheReceipt().SetUri(url).SetEncryptor(encryptor)).AddBasket(this);
+                entry = cloud.Request<SpriteContent>(new CacheReceipt().SetUri(url).SetEncryptor(encryptor)).AddBasket(this);
         }
 
         private void OnDisable()
@@ -62,16 +62,16 @@ namespace SexyDu.Network.Cache.Sample
             texture = null;
         }
 
-        public void Pour(object obj)
+        public void Pour(IResponse res)
         {
             Debug.LogFormat("Pour");
-            if (obj is Texture2D texture2D)
+            if (res is IResponse<Texture2D> resTex)
             {
-                texture = texture2D;
+                texture = resTex.content;
             }
-            else if (obj is Sprite sprite)
+            else if (res is IResponse<SpriteContent> respSp)
             {
-                sr.sprite = sprite;
+                sr.sprite = respSp.content.sprite;
             }
         }
 

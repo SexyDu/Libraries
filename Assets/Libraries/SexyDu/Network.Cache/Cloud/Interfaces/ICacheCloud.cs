@@ -10,36 +10,30 @@ namespace SexyDu.Network.Cache
         /// <summary>
         /// 캐시 엔트리 존재 여부 확인
         /// </summary>
-        /// <typeparam name="T">캐시 타입</typeparam>
-        /// <param name="url">URL</param>
-        /// <returns>캐시 엔트리 존재 여부</returns>
-        public bool HasEntry<T>(string url);
+        public bool HasEntry<T>(string url) where T : class;
 
         /// <summary>
         /// 캐시 엔트리 반환
         /// </summary>
-        /// <typeparam name="T">캐시 타입</typeparam>
-        /// <param name="url">URL</param>
-        /// <returns>캐시 엔트리</returns>
-        public ICacheEntry GetEntry<T>(string url);
+        public ICacheEntry GetEntry<T>(string url) where T : class;
         /// <summary>
         /// 캐시 엔트리 요청
         /// </summary>
         /// <typeparam name="T">캐시 타입</typeparam>
         /// <param name="receipt">접수증</param>
         /// <returns>캐시 엔트리</returns>
-        public ICacheEntry Request<T>(ICacheReceipt receipt);
+        public ICacheEntry Request<T>(ICacheReceipt receipt) where T : class;
         /// <summary>
         /// 캐시 엔트리 삭제
         /// </summary>
-        /// <typeparam name="T">캐시 타입</typeparam>
-        /// <param name="url">URL</param>
+        public void Remove(string key);
+        /// <summary>
+        /// 캐시 엔트리 삭제
+        /// </summary>
         public void Remove<T>(string url);
         /// <summary>
         /// 캐시 엔트리 삭제
         /// </summary>
-        /// <param name="type">캐시 타입</param>
-        /// <param name="url">URL</param>
         public void Remove(Type type, string url);
     }
 
@@ -51,11 +45,7 @@ namespace SexyDu.Network.Cache
         /// <summary>
         /// URL
         /// </summary>
-        public string Url { get; }
-        /// <summary>
-        /// 캐시 타입
-        /// </summary>
-        public Type Type { get; }
+        public string Key { get; }
 
         /// <summary>
         /// 바구니 추가

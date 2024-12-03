@@ -32,38 +32,38 @@ namespace SexyDu.Network.Cache.Sample
             {
                 Clear();
 
-                new TextureCache()
+                new SexyCache<Texture2D>()
                 .Request(new CacheReceipt()
                     .SetUri(imageUrl))
                 .Subscribe(res =>
                 {
-                    texture = res.data;
+                    texture = res.content;
                 });
             }
             if (GUI.Button(new Rect(100f, 0f, 100f, 100f), "Load"))
             {
                 Clear();
 
-                new TextureCache()
+                new SexyCache<Texture2D>()
                 .Request(new CacheReceipt()
                     .SetUri(imageUrl)
                     .SetEncryptor(CacheEncryptor.Default))
                 .Subscribe(res =>
                 {
-                    texture = res.data;
+                    texture = res.content;
                 });
             }
             if (GUI.Button(new Rect(200f, 0f, 100f, 100f), "Load"))
             {
                 Clear();
 
-                new TextureCache()
+                new SexyCache<Texture2D>()
                 .Request(new CacheReceipt()
                     .SetUri(imageUrl)
                     .SetEncryptor(CacheEncryptor.Default.UseDefaultHmac()))
                 .Subscribe(res =>
                 {
-                    texture = res.data;
+                    texture = res.content;
                 });
             }
 

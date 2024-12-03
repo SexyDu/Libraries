@@ -2,7 +2,7 @@ using System;
 using SexyDu.ContainerSystem;
 using SexyDu.Tool;
 
-namespace SexyDu.Tools
+namespace SexyDu.Tool
 {
     /// <summary>
     /// 메인 스레드 디스패처 수행 클래스

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using SexyDu.Tool;
 
-namespace SexyDu.Tools
+namespace SexyDu.Tool
 {
     /// <summary>
     /// Main Thread Dispatcher 기본 동작 클래스

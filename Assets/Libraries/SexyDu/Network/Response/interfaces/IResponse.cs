@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace SexyDu.Network
 {
-    public interface IResponse
+    public interface IResponse : IReleasable
     {
         // 수신 코드
         public long code { get; }
@@ -33,6 +33,6 @@ namespace SexyDu.Network
     /// </summary>
     public interface IResponse<T> : IResponse
     {
-        public T data { get; }
+        public T content { get; }
     }
 }

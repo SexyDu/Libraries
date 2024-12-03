@@ -11,25 +11,21 @@ namespace SexyDu.Network.Cache
     public class CacheEntry : ICacheEntry
     {
         // URL
-        public readonly string url = null;
-        // 타입
-        public readonly Type type = null;
+        public readonly string key = null;
         // 데이터
-        public object data
+        public IResponse response
         {
             get;
             private set;
         }
-        public string Url => url;
-        public Type Type => type;
+        public string Key => key;
 
         // 관리자
         public ICacheCloud manager = null;
 
-        public CacheEntry(string url, Type type)
+        public CacheEntry(string key)
         {
-            this.url = url;
-            this.type = type;
+            this.key = key;
         }
 
         // Dispose 여부
@@ -52,15 +48,15 @@ namespace SexyDu.Network.Cache
                 baskets = null;
             }
 
-            if (data != null)
+            if (response != null)
             {
                 // 유니티 오브젝트인 경우 파괴
-                DestroyIfUnityObject(data);
-                data = null;
+                response.Release();
+                response = null;
             }
 
             // 관리자에 엔트리 삭제 요청
-            manager.Remove(type, url);
+            manager.Remove(key);
             manager = null;
         }
 
@@ -75,11 +71,11 @@ namespace SexyDu.Network.Cache
         /// <summary>
         /// 데이터 설정
         /// </summary>
-        public CacheEntry Set(object data)
+        public CacheEntry Set(IResponse response)
         {
             if (!IsDisposed)
             {
-                this.data = data;
+                this.response = response;
 
                 // basket이 있는 경우 배포
                 if (baskets.Count > 0)
@@ -89,8 +85,8 @@ namespace SexyDu.Network.Cache
                     Dispose();
             }
             else
-                // 이미 Dispose 된 경우 파괴
-                DestroyIfUnityObject(data);
+                // 이미 Dispose 된 경우 해제
+                response.Release();
 
             return this;
         }
@@ -108,8 +104,8 @@ namespace SexyDu.Network.Cache
             baskets.Add(basket);
 
             // 데이터가 있는 경우 배포
-            if (data != null)
-                basket.Pour(data);
+            if (response != null)
+                basket.Pour(response);
 
             return this;
         }
@@ -137,22 +133,7 @@ namespace SexyDu.Network.Cache
         private void Distribute()
         {
             foreach (var basket in baskets)
-                basket.Pour(data);
-        }
-
-        /// <summary>
-        /// 유니티 오브젝트인 경우 파괴
-        /// </summary>
-        private void DestroyIfUnityObject(object obj)
-        {
-            // Sprite인 경우 텍스쳐까지 파괴해야함
-            if (obj is Sprite sprite)
-            {
-                UnityEngine.Object.Destroy(sprite.texture);
-                UnityEngine.Object.Destroy(sprite);
-            }
-            if (obj is UnityEngine.Object unityObject)
-                UnityEngine.Object.Destroy(unityObject);
+                basket.Pour(response);
         }
     }
 }

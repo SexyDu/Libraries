@@ -52,34 +52,8 @@ namespace SexyDu.Network.Cache
         {
             if (callback != null)
             {
-                Texture2D tex2D = ByteArrayToTexture2D(data);
+                Texture2D tex2D = ConvertFromBytes.ToTexture2D(data);
                 callback.Invoke(new Response<Texture2D>(tex2D, code, error, result));
-            }
-        }
-
-        /// <summary>
-        /// byte array를 받아 Texture2D로 변환하는 함수
-        /// </summary>
-        /// <param name="bytes">byte array</param>
-        /// <returns>Texture2D</returns>
-        private Texture2D ByteArrayToTexture2D(byte[] bytes)
-        {
-            // 바이트가 없는 경우 null반환
-            if (bytes == null)
-                return null;
-            // 바이트가 있는 경우
-            else
-            {
-                // 텍스쳐2D 생성 및 속성 설정
-                Texture2D tex2D = new Texture2D(0, 0);
-                tex2D.wrapMode = TextureWrapMode.Clamp;
-                tex2D.filterMode = FilterMode.Bilinear;
-
-                // byte 이미지 변환
-                tex2D.LoadImage(bytes);
-
-                // 이미지 반환
-                return tex2D;
             }
         }
     }

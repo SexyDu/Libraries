@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace SexyDu.Network
@@ -9,7 +10,7 @@ namespace SexyDu.Network
     public struct Response<T> : IResponse<T> where T : class
     {
         // 수신 데이터
-        public readonly T data
+        public readonly T content
         {
             get;
         }
@@ -34,9 +35,9 @@ namespace SexyDu.Network
             get;
         }
 
-        public Response(T data, long code, string error, NetworkResult result, Dictionary<string, string> headers = null)
+        public Response(T content, long code, string error, NetworkResult result, Dictionary<string, string> headers = null)
         {
-            this.data = data;
+            this.content = content;
             this.code = code;
             this.error = error;
             this.result = result;
@@ -44,6 +45,17 @@ namespace SexyDu.Network
         }
 
         public Response(T data, IResponse response) : this(data, response.code, response.error, response.result, response.headers) { }
+
+        /// <summary>
+        /// 수신 데이터(리소스) 릴리즈
+        /// </summary>
+        public void Release()
+        {
+            if (content is IReleasable releasable)
+                releasable.Release();
+            else if (content is UnityEngine.Object unityObject)
+                UnityEngine.Object.Destroy(unityObject);
+        }
 
         /// <summary>
         /// 빈 수신 데이터

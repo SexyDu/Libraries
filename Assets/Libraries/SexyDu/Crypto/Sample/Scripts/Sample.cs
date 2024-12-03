@@ -1,4 +1,5 @@
 using System.IO;
+using SexyDu.Tool;
 using UnityEngine;
 
 namespace SexyDu.Crypto
@@ -31,7 +32,7 @@ namespace SexyDu.Crypto
             {
                 aes.SetHmac(HMAC_Chars);
 
-                texture2D = ByteArrayToTexture2D(aes.Read(outputFile));
+                texture2D = ConvertFromBytes.ToTexture2D(aes.Read(outputFile));
             }
         }
 
@@ -68,32 +69,6 @@ namespace SexyDu.Crypto
                 SHA256Encryptor sha256 = new SHA256Encryptor();
                 string hash = string.IsNullOrEmpty(salt) ? sha256.Encrypt(plainText) : sha256.Encrypt(plainText, salt.ToCharArray(), iteration);
                 Debug.Log($"hash: {hash}");
-            }
-        }
-
-        /// <summary>
-        /// byte array를 받아 Texture2D로 변환하는 함수
-        /// </summary>
-        /// <param name="bytes">byte array</param>
-        /// <returns>Texture2D</returns>
-        private Texture2D ByteArrayToTexture2D(byte[] bytes)
-        {
-            // 바이트가 없는 경우 null반환
-            if (bytes == null)
-                return null;
-            // 바이트가 있는 경우
-            else
-            {
-                // 텍스쳐2D 생성 및 속성 설정
-                Texture2D tex2D = new Texture2D(0, 0);
-                tex2D.wrapMode = TextureWrapMode.Clamp;
-                tex2D.filterMode = FilterMode.Bilinear;
-
-                // byte 이미지 변환
-                tex2D.LoadImage(bytes);
-
-                // 이미지 반환
-                return tex2D;
             }
         }
     }

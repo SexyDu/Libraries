@@ -1,10 +1,7 @@
-// #define FIX_FILE_NAME
-
 using System;
 using System.Collections;
 using System.IO;
 using System.Threading.Tasks;
-using SexyDu.Crypto;
 using SexyDu.FileIO;
 using UnityEngine;
 
@@ -70,10 +67,10 @@ namespace SexyDu.Network.Cache
                 // 다운로더 요청 후 캐시 파일 쓰기 및 옵저버에 노티
                 INetworker worker = MakeDownloader().Request(receipt).Subscribe(res =>
                 {
-                    responseData = res.data;
+                    responseData = res.content;
 
                     // 옵저버에 노티
-                    Notify(res.data, res.code, res.error, res.result);
+                    Notify(res.content, res.code, res.error, res.result);
                 });
                 // 작업 완료 대기
                 yield return new WaitUntil(() => !worker.IsWorking);
@@ -163,46 +160,7 @@ namespace SexyDu.Network.Cache
         /// <returns>파일 경로</returns>
         protected string GetCachePath(ICacheReceipt receipt)
         {
-            return Path.Combine(CachePath, GetCacheName(receipt));
-        }
-
-        /// <summary>
-        /// Url에 따른 파일명 반환
-        /// </summary>
-        /// <param name="url">URL</param>
-        /// <returns>파일명</returns>
-        protected virtual string GetCacheName(ICacheReceipt receipt)
-        {
-            using (SHA256Encryptor hash = new SHA256Encryptor())
-            {
-#if FIX_FILE_NAME
-                return hash.Encrypt(receipt.uri.AbsoluteUri, GetBaseHashSalt());
-#else
-                // 암호화가 없는 경우  BaseHashSalt 사용
-                if (receipt.encryptor == null)
-                    return hash.Encrypt(receipt.uri.AbsoluteUri, GetBaseHashSalt());
-                // 암호화가 있는 경우
-                else
-                {
-                    // HMAC 사용 시 HMAC Key 및 IV 사용
-                    if (receipt.encryptor.UseHmac)
-                        return hash.Encrypt(receipt.uri.AbsoluteUri, receipt.encryptor.HmacKey, receipt.encryptor.Iv);
-                    // HMAC 미사용 시 BaseHashSalt 및 IV 사용
-                    else
-                        return hash.Encrypt(receipt.uri.AbsoluteUri, GetBaseHashSalt(), receipt.encryptor.Iv);
-                }
-#endif
-            }
-        }
-
-        /// <summary>
-        /// 파일명 암호화에 사용될 기본 Salt
-        /// </summary>
-        protected char[] GetBaseHashSalt()
-        {
-            /// string : RvLMAT5gi+kmM4DnzJs5nA==
-            /// EncryptionKeyGenerator (EditorWindow 'SexyDu/EncryptionKeyGenerator')에서 생성 <summary>
-            return new char[24] { 'R', 'v', 'L', 'M', 'A', 'T', '5', 'g', 'i', '+', 'k', 'm', 'M', '4', 'D', 'n', 'z', 'J', 's', '5', 'n', 'A', '=', '=' };
+            return Path.Combine(CachePath, receipt.GetCacheFileName());
         }
         #endregion
     }

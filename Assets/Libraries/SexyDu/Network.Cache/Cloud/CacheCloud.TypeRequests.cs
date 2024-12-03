@@ -1,3 +1,6 @@
+#define USE_COMBINED_REQUEST
+
+#if !USE_COMBINED_REQUEST
 using System;
 using UnityEngine;
 
@@ -20,8 +23,10 @@ namespace SexyDu.Network.Cache
         {
             if (type == typeof(Texture2D))
                 return RequestTexture(key, receipt);
+            else if (type == typeof(SpriteContent))
+                return RequestSpriteContent(key, receipt);
             else if (type == typeof(Sprite))
-                return RequestSprite(key, receipt);
+                throw new NotSupportedException($"Sprite 타입 대신 SpriteContent 타입을 사용해주세요.");
             else
                 throw new NotSupportedException($"Not supported type: {type.Name}");
         }
@@ -35,19 +40,17 @@ namespace SexyDu.Network.Cache
         {
             if (!HasEntry(key))
             {
-                CacheEntry entry = new CacheEntry(receipt.uri.AbsoluteUri, typeof(Texture2D)).Set(this);
+                CacheEntry entry = new CacheEntry(key).Set(this);
                 entries[key] = entry;
 
-                new TextureCache().Request(receipt).Subscribe(res =>
+                new SexyCache<Texture2D>().Request(receipt).Subscribe(res =>
                 {
                     if (res.IsSuccess)
                     {
                         if (!entry.IsDisposed)
-                        {
-                            entry.Set(res.data);
-                        }
+                            entry.Set(res);
                         else
-                            UnityEngine.Object.Destroy(res.data);
+                            res.Release();
                     }
                     else
                     {
@@ -65,23 +68,21 @@ namespace SexyDu.Network.Cache
         /// <param name="key">캐시 키</param>
         /// <param name="receipt">캐시 접수증</param>
         /// <returns>캐시 엔트리</returns>
-        private ICacheEntry RequestSprite(string key, ICacheReceipt receipt)
+        private ICacheEntry RequestSpriteContent(string key, ICacheReceipt receipt)
         {
             if (!HasEntry(key))
             {
-                CacheEntry entry = new CacheEntry(receipt.uri.AbsoluteUri, typeof(Sprite)).Set(this);
+                CacheEntry entry = new CacheEntry(key).Set(this);
                 entries[key] = entry;
 
-                new TextureCache().Request(receipt).Subscribe(res =>
+                new SexyCache<SpriteContent>().Request(receipt).Subscribe(res =>
                 {
                     if (res.IsSuccess)
                     {
                         if (!entry.IsDisposed)
-                        {
-                            entry.Set(Sprite.Create(res.data, new Rect(0, 0, res.data.width, res.data.height), new Vector2(0.5f, 0.5f)));
-                        }
+                            entry.Set(res);
                         else
-                            UnityEngine.Object.Destroy(res.data);
+                            res.Release();
                     }
                     else
                     {
@@ -95,3 +96,4 @@ namespace SexyDu.Network.Cache
         }
     }
 }
+#endif

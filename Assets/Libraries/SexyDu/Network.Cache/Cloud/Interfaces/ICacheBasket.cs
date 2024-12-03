@@ -11,7 +11,7 @@ namespace SexyDu.Network.Cache
         /// <summary>
         /// 데이터 발생 시 호출(수신)되는 함수
         /// </summary>
-        public void Pour(object obj);
+        public void Pour(IResponse res);
         /// <summary>
         /// 속한 entry가 파괴되었을 때 이벤트
         /// </summary>

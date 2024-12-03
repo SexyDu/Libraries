@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace SexyDu.Tools
+namespace SexyDu.Tool
 {   
     /// <summary>
     /// 메인 스레드에서 실행할 작업을 큐에 추가하는 인터페이스

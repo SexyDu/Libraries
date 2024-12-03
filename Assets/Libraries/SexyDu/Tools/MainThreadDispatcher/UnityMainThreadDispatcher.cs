@@ -5,7 +5,7 @@ using System;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace SexyDu.Tools
+namespace SexyDu.Tool
 {
     /// <summary>
     /// 유니티 Update기반 Main Thread Dispatcher

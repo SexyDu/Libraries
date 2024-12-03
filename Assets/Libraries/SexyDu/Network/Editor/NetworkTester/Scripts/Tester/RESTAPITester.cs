@@ -206,7 +206,7 @@ namespace SexyDu.Network.Editor
             {
                 base.Set(response);
 
-                text = response.data;
+                text = response.content;
             }
 
             public override void Clear()
