@@ -2,9 +2,6 @@ using System.Collections.Generic;
 
 namespace SexyDu.Network
 {
-    /// <summary>
-    /// Network 수신 데이터 인터페이스
-    /// </summary>
     public interface IResponse
     {
         // 수신 코드
@@ -29,5 +26,13 @@ namespace SexyDu.Network
         /// InternalServerError 여부
         /// </summary>
         public bool IsInternalServerError => code == 500;
+    }
+
+    /// <summary>
+    /// Network 수신 데이터 인터페이스
+    /// </summary>
+    public interface IResponse<T> : IResponse
+    {
+        public T data { get; }
     }
 }

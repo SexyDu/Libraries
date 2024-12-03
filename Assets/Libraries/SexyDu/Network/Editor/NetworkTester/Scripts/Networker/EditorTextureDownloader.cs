@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine.Networking;
 using SexyDu.OnEditor;
 using System;
+using UnityEngine;
 
 namespace SexyDu.Network.Editor
 {
@@ -66,9 +67,9 @@ namespace SexyDu.Network.Editor
         /// UnityWebRequest의 수신 데이터를 기반으로 수신 데이터 재구성 및 반환
         /// * Editor에선 기본적으로 response header를 포함해서 가져온다.
         /// </summary>
-        protected override TextureResponse MakeResponse(UnityWebRequest target)
+        protected override IResponse<Texture2D> MakeResponse(UnityWebRequest target)
         {
-            return new TextureResponse(DownloadHandlerTexture.GetContent(target), target.responseCode, target.error, ToRESTResult(target.result), target.GetResponseHeaders());
+            return new Response<Texture2D>(DownloadHandlerTexture.GetContent(target), target.responseCode, target.error, ToRESTResult(target.result), target.GetResponseHeaders());
         }
     }
 }

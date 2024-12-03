@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace SexyDu.Network
 {
@@ -16,6 +17,6 @@ namespace SexyDu.Network
         /// <summary>
         /// 수신 콜백 등록
         /// </summary>
-        public ITextureDownloader Subscribe(Action<ITextureResponse> callback);
+        public ITextureDownloader Subscribe(Action<IResponse<Texture2D>> callback);
     }
 }

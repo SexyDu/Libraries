@@ -16,6 +16,6 @@ namespace SexyDu.Network
         /// </summary>
         /// <param name="callback">콜백 함수</param>
         /// <returns>자기 자신 인터페이스</returns>
-        public IRESTWorker Subscribe(Action<ITextResponse> callback);
+        public IRESTWorker Subscribe(Action<IResponse<string>> callback);
     }
 }

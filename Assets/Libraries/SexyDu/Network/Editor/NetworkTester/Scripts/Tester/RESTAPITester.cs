@@ -202,11 +202,11 @@ namespace SexyDu.Network.Editor
             // 수신 데이터
             public string text = string.Empty;
 
-            public void Set(ITextResponse response)
+            public void Set(IResponse<string> response)
             {
                 base.Set(response);
 
-                text = response.text;
+                text = response.data;
             }
 
             public override void Clear()

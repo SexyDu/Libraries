@@ -80,11 +80,11 @@ namespace SexyDu.Network.Sample
                 Request(new RESTReceipt(NetworkMethod.GET).SetUri(googleDriveUrl)).
                 Subscribe((res) =>
                 {
-                    Debug.Log($"res.text : {res.text}");
-                    if (res.text.Length > 100)
-                        text = res.text.Substring(0, 100);
+                    Debug.Log($"res.text : {res.data}");
+                    if (res.data.Length > 100)
+                        text = res.data.Substring(0, 100);
                     else
-                        text = res.text;
+                        text = res.data;
 
                     Set(res);
                 });
@@ -98,7 +98,7 @@ namespace SexyDu.Network.Sample
                 Request(new BinaryReceipt().SetUri(imageUrl)).
                 Subscribe((res) =>
                 {
-                    texture = res.tex;
+                    texture = res.data;
 
                     Set(res);
                 });

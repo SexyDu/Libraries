@@ -37,7 +37,7 @@ namespace SexyDu.Network.Cache.Sample
                     .SetUri(imageUrl))
                 .Subscribe(res =>
                 {
-                    texture = res.tex;
+                    texture = res.data;
                 });
             }
             if (GUI.Button(new Rect(100f, 0f, 100f, 100f), "Load"))
@@ -50,7 +50,7 @@ namespace SexyDu.Network.Cache.Sample
                     .SetEncryptor(CacheEncryptor.Default))
                 .Subscribe(res =>
                 {
-                    texture = res.tex;
+                    texture = res.data;
                 });
             }
             if (GUI.Button(new Rect(200f, 0f, 100f, 100f), "Load"))
@@ -63,7 +63,7 @@ namespace SexyDu.Network.Cache.Sample
                     .SetEncryptor(CacheEncryptor.Default.UseDefaultHmac()))
                 .Subscribe(res =>
                 {
-                    texture = res.tex;
+                    texture = res.data;
                 });
             }
 

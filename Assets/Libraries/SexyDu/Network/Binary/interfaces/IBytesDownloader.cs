@@ -16,6 +16,6 @@ namespace SexyDu.Network
         /// <summary>
         /// 수신 콜백 등록
         /// </summary>
-        public IBytesDownloader Subscribe(Action<IBytesResponse> callback);
+        public IBytesDownloader Subscribe(Action<IResponse<byte[]>> callback);
     }
 }

@@ -3,17 +3,18 @@ using System.Collections.Generic;
 namespace SexyDu.Network
 {
     /// <summary>
-    /// 텍스트 수신 데이터
+    /// 네티워크 수신 데이터
     /// </summary>
-    public struct TextResponse : ITextResponse
+    /// <typeparam name="T"></typeparam>
+    public struct Response<T> : IResponse<T> where T : class
     {
-        // response code
-        public readonly long code
+        // 수신 데이터
+        public readonly T data
         {
             get;
         }
-        // 수신받은 데이터
-        public readonly string text
+        // response code
+        public readonly long code
         {
             get;
         }
@@ -33,18 +34,20 @@ namespace SexyDu.Network
             get;
         }
 
-        public TextResponse(string text, long code, string error, NetworkResult result, Dictionary<string, string> headers = null)
+        public Response(T data, long code, string error, NetworkResult result, Dictionary<string, string> headers = null)
         {
-            this.text = text;
+            this.data = data;
             this.code = code;
             this.error = error;
             this.result = result;
             this.headers = headers;
         }
 
+        public Response(T data, IResponse response) : this(data, response.code, response.error, response.result, response.headers) { }
+
         /// <summary>
         /// 빈 수신 데이터
         /// </summary>
-        public static readonly TextResponse Empty = new TextResponse(string.Empty, long.MinValue, string.Empty, NetworkResult.ConnectionError);
+        public static readonly Response<T> Empty = new Response<T>(null, long.MinValue, string.Empty, NetworkResult.Unknown);
     }
 }

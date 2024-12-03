@@ -121,11 +121,11 @@ namespace SexyDu.Network.Editor
             // 수신 데이터
             public Texture2D tex = null;
 
-            public void Set(ITextureResponse response)
+            public void Set(IResponse<Texture2D> response)
             {
                 base.Set(response);
 
-                tex = response.tex;
+                tex = response.data;
             }
 
             public override void Clear()

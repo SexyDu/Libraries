@@ -32,13 +32,13 @@ namespace SexyDu.Network.Cache
         }
 
         // 텍스쳐 콜백
-        private Action<ITextureResponse> callback = null;
+        private Action<IResponse<Texture2D>> callback = null;
         /// <summary>
         /// 콜백 등록
         /// </summary>
         /// <param name="callback">콜백</param>
         /// <returns>옵저거 서브젝트 인터페이스</returns>
-        public TextureCache Subscribe(Action<ITextureResponse> callback)
+        public TextureCache Subscribe(Action<IResponse<Texture2D>> callback)
         {
             this.callback = callback;
 
@@ -53,7 +53,7 @@ namespace SexyDu.Network.Cache
             if (callback != null)
             {
                 Texture2D tex2D = ByteArrayToTexture2D(data);
-                callback.Invoke(new TextureResponse(tex2D, code, error, result));
+                callback.Invoke(new Response<Texture2D>(tex2D, code, error, result));
             }
         }
 

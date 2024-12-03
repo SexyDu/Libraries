@@ -40,12 +40,12 @@ namespace SexyDu.Network
         public abstract IRESTWorker Request(IRESTReceipt receipt);
 
         // REST API 수신 콜백
-        private Action<ITextResponse> callback = null;
+        private Action<IResponse<string>> callback = null;
 
         /// <summary>
         /// REST API 수신 콜백 등록
         /// </summary>
-        public virtual IRESTWorker Subscribe(Action<ITextResponse> callback)
+        public virtual IRESTWorker Subscribe(Action<IResponse<string>> callback)
         {
             this.callback = callback;
 
@@ -60,7 +60,7 @@ namespace SexyDu.Network
         {
             if (callback != null)
             {
-                TextResponse res = MakeResponse(req);
+                IResponse<string> res = MakeResponse(req);
                 callback.Invoke(res);
             }
         }
@@ -68,12 +68,12 @@ namespace SexyDu.Network
         /// <summary>
         /// UnityWebRequest의 수신 데이터를 기반으로 수신 데이터 재구성 및 반환
         /// </summary>
-        private TextResponse MakeResponse(UnityWebRequest target)
+        private IResponse<string> MakeResponse(UnityWebRequest target)
         {
             if (includeResponseHeaders)
-                return new TextResponse(target.downloadHandler.text, target.responseCode, target.error, ToRESTResult(target.result), target.GetResponseHeaders());
+                return new Response<string>(target.downloadHandler.text, target.responseCode, target.error, ToRESTResult(target.result), target.GetResponseHeaders());
             else
-                return new TextResponse(target.downloadHandler.text, target.responseCode, target.error, ToRESTResult(target.result));
+                return new Response<string>(target.downloadHandler.text, target.responseCode, target.error, ToRESTResult(target.result));
         }
 
         /// <summary>

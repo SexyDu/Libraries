@@ -43,9 +43,11 @@ namespace SexyDu.Network.Cache
                     if (res.IsSuccess)
                     {
                         if (!entry.IsDisposed)
-                            entry.Set(res.tex);
+                        {
+                            entry.Set(res.data);
+                        }
                         else
-                            UnityEngine.Object.Destroy(res.tex);
+                            UnityEngine.Object.Destroy(res.data);
                     }
                     else
                     {
@@ -75,9 +77,11 @@ namespace SexyDu.Network.Cache
                     if (res.IsSuccess)
                     {
                         if (!entry.IsDisposed)
-                            entry.Set(Sprite.Create(res.tex, new Rect(0, 0, res.tex.width, res.tex.height), new Vector2(0.5f, 0.5f)));
+                        {
+                            entry.Set(Sprite.Create(res.data, new Rect(0, 0, res.data.width, res.data.height), new Vector2(0.5f, 0.5f)));
+                        }
                         else
-                            UnityEngine.Object.Destroy(res.tex);
+                            UnityEngine.Object.Destroy(res.data);
                     }
                     else
                     {

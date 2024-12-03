@@ -24,11 +24,11 @@ namespace SexyDu.Network
         public abstract IBytesDownloader Request(IBinaryReceipt receipt);
 
         // 수신 콜백
-        private Action<IBytesResponse> callback = null;
+        private Action<IResponse<byte[]>> callback = null;
         /// <summary>
         /// 수신 콜백 등록
         /// </summary>
-        public virtual IBytesDownloader Subscribe(Action<IBytesResponse> callback)
+        public virtual IBytesDownloader Subscribe(Action<IResponse<byte[]>> callback)
         {
             this.callback = callback;
 
@@ -43,7 +43,7 @@ namespace SexyDu.Network
         {
             if (callback != null)
             {
-                BytesResponse res = MakeResponse(req);
+                IResponse<byte[]> res = MakeResponse(req);
                 callback.Invoke(res);
             }
         }
@@ -61,9 +61,9 @@ namespace SexyDu.Network
         /// <summary>
         /// UnityWebRequest의 수신 데이터를 기반으로 수신 데이터 재구성 및 반환
         /// </summary>
-        protected BytesResponse MakeResponse(UnityWebRequest target)
+        protected IResponse<byte[]> MakeResponse(UnityWebRequest target)
         {
-            return new BytesResponse(target.downloadHandler.data, target.responseCode, target.error, ToRESTResult(target.result));
+            return new Response<byte[]>(target.downloadHandler.data, target.responseCode, target.error, ToRESTResult(target.result));
         }
     }
 }

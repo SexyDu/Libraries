@@ -25,11 +25,11 @@ namespace SexyDu.Network
         public abstract ITextureDownloader Request(IBinaryReceipt receipt);
 
         // 수신 콜백
-        private Action<ITextureResponse> callback = null;
+        private Action<IResponse<Texture2D>> callback = null;
         /// <summary>
         /// 수신 콜백 등록
         /// </summary>
-        public virtual ITextureDownloader Subscribe(Action<ITextureResponse> callback)
+        public virtual ITextureDownloader Subscribe(Action<IResponse<Texture2D>> callback)
         {
             this.callback = callback;
 
@@ -44,7 +44,7 @@ namespace SexyDu.Network
         {
             if (callback != null)
             {
-                TextureResponse res = MakeResponse(req);
+                IResponse<Texture2D> res = MakeResponse(req);
                 callback.Invoke(res);
             }
         }
@@ -62,9 +62,9 @@ namespace SexyDu.Network
         /// <summary>
         /// UnityWebRequest의 수신 데이터를 기반으로 수신 데이터 재구성 및 반환
         /// </summary>
-        protected virtual TextureResponse MakeResponse(UnityWebRequest target)
+        protected virtual IResponse<Texture2D> MakeResponse(UnityWebRequest target)
         {
-            return new TextureResponse(DownloadHandlerTexture.GetContent(target), target.responseCode, target.error, ToRESTResult(target.result));
+            return new Response<Texture2D>(DownloadHandlerTexture.GetContent(target), target.responseCode, target.error, ToRESTResult(target.result));
         }
     }
 }
