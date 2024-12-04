@@ -12,12 +12,12 @@ namespace SexyDu.Touch
         // 터치 위치
         public readonly Vector2 position;
         // 유효 터치 여부
-        public bool IsValid => TouchCenter.Config.ValidateTouchPosition(position);
+        public bool IsValid => ITouchCenter.Config.ValidateTouchPosition(position);
 
         public TouchData(int fingerId)
         {
             this.fingerId = fingerId;
-            position = TouchCenter.Config.GetTouchPosition(this.fingerId);
+            position = ITouchCenter.Config.GetTouchPosition(this.fingerId);
         }
 
         public TouchData(int fingerId, Vector2 position)

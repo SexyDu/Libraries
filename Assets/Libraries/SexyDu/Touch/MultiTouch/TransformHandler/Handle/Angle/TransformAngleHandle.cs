@@ -41,7 +41,7 @@ namespace SexyDu.Touch
                 // 현재 오브젝트 위치값
                 Vector2 currentPoint = body.Target.position;
                 // 현재 터치 센터의 유니티 위치값
-                Vector2 centerUnit = TouchCenter.Config.ConvertUnityPosition(body.Data.center);
+                Vector2 centerUnit = ITouchCenter.Config.ConvertUnityPosition(body.Data.center);
                 // 새로 계산된 오브젝트 위치값
                 Vector2 newPoint = RotatePoint(currentPoint, centerUnit, averageAngle);
 

@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/Libraries/Samples/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/Libraries/SexyDu/Touch/Scenes/SampleTouch.unity
+    path: Assets/Libraries/SexyDu/Touch/Sample/Scenes/SampleTouch.unity
     guid: f8ce4cb3390524822a6d3f42fe0890a6
   m_configObjects: {}

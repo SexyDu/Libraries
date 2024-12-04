@@ -11,7 +11,7 @@ namespace SexyDu.Sample
         {
             Application.targetFrameRate = 60;
 
-            Vector2 unitMaximumArea = TouchCenter.Config.GetUnitArea();
+            Vector2 unitMaximumArea = ITouchCenter.Config.GetUnitArea();
             Vector2 unitMinimumArea = -unitMaximumArea;
             for (int i = 0; i < touchHandlers.Length; i++)
             {

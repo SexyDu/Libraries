@@ -11,22 +11,18 @@ using UnityEngine.EventSystems;
 
 namespace SexyDu.Touch
 {
-    public class TouchEventSystem : ITouchEventSystem
+    /// <summary>
+    /// 유니티 터치 이벤트 시스템
+    ///  * 현재는 Begin 이벤트만 처리한다.
+    /// </summary>
+    public class SexyEventSystem : ITouchEventSystem
     {
+        // 터치 수신자 리스트
         private readonly List<ITouchEventReceiver> receivers = new List<ITouchEventReceiver>();
 
-        public void SendTouch(UnityEngine.Touch touch)
-        {
-            foreach (var receiver in receivers)
-                receiver.OnTouchBegin(touch);
-        }
-
-        public void SendMouse(int mouseId, Vector2 position)
-        {
-            foreach (var receiver in receivers)
-                receiver.OnMouseBegin(mouseId, position);
-        }
-
+        /// <summary>
+        /// 터치 수신자 등록
+        /// </summary>
         public void Subscribe(ITouchEventReceiver receiver)
         {
             receivers.Add(receiver);
@@ -34,7 +30,9 @@ namespace SexyDu.Touch
             if (!IsUpdating)
                 Run();
         }
-
+        /// <summary>
+        /// 터치 수신자 제거
+        /// </summary>
         public void Unsubscribe(ITouchEventReceiver receiver)
         {
             receivers.Remove(receiver);
@@ -42,22 +40,45 @@ namespace SexyDu.Touch
             if (receivers.Count == 0)
                 Stop();
         }
-
+        /// <summary>
+        /// 터치 수신자 클리어
+        /// </summary>
         public void ClearSubscription()
         {
             receivers.Clear();
 
             Stop();
         }
+        /// <summary>
+        /// 터치 이벤트 전송
+        /// </summary>
+        public void SendTouch(UnityEngine.Touch touch)
+        {
+            foreach (var receiver in receivers)
+                receiver.OnTouchBegin(touch);
+        }
+        /// <summary>
+        /// 마우스 이벤트 전송
+        /// </summary>
+        public void SendMouse(int mouseId, Vector2 position)
+        {
+            foreach (var receiver in receivers)
+                receiver.OnMouseBegin(mouseId, position);
+        }
 
+        #region Update
         private IDisposable update = null;
         private bool IsUpdating => update != null;
-
+        /// <summary>
+        /// 업데이트 시작
+        /// </summary>
         private void Run()
         {
             update = MonoHelper.StartCoroutine(CoUpdate());
         }
-
+        /// <summary>
+        /// 업데이트 종료
+        /// </summary>
         private void Stop()
         {
             if (IsUpdating)
@@ -66,7 +87,9 @@ namespace SexyDu.Touch
                 update = null;
             }
         }
-
+        /// <summary>
+        /// 업데이트 코루틴
+        /// </summary>
         private IEnumerator CoUpdate()
         {
             do
@@ -78,8 +101,8 @@ namespace SexyDu.Touch
 #endif
                 for (int i = 0; i < Input.touchCount; i++)
                 {
-                    if (Input.touches[i].phase.Equals(TouchPhase.Began) // 터치 시작 상태이고
-                     && !IsCanvasTouch(Input.touches[i])) // 캔버스 영역이 아니면
+                    // 터치 시작 상태이고 캔버스 영역이 아니면
+                    if (Input.touches[i].phase.Equals(TouchPhase.Began) && !IsCanvasTouch(Input.touches[i]))
                     {
                         SendTouch(Input.touches[i]);
 #if CONSIDER_MOUSE
@@ -89,6 +112,7 @@ namespace SexyDu.Touch
                 }
 
 #if CONSIDER_MOUSE
+                // 터치 시작 이벤트가 없거나 마우스가 캔버스 영역이 아니면
                 if (!hasBeginTouch || !IsCanvasMouse())
                 {
                     if (Input.GetMouseButtonDown(0))
@@ -99,15 +123,15 @@ namespace SexyDu.Touch
 #endif
             } while (true);
         }
+        #endregion
 
-        protected EventSystem eventSystem => EventSystem.current;
-
+        #region Canvas Check
         /// <summary>
         /// 해당 터치가 캔버스 영역(UGUI)에 있는지 반환
         /// </summary>
         private bool IsCanvasTouch(UnityEngine.Touch touch)
         {
-            return eventSystem is null ? false : eventSystem.IsPointerOverGameObject(touch.fingerId);
+            return EventSystem.current is null ? false : EventSystem.current.IsPointerOverGameObject(touch.fingerId);
         }
 
 #if CONSIDER_MOUSE
@@ -116,8 +140,10 @@ namespace SexyDu.Touch
         /// </summary>
         private bool IsCanvasMouse()
         {
-            return eventSystem is null ? false : eventSystem.IsPointerOverGameObject();
+            return EventSystem.current is null ? false : EventSystem.current.IsPointerOverGameObject();
         }
 #endif
+        #endregion
+
     }
 }

@@ -38,7 +38,7 @@ namespace SexyDu.Touch
             }
 
 #if CONSIDER_MOUSE
-            if (TouchCenter.Config.IsMouse(fingerId))
+            if (ITouchCenter.Config.IsMouse(fingerId))
                 Detect(fingerId, Input.mousePosition);
 #endif
         }

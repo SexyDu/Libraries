@@ -13,15 +13,21 @@ namespace SexyDu.Touch
         public const int MouseIdLeft = 100;
         // 마우스 우클릭 터치 ID
         public const int MouseIdRight = 101;
+
+        /// <summary>
+        /// 터치 이벤트 시스템
+        /// </summary>
+        public readonly ITouchEventSystem EventSystem = null;
         
         public TouchConfig()
         {
-            EventSystem = new TouchEventSystem();
+            /// 터치 이벤트 시스템 생성
+            EventSystem = new SexyEventSystem();
         }
 
         #region TouchCenter Management
         // 활성화된 전체 터치 센터
-        private List<TouchCenter> touchCenters = new List<TouchCenter>();
+        private List<ITouchCenter> touchCenters = new List<ITouchCenter>();
         // 프로젝트 기본 OrthographicSize
         private const float DefaultOrthographicSize = 5f;
 
@@ -37,7 +43,7 @@ namespace SexyDu.Touch
         }
 
         // 메인 터치 센터
-        public TouchCenter MainTouchCenter
+        public ITouchCenter MainTouchCenter
         {
             get
             {
@@ -58,7 +64,8 @@ namespace SexyDu.Touch
             touchCenters.Add(touchCenter);
             // 메인 터치 센터 정보 설정
             SetMainTouchCenterInfo();
-        }/// <summary>
+        }
+        /// <summary>
          /// 터치 센터 삭제 함수
          /// </summary>
          /// <param name="touchCenter">터치 센터</param>
@@ -80,16 +87,11 @@ namespace SexyDu.Touch
         {
             SettingScreenInformation();
 
-            for (int i = 0; i < touchCenters.Count - 1; i++)
-            {
-                touchCenters[i].Stop();
-            }
-
-            MainTouchCenter?.Run();
+            EventSystem.ClearSubscription();
+            if (MainTouchCenter != null)
+                EventSystem.Subscribe(MainTouchCenter);
         }
         #endregion
-
-
 
         /// <summary>
         /// 1픽셀당 유니티 오브젝트 크기/위치값
@@ -309,13 +311,6 @@ namespace SexyDu.Touch
             /// -return.y ~ return.y
             return new Vector2(orthographicSize * screenRatio, orthographicSize);
         }
-        #endregion
-
-        #region TouchEventSystem
-        /// <summary>
-        /// 터치 이벤트 시스템
-        /// </summary>
-        public readonly ITouchEventSystem EventSystem = null;
         #endregion
     }
 }

@@ -39,7 +39,7 @@ namespace SexyDu.Touch
             // 변경 전후 비율
             float ratio = scaleAfter / scaleBefore;
             // 현재 터치 센터의 유니티 위치값
-            Vector2 centerUnit = TouchCenter.Config.ConvertUnityPosition(body.Data.center);
+            Vector2 centerUnit = ITouchCenter.Config.ConvertUnityPosition(body.Data.center);
             // 크기 변경 전의 터치 센터와 대상간의 위치 차이
             Vector2 differenceBefore = new Vector2(
                 body.Target.position.x - centerUnit.x,

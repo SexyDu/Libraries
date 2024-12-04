@@ -44,11 +44,11 @@ namespace SexyDu
                 }
 
 #if CONSIDER_MOUSE
-                if (TouchCenter.Config.IsMouse(fingerId))
+                if (ITouchCenter.Config.IsMouse(fingerId))
                     return Input.mousePosition;
 #endif
 
-                return TouchCenter.Config.InvalidTouchPosition;
+                return ITouchCenter.Config.InvalidTouchPosition;
             }
         }
     }

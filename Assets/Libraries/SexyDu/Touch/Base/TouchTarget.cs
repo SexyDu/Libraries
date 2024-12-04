@@ -18,7 +18,7 @@ namespace SexyDu.Touch
         /// </summary>
         public abstract void ClearTouch();
 
-        protected TouchConfig Config => TouchCenter.Config;
+        protected TouchConfig Config => ITouchCenter.Config;
 
         /// <summary>
         /// Unity Position Per One Pixel
