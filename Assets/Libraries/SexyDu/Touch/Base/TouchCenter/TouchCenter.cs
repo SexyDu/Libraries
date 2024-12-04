@@ -154,14 +154,6 @@ namespace SexyDu.Touch
         #endregion
 
 #if CONSIDER_MOUSE
-        public const int MouseIdLeft = 100;
-        public const int MouseIdRight = 101;
-
-        public bool IsMouse(int fingerId)
-        {
-            return fingerId == MouseIdLeft || fingerId == MouseIdRight;
-        }
-
         private void ProcessMouse()
         {
             if (!IsCanvasMouse())
@@ -179,13 +171,12 @@ namespace SexyDu.Touch
 
         private void SendMouseToTarget(bool left)
         {
-            Debug.Log($"SendMouseToTarget({left})");
             if (!IsCanvasMouse())
             {
                 if (left)
                 {
                     // 터치된 타겟이 있는 경우만 AddTouch
-                    GetTouchedTarget(mainCam, Input.mousePosition)?.ReceiveTouch(MouseIdLeft);
+                    GetTouchedTarget(mainCam, Input.mousePosition)?.ReceiveTouch(TouchConfig.MouseIdLeft);
                 }
                 else
                 {

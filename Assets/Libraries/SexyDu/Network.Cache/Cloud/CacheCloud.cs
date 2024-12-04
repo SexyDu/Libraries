@@ -53,7 +53,7 @@ namespace SexyDu.Network.Cache
         {
             Type requestedType = typeof(T);
             // Cloud에서 지원하지 않는 타입 거르기
-            if (IsNotSupportedType(requestedType))
+            if (IsNotSupported(requestedType))
                 return null;
             // 캐시 엔트리 키
             string key = GetKey(requestedType, receipt.uri.AbsoluteUri);
@@ -87,7 +87,6 @@ namespace SexyDu.Network.Cache
                         entry.Dispose();
                     }
 #endif
-
                 });
             }
 
@@ -119,11 +118,11 @@ namespace SexyDu.Network.Cache
         /// <summary>
         /// 지원하지 않는 타입인지 확인
         /// </summary>
-        private bool IsNotSupportedType(Type type)
+        private bool IsNotSupported(Type type)
         {
             if (type == typeof(Sprite))
             {
-                Debug.LogError($"SpriteContent 사용을 권장합니다. CacheCloud에서 Sprite 해제 시 이슈(Sprite.texture 해제 문제)가 있습니다.");
+                Debug.LogError($"[SpriteContent 대체] CacheCloud에서 Sprite 해제 시 이슈(Sprite.texture 해제 문제)가 있습니다. SpriteContent를 사용하세요.");
                 return true;
             }
             return false;

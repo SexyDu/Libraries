@@ -43,7 +43,7 @@ namespace SexyDu.Network.Cache
     public interface ICacheEntry : IDisposable
     {
         /// <summary>
-        /// URL
+        /// Cache Entry key
         /// </summary>
         public string Key { get; }
 

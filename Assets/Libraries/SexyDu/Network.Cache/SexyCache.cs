@@ -85,7 +85,7 @@ namespace SexyDu.Network.Cache
         /// </summary>
         private bool IsSupported()
         {
-            return converters.ContainsKey(typeof(T));
+            return IsSupported(typeof(T));
         }
 
         /// <summary>

@@ -8,12 +8,18 @@ using UnityEngine;
 namespace SexyDu.Touch
 {
     public class TouchConfig
-    {
+    { 
+        // 마우스 좌클릭 터치 ID
+        public const int MouseIdLeft = 100;
+        // 마우스 우클릭 터치 ID
+        public const int MouseIdRight = 101;
+        
         public TouchConfig()
         {
-
+            EventSystem = new TouchEventSystem();
         }
 
+        #region TouchCenter Management
         // 활성화된 전체 터치 센터
         private List<TouchCenter> touchCenters = new List<TouchCenter>();
         // 프로젝트 기본 OrthographicSize
@@ -81,6 +87,9 @@ namespace SexyDu.Touch
 
             MainTouchCenter?.Run();
         }
+        #endregion
+
+
 
         /// <summary>
         /// 1픽셀당 유니티 오브젝트 크기/위치값
@@ -155,12 +164,12 @@ namespace SexyDu.Touch
 #if CONSIDER_MOUSE
             switch (fingerId)
             {
-                case TouchCenter.MouseIdLeft:
+                case MouseIdLeft:
                     if (Input.GetMouseButton(0))
                         return Input.mousePosition;
                     else
                         break;
-                case TouchCenter.MouseIdRight:
+                case MouseIdRight:
                     if (Input.GetMouseButton(1))
                         return Input.mousePosition;
                     else
@@ -174,7 +183,7 @@ namespace SexyDu.Touch
 #if CONSIDER_MOUSE
         public bool IsMouse(int fingerId)
         {
-            return fingerId == TouchCenter.MouseIdLeft || fingerId == TouchCenter.MouseIdRight;
+            return fingerId == MouseIdLeft || fingerId == MouseIdRight;
         }
 #endif
         #endregion
@@ -300,6 +309,13 @@ namespace SexyDu.Touch
             /// -return.y ~ return.y
             return new Vector2(orthographicSize * screenRatio, orthographicSize);
         }
+        #endregion
+
+        #region TouchEventSystem
+        /// <summary>
+        /// 터치 이벤트 시스템
+        /// </summary>
+        public readonly ITouchEventSystem EventSystem = null;
         #endregion
     }
 }
