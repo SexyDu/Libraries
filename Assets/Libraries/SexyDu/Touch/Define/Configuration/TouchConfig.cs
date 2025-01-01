@@ -1,5 +1,5 @@
 #if UNITY_EDITOR || !(UNITY_ANDROID || UNITY_IOS)
-#define CONSIDER_MOUSE
+#define CONSIDER_DESKTOP
 #endif
 
 using System.Collections.Generic;
@@ -163,7 +163,7 @@ namespace SexyDu.Touch
                     return Input.touches[i].position;
             }
 
-#if CONSIDER_MOUSE
+#if CONSIDER_DESKTOP
             switch (fingerId)
             {
                 case MouseIdLeft:
@@ -182,7 +182,7 @@ namespace SexyDu.Touch
             return InvalidTouchPosition;
         }
 
-#if CONSIDER_MOUSE
+#if CONSIDER_DESKTOP
         public bool IsMouse(int fingerId)
         {
             return fingerId == MouseIdLeft || fingerId == MouseIdRight;

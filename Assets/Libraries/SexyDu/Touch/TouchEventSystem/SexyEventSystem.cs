@@ -1,5 +1,5 @@
 #if UNITY_EDITOR || !(UNITY_ANDROID || UNITY_IOS)
-#define CONSIDER_MOUSE
+#define CONSIDER_DESKTOP
 #endif
 
 using System;
@@ -96,7 +96,7 @@ namespace SexyDu.Touch
             {
                 yield return null;
 
-#if CONSIDER_MOUSE
+#if CONSIDER_DESKTOP
                 bool hasBeginTouch = false;
 #endif
                 for (int i = 0; i < Input.touchCount; i++)
@@ -105,13 +105,13 @@ namespace SexyDu.Touch
                     if (Input.touches[i].phase.Equals(TouchPhase.Began))
                     {
                         SendTouch(Input.touches[i]);
-#if CONSIDER_MOUSE
+#if CONSIDER_DESKTOP
                         hasBeginTouch = true;
 #endif
                     }
                 }
 
-#if CONSIDER_MOUSE
+#if CONSIDER_DESKTOP
                 // 터치 시작 이벤트가 없고 마우스가 캔버스 영역이 아니면
                 if (!hasBeginTouch)
                 {

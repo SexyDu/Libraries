@@ -1,5 +1,5 @@
 #if UNITY_EDITOR || !(UNITY_ANDROID || UNITY_IOS)
-#define CONSIDER_MOUSE
+#define CONSIDER_DESKTOP
 #endif
 
 using UnityEngine;
@@ -37,7 +37,7 @@ namespace SexyDu.Touch
                 }
             }
 
-#if CONSIDER_MOUSE
+#if CONSIDER_DESKTOP
             if (ITouchCenter.Config.IsMouse(fingerId))
                 Detect(fingerId, Input.mousePosition);
 #endif
