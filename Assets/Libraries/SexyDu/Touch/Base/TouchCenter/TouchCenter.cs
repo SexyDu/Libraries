@@ -67,15 +67,37 @@ namespace SexyDu.Touch
         /// </summary>
         public void OnTouchBegin(UnityEngine.Touch touch)
         {
-            GetTouchedTarget(mainCam, touch)?.ReceiveTouch(touch.fingerId);
+            if (!IsCanvasTouch(touch))
+                GetTouchedTarget(mainCam, touch)?.ReceiveTouch(touch.fingerId);
         }
         /// <summary>
         /// 마우스 입력 수신 이벤트 함수
         /// </summary>
         public void OnMouseBegin(int mouseId, Vector2 position)
         {
-            // 터치된 타겟이 있는 경우만 AddTouch
-            GetTouchedTarget(mainCam, position)?.ReceiveTouch(mouseId);
+            if (!IsCanvasMouse())
+                // 터치된 타겟이 있는 경우만 AddTouch
+                GetTouchedTarget(mainCam, position)?.ReceiveTouch(mouseId);
         }
+
+        #region Canvas Check
+        /// <summary>
+        /// 해당 터치가 캔버스 영역(UGUI)에 있는지 반환
+        /// </summary>
+        private bool IsCanvasTouch(UnityEngine.Touch touch)
+        {
+            return EventSystem.current is null ? false : EventSystem.current.IsPointerOverGameObject(touch.fingerId);
+        }
+
+#if CONSIDER_MOUSE
+        /// <summary>
+        /// 마우스가 캔버스 영역(UGUI)에 있는지 반환
+        /// </summary>
+        private bool IsCanvasMouse()
+        {
+            return EventSystem.current is null ? false : EventSystem.current.IsPointerOverGameObject();
+        }
+#endif
+        #endregion
     }
 }
