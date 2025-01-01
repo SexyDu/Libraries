@@ -17,6 +17,8 @@ namespace SexyDu.UI.UGUI
                 {
                     ButtonBasic comp = targets[i] as ButtonBasic;
                     comp.SetInteracts();
+
+                    EditorUtility.SetDirty(comp);
                 }
             }
         }

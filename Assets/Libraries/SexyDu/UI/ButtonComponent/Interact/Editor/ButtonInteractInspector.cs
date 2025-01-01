@@ -23,6 +23,8 @@ namespace SexyDu.UI
                 {
                     ButtonInteract comp = targets[i] as ButtonInteract;
                     comp.ConstructDefaultSetting();
+
+                    EditorUtility.SetDirty(comp);
                 }
             }
         }
