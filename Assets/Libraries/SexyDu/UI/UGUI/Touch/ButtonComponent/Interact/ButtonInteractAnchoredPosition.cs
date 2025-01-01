@@ -22,5 +22,17 @@ namespace SexyDu.UI
         {
             target.anchoredPosition = pos;
         }
+
+#if UNITY_EDITOR
+        public override void ConstructDefaultSetting()
+        {
+            if (target == null)
+            {
+                throw new System.NullReferenceException("target이 존재하지 않습니다.");
+            }
+
+            pos_normal = pos_press = target.anchoredPosition;
+        }
+#endif
     }
 }

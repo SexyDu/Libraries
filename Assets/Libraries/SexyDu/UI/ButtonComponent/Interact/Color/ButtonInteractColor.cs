@@ -1,7 +1,4 @@
 using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 namespace SexyDu.UI
 {
@@ -21,26 +18,5 @@ namespace SexyDu.UI
         }
 
         protected abstract void SetRendersColor(Color[] cols);
-
-#if UNITY_EDITOR
-        public abstract void SetDefaultColors();
-#endif
     }
-
-#if UNITY_EDITOR
-    [CustomEditor(typeof(ButtonInteractColor), true)]
-    public class ButtonInteractColorInspector : Editor
-    {
-        public override void OnInspectorGUI()
-        {
-            base.OnInspectorGUI();
-
-            if (GUILayout.Button("SetDefaultColors"))
-            {
-                ButtonInteractColor comp = target as ButtonInteractColor;
-                comp.SetDefaultColors();
-            }
-        }
-    }
-#endif
 }

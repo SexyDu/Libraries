@@ -15,7 +15,7 @@ namespace SexyDu.UI
         }
 
 #if UNITY_EDITOR
-        public override void SetDefaultColors()
+        public override void ConstructDefaultSetting()
         {
             if (renders == null || renders.Length.Equals(0))
                 throw new System.Exception("해당 스크립트에 연결된 renders가 없습니다.");

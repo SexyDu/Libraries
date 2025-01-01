@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace SexyDu.UI
@@ -10,5 +11,15 @@ namespace SexyDu.UI
         public abstract void OnButtonPress();
 
         public abstract void OnButtonUp();
+
+        #if UNITY_EDITOR
+        /// <summary>
+        /// 기본 설정 구성
+        /// </summary>
+        public virtual void ConstructDefaultSetting()
+        {
+            throw new NotSupportedException("여기선 기본 설정 구성을 지원하지 않습니다.");
+        }
+        #endif
     }
 }
